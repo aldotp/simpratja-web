@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: simpratja
+            MYSQL_USER: simpratja
+            MYSQL_PASSWORD: 1235678a
+        volumes:
+            - ./data/mysql:/var/lib/mysql
+        restart: unless-stopped
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
