@@ -3,18 +3,24 @@
 namespace App\Services;
 
 use App\Repositories\VisitRepository;
-use App\Repositories\DocterRepository;
+use App\Repositories\UserDetailRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\PatientRepository;
 use Illuminate\Support\Facades\DB;
 
 class VisitService
 {
     protected $visitRepository;
-    protected $docterRepository;
+    protected $userDetailRepository;
+    protected $userRepository;
+    protected $patientRepository;
 
-    public function __construct(VisitRepository $visitRepository, DocterRepository $docterRepository)
+    public function __construct(VisitRepository $visitRepository, UserDetailRepository $userDetailRepository, UserRepository $userRepository, PatientRepository $patientRepository)
     {
         $this->visitRepository = $visitRepository;
-        $this->docterRepository = $docterRepository;
+        $this->userDetailRepository = $userDetailRepository;
+        $this->userRepository = $userRepository;
+        $this->patientRepository = $patientRepository;
     }
 
     public function getQueueNumber($id)
@@ -54,27 +60,36 @@ class VisitService
     public function registerExistingPatientVisit($data)
     {
         DB::beginTransaction();
-        
+
         try {
-            $docter = $this->docterRepository->getById($data['docter_id']);
-            if (!$docter) {
-                return [null, null, 'Dokter tidak ditemukan'];
+            $existingPatient = $this->patientRepository->queryWhere(["id" => $data["patient_id"]])->first();
+            if ($existingPatient) {
+                $existingVisit = $this->visitRepository->queryWhere(['patient_id' => $existingPatient->id])
+                    ->where('examination_date', $data['visit_date'])
+                    ->first();
+                if ($existingVisit) {
+                    return [null, 'Patient already has a visit for this date'];
+                }
             }
 
+
+            $docter = $this->userRepository->getAllUsersDetailByID($data['docter_id']);
+            if (!$docter) {
+                return [null, 'docter not found'];
+            }
 
             $visitCount = $this->visitRepository->countVisitsByDocterAndDate($data['docter_id'], $data['visit_date']);
 
             if ($visitCount >= $docter->quota) {
                 return [null, null, 'Kuota dokter sudah penuh untuk tanggal tersebut'];
             }
-    
+
             $queueNumber = $visitCount + 1;
 
 
             $visitData = [
                 'patient_id' => $data['patient_id'],
                 'examination_date' => $data['visit_date'],
-                'complaint' => $data['complaint'],
                 'status' => 'pending',
                 'docter_id' => $data['docter_id'],
                 'insurance' => $data['insurance'],
@@ -84,10 +99,10 @@ class VisitService
             ];
 
             $visit = $this->visitRepository->store($visitData);
-            
+
             DB::commit();
             return $visit;
-            
+
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;

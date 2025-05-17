@@ -65,12 +65,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('patients')->group(function () {
         Route::post('/register', [PatientController::class, 'register']);
         Route::post('/register-existing', [VisitController::class, 'registerExistingPatientVisit']);
+        Route::get('/registrations/', [PatientController::class, 'getAllRegistration']);
         Route::get('/registrations/{id}', [PatientController::class, 'showRegistration']);
         Route::get('/queue-number/{id}', [VisitController::class, 'getQueueNumber']);
         Route::post('/feedbacks', [FeedbackController::class, 'store']);
-
-        Route::get('/registrations', [VisitController::class, 'getAllVisits']);
-        Route::get('/registrations/{id}', [VisitController::class, 'getVisitByID']);
 
         Route::get('/', [PatientController::class, 'index']);
         Route::put('/{id}', [PatientController::class, 'update']);
@@ -121,7 +119,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/visits', [VisitController::class, 'getAllVisits']);
         Route::get('/visits/{id}', [VisitController::class, 'getVisitByID']);
         Route::get('/medicines', [MedicineController::class, 'index']);
-
     });
 
     // Endpoint Leaders

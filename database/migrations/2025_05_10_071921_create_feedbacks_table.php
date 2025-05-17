@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('feedbacks', function (Blueprint $table) {
-            $table->integer('id', true, true)->length(10);
-            $table->integer('patient_id', false, true)->length(10);
+            $table->id();
+            $table->unsignedBigInteger('patient_id');
             $table->string('feedback_content', 255);
-            $table->date('feedback_date');
+            $table->integer("rating")->length(1);
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');

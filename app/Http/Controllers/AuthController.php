@@ -72,7 +72,7 @@ use Illuminate\Support\Facades\Validator;
         if (!$loginResult) {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
-        
+
         return response()
             ->json(['user' => $loginResult['user']])
             ->cookie($loginResult['cookie']);
@@ -104,13 +104,13 @@ use Illuminate\Support\Facades\Validator;
         auth()->logout();
 
         $response = $this->response->responseSuccess(null, 'Successfully Logout successfully', 200);
-        
+
         if (method_exists($response, 'header')) {
             $response->headers->remove('Authorization');
         }
-        
+
         $cookie = cookie()->forget('user_session');
-        
+
         return $response->withCookie($cookie);
     }
 

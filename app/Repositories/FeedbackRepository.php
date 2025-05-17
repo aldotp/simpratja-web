@@ -19,7 +19,7 @@ class FeedbackRepository
     public function getFeedbacks()
     {
         $query = Feedback::query()
-            ->select("feedbacks.id", "patients.name", "feedbacks.feedback_content", "feedbacks.feedback_date")
+            ->select("feedbacks.id", "patients.name", "feedbacks.feedback_content", "feedbacks.rating", "feedbacks.created_at")
             ->join('patients', 'feedbacks.patient_id', '=', 'patients.id');
 
         return $query->get();
@@ -28,7 +28,7 @@ class FeedbackRepository
     public function getFeedbackByID($id)
     {
         $query = Feedback::query()
-        ->select("feedbacks.id", "patients.name", "feedbacks.feedback_content", "feedbacks.feedback_date")
+        ->select("feedbacks.id", "patients.name", "feedbacks.feedback_content", "feedbacks.rating", "feedbacks.created_at")
         ->join('patients', 'feedbacks.patient_id', '=', 'patients.id')
         ->where('feedbacks.id', $id);
 

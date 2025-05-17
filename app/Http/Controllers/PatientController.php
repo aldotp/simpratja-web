@@ -28,7 +28,7 @@ class PatientController
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'nik' => 'required|unique:patients,nik',
+            'nik' => 'required',
             'name' => 'required|string|max:50',
             'birth_date' => 'required|date',
             'gender' => 'required|integer|max:1',
@@ -57,13 +57,19 @@ class PatientController
 
     public function showRegistration($id)
     {
-        $patient = $this->patientService->getByID($id);
+        $patient = $this->patientService->getRegistration($id);
 
         if (!$patient) {
             return $this->response->responseError('Data pasien tidak ditemukan', 404);
         }
 
         return $this->response->responseSuccess($patient, 'Data pendaftaran ditemukan');
+    }
+
+    public function getAllRegistration(Request $request)
+    {
+        $patients = $this->patientService->getAllRegistration($request->all());
+        return $this->response->responseSuccess($patients, 'Data pasien berhasil diambil');
     }
 
     public function index()
@@ -100,17 +106,10 @@ class PatientController
 
     public function destroy($id)
     {
-        $patient = $this->patientService->deletePatient($id);
-        if ($patient == 'data not found') {
-            return $this->response->responseError('Data pasien tidak ditemukan', 404);
-        }
-
+        $patient = $this->patientService->delete($id);
         if (!$patient) {
             return $this->response->responseError('Pasien tidak ditemukan', 404);
         }
-
-
-
         return $this->response->responseSuccess($patient, 'Data pasien berhasil dihapus');
     }
 }

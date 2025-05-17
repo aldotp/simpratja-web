@@ -24,7 +24,6 @@ class FeedbackController
         $validator = Validator::make($data, [
             'patient_id' => 'required|exists:patients,id',
             'feedback_content' => 'required|string',
-            'feedback_date' => 'required|date',
         ]);
 
         if ($validator->fails()) {

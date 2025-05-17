@@ -39,7 +39,6 @@ class MedicalRecordController
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'patient_id' => 'required|exists:patients,id',
             'visit_id' => 'required|exists:visits,id',
             'medicine_id' => 'required|exists:medicines,id',
             'examination_date' => 'required|date',
@@ -56,6 +55,10 @@ class MedicalRecordController
 
         try {
             $result = $this->medicalRecordService->createMedicalRecordWithDetail($data, $userId);
+
+            if (is_array($result) && isset($result[1]) && $result[1] !== null) {
+                return $this->response->responseError($result[1], 422);
+            }
         } catch (\Exception $e) {
             return $this->response->responseError('Gagal membuat medical record: ' . $e->getMessage(), 500);
         }

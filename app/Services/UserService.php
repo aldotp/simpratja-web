@@ -3,26 +3,101 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
+use App\Repositories\UserDetailRepository;
+use Illuminate\Support\Facades\DB;
+use App\Exceptions\CustomException;
 
 class UserService {
 
     private $userRepository;
+    protected $userDetailRepository;
 
-    public function __construct(UserRepository $userRepository) {
+    public function __construct(UserRepository $userRepository, UserDetailRepository $userDetailRepository) {
         $this->userRepository = $userRepository;
+        $this->userDetailRepository = $userDetailRepository;
     }
 
     public function getAllUsers($request)
     {
-        return $this->userRepository->getAllUsers($request);
+        $users = $this->userRepository->getAllUsersDetail($request);
+
+      return $users->map(function ($data) {
+        return [
+            "id" => $data->id,
+            "name" => $data->name,
+            "nik" => $data->nik,
+            "role" => $data->role,
+            "phone_number" => $data->phone_number,
+            "gender" => $data->gender,
+            "quota" => $data->quota,
+            "created_at" => $data->created_at,
+            "updated_at" => $data->updated_at,
+        ];
+    });
     }
 
     public function getUser($id)
     {
-        return $this->userRepository->getUser($id);
+        $user = $this->userRepository->getAllUsersDetailByID($id);
+
+        return $user;
     }
 
-    public function createUser($request)
+     public function createUser($data)
+    {
+        DB::beginTransaction();
+
+        try {
+            $existingUser = $this->userRepository->findByNik($data['nik']);
+            if ($existingUser) {
+                return [
+                    'success' => false,
+                    'message' => 'User with this NIK already exists'
+                ];
+            }
+
+            $user = $this->userRepository->createUser([
+                'nik' => $data['nik'],
+                'status' => 1,
+                'password' => bcrypt("12345678a"),
+                'role' => $data['role'],
+            ]);
+
+            $userId = is_object($user) ? $user->id : $user['data']->id;
+
+            $userDetail = [
+                'name' => $data['name'],
+                'phone_number' => $data['phone_number'],
+                'gender' => $data['gender'],
+                'quota' => 0,
+                'user_id' => $userId,
+            ];
+
+            $userDetail = $this->userDetailRepository->store($userDetail);
+
+            DB::commit();
+            return [
+                'success' => true,
+                'data' => [
+                    "id" => $user->id,
+                    "name" => $userDetail->name,
+                    "nik" => $user->nik,
+                    "role" => $data["role"],
+                    "phone_number" => $userDetail->phone_number,
+                    "gender" => $userDetail->gender,
+                    "quota" => $userDetail->quota,
+                    "created_at" => $user->created_at,
+                    "updated_at" => $user->updated_at,
+                ],
+            ];
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function create($request)
     {
         $existingUser = $this->userRepository->findByNik($request['nik']);
         if ($existingUser) {
@@ -34,10 +109,7 @@ class UserService {
 
         try {
             $user = $this->userRepository->createUser([
-                'name' => $request['name'],
                 'nik' => $request['nik'],
-                'phone_number' => $request['phone_number'],
-                'gender' => $request['gender'],
                 'status' => 1,
                 'password' => bcrypt("12345678a"),
             ]);
@@ -55,13 +127,18 @@ class UserService {
 
     public function updateUser($id, $data) {
         $user = $this->userRepository->getUser($id);
+        $userDetail = $this->userDetailRepository->getByUserId($id);
 
         if (!$user) {
             return null;
         }
 
+        if (!$userDetail) {
+            return null;
+        }
+
         if (isset($data['name']) && $data['name'] != "") {
-            $user->name = $data["name"];
+            $userDetail->name = $data["name"];
         }
 
         if (isset($data['nik']) && $data['nik'] != "") {
@@ -87,11 +164,11 @@ class UserService {
         }
 
         if (isset($data['gender']) && $data['gender'] != "") {
-            $user->gender = $data["gender"];
+            $userDetail->gender = $data["gender"];
         }
 
         if (isset($data['phone_number']) && $data['phone_number'] != "") {
-            $user->phone_number = $data["phone_number"];
+            $userDetail->phone_number = $data["phone_number"];
         }
 
         if (isset($data['role']) && $data['role'] != "") {
@@ -100,8 +177,19 @@ class UserService {
 
 
         $user->save();
+        $userDetail->save();
 
-        return $user;
+       return [
+            "id" => $user->id,
+            "name" => $userDetail->name ?? null,
+            "nik" => $user->nik,
+            "role" => $user->role,
+            "phone_number" => $userDetail->phone_number,
+            "gender" => $userDetail->gender,
+            "quota" => $user->quota,
+            "created_at" => $user->created_at,
+            "updated_at" => $user->updated_at,
+        ];
     }
 
     public function deleteUser($id) {
@@ -111,7 +199,18 @@ class UserService {
             return null;
         }
 
-        return $this->userRepository->deleteUser($id);
+        $userDetail = $this->userDetailRepository->getByUserId($id);
+        if (!$userDetail) {
+            return null;
+        }
+
+        $userDetail->delete();
+        $user->delete();
+
+        return $user;
+
+        // $user =  $this->userRepository->deleteUser($id);
+
     }
 
 

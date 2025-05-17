@@ -17,4 +17,14 @@ class Visit extends Model
         'queue_number',
         'visit_status',
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(\App\Models\Patient::class, 'patient_id');
+    }
+
+    public function docter()
+    {
+        return $this->belongsTo(\App\Models\UserDetail::class, 'docter_id');
+    }
 }

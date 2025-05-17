@@ -2,19 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Models\Docter;
+use App\Models\UserDetail;
 use Illuminate\Support\Facades\DB;
 
-class DocterRepository
+class UserDetailRepository
 {
     public function getAll($filters = [])
     {
-        $query = Docter::query();
+        $query = UserDetail::query();
 
         if (!empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('name', 'like', '%' . $filters['search'] . '%')
-                  ->orWhere('nik', 'like', '%' . $filters['search'] . '%')
                   ->orWhere('phone_number', 'like', '%' . $filters['search'] . '%');
             });
         }
@@ -24,24 +23,22 @@ class DocterRepository
 
     public function getById($id)
     {
-        return Docter::find($id);
+        return UserDetail::find($id);
     }
 
     public function getByUserId($userId)
     {
-        return DB::table('docters')
-            ->where('user_id', $userId)
-            ->first();
+         return UserDetail::query()->where('user_id', $userId)->first();
     }
 
     public function store($data)
     {
-        return Docter::create($data);
+        return UserDetail::create($data);
     }
 
     public function update($id, $data)
     {
-        $docter = Docter::find($id);
+        $docter = UserDetail::find($id);
         if (!$docter) {
             return null;
         }
@@ -51,12 +48,12 @@ class DocterRepository
 
     public function delete($id)
     {
-        $docter = Docter::find($id);
-        if (!$docter) {
+        $userDetail = UserDetail::find($id);
+        if (!$userDetail) {
             return null;
         }
-        $docter->delete();
-        return $docter;
+        $userDetail->delete();
+        return $userDetail;
     }
 
     public function countPatientsByDoctor($doctorId)
@@ -66,4 +63,6 @@ class DocterRepository
             ->distinct('patient_id')
             ->count('patient_id');
     }
+
+
 }

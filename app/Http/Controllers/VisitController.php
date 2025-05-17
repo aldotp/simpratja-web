@@ -60,7 +60,6 @@ class VisitController
         $validator = Validator::make($data, [
             'patient_id' => 'required|exists:patients,id',
             'visit_date' => 'required|date',
-            'complaint' => 'required|string',
             'docter_id' => 'required',
             'insurance' => 'required|string',
         ]);
@@ -70,6 +69,14 @@ class VisitController
         }
 
         $visit = $this->visitService->registerExistingPatientVisit($data);
+
+        if (is_array($visit) && isset($visit[1]) && $visit[1] !== null) {
+            return $this->response->responseError($visit[1], 422);
+        }
+        if (is_array($visit) && isset($visit[2]) && $visit[2] !== null) {
+            return $this->response->responseError($visit[2], 422);
+        }
+
         return $this->response->responseSuccess($visit, 'Visit registered successfully');
     }
 }

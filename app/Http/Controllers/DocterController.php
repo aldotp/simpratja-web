@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Response\Response;
 use App\Services\DocterService;
 use Illuminate\Support\Facades\Validator;
-use App\Exceptions\CustomException;
 
 class DocterController
 {
@@ -41,7 +40,7 @@ class DocterController
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name' => 'required|string|max:50',
-                'nik' => 'required|string|max:20|unique:docters,nik',
+                'nik' => 'required|string|max:20|unique:users,nik',
                 'gender' => 'required|integer',
                 'phone_number' => 'required|string|max:20',
                 'quota' => 'required|integer',
@@ -56,15 +55,15 @@ class DocterController
 
             $doctor = $this->docterService->createDocter($data);
             return $this->response->responseSuccess($doctor, 'Doctor created successfully');
-            
-        } catch (CustomException $e) {
+
+        } catch (\App\Exceptions\CustomException $e) {
             return $this->response->responseError(
                 $e->getMessage(),
-                $e->getCode()
+                (int) $e->getCode()
             );
         } catch (\Exception $e) {
             return $this->response->responseError(
-                $e->getMessage(),
+                'Internal server error',
                 500
             );
         }
@@ -75,7 +74,7 @@ class DocterController
         $data = $request->all();
         $validator = Validator::make($data, [
             'name' => 'sometimes|required|string|max:50',
-            'nik' => 'sometimes|required|string|max:20|unique:docters,nik,' . $id,
+            'nik' => 'sometimes|required|string|max:20|unique:users,nik,' . $id,
             'gender' => 'sometimes|required|integer',
             'phone_number' => 'sometimes|required|string|max:20',
             'quota' => 'sometimes|required|integer',
@@ -103,8 +102,8 @@ class DocterController
 
     public function getPatientCountByDocterID(Request $request)
     {
-       $payload = $request->attributes->get('user_auth');
-        $userId = $payload['id'];
+        $payload = $request->attributes->get('user_auth');
+        $userId = $payload['sub'];
         $patientCount = $this->docterService->getPatientCount($userId);
 
         return $this->response->responseSuccess([

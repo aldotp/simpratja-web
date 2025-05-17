@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('visits', function (Blueprint $table) {
-            $table->integer('id', true, true)->length(10);
-            $table->integer('patient_id', false, true)->length(10);
-            $table->integer('docter_id', false, true)->length(10);
+            $table->id();
+            $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('docter_id');
             $table->date('examination_date');
             $table->string('insurance', 50);
             $table->string('registration_number', 20);
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');
-            $table->foreign('docter_id')->references('id')->on('docters');
+            $table->foreign('docter_id')->references('id')->on('users');
         });
     }
 

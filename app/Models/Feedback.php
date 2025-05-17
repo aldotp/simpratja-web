@@ -12,5 +12,6 @@ class Feedback extends Model
         'patient_id',
         'feedback_content',
         'feedback_date',
+        'rating',
     ];
 }

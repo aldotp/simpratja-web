@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('docters', function (Blueprint $table) {
-            $table->integer('id', true, true)->length(10);
+        Schema::create('user_details', function (Blueprint $table) {
+            $table->id();
             $table->string('name', 50);
-            $table->string('nik', 20);
             $table->integer('gender')->length(1);
             $table->string('phone_number', 20);
             $table->integer('quota')->length(10);

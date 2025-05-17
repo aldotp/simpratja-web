@@ -31,8 +31,8 @@ class VisitRepository
     {
         $query = Visit::query()
             ->join('patients', 'visits.patient_id', '=', 'patients.id')
-            ->join('docters', 'visits.docter_id', '=', 'docters.id')
-            ->select('visits.id','patients.id as patient_id','docters.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.insurance', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at');
+            ->join('user_details', 'visits.docter_id', '=', 'user_details.user_id')
+            ->select('visits.id','patients.id as patient_id','user_details.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.insurance', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at');
 
         if (!empty($filters['date'])) {
             $query->where('visits.examination_date', $filters['date']);
@@ -53,8 +53,8 @@ class VisitRepository
     {
         $query = Visit::query()
             ->join('patients', 'visits.patient_id', '=', 'patients.id')
-            ->join('docters', 'visits.docter_id', '=', 'docters.id')
-            ->select('visits.id','docters.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.insurance', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at')
+            ->join('user_details', 'visits.docter_id', '=', 'user_details.user_id')
+            ->select('visits.id','user_details.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.insurance', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at')
             ->where('visits.id', $id);
 
             $data = $query->first();
@@ -77,6 +77,11 @@ class VisitRepository
     public function countAll()
     {
         return Visit::count();
+    }
+
+    public function query()
+    {
+        return \App\Models\Visit::query();
     }
 
     public function queryWhere($conditions)

@@ -13,7 +13,8 @@ class MedicalRecordDetail extends Model
 
     protected $fillable = [
         'medical_record_id',
-        'doctor_id',
+        'docter_id',
+        'patient_id',
         'visit_id',
         'medicine_id',
         'examination_date',

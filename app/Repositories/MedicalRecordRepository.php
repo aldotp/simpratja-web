@@ -50,7 +50,6 @@ class MedicalRecordRepository
             ->join('medicines as m', 'mrd.medicine_id', '=', 'm.id')
             ->where('mr.patient_id', $patientId)
             ->select(
-                'mr.id as medical_record_id',
                 'mr.medical_record_number',
                 'p.name as patient_name',
                 'p.address as patient_address',

@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+      Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50);
             $table->string('nik', 20)->unique();
             $table->string('password', 100);
-            $table->integer('gender')->length(1);
-            $table->string('phone_number');
-            $table->string('status');
             $table->enum('role', ['admin', 'docter', 'staff', 'leader', 'patient']);
+            $table->string('status');
             $table->rememberToken();
             $table->timestamps();
         });
+
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();

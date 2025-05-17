@@ -4,27 +4,31 @@ namespace App\Services;
 
 use App\Repositories\MedicalRecordRepository;
 use App\Repositories\MedicalRecordDetailRepository;
-use App\Repositories\DocterRepository;
+use App\Repositories\UserDetailRepository;
 use App\Repositories\VisitRepository;
+use App\Repositories\MedicineRepository;
 use Illuminate\Support\Facades\DB;
 
 class MedicalRecordService
 {
     protected $medicalRecordRepository;
     protected $medicalRecordDetailRepository;
-    protected $docterRepository;
+    protected $userDetailRepository;
     protected $visitRepository;
+    protected $medicineRepository;
 
     public function __construct(
         MedicalRecordRepository $medicalRecordRepository,
         MedicalRecordDetailRepository $medicalRecordDetailRepository,
-        DocterRepository $docterRepository,
-        VisitRepository $visitRepository
+        UserDetailRepository $userDetailRepository,
+        VisitRepository $visitRepository,
+        MedicineRepository $medicineRepository // tambahkan ini
     ) {
         $this->medicalRecordRepository = $medicalRecordRepository;
         $this->medicalRecordDetailRepository = $medicalRecordDetailRepository;
-        $this->docterRepository = $docterRepository;
+        $this->userDetailRepository = $userDetailRepository;
         $this->visitRepository = $visitRepository;
+        $this->medicineRepository = $medicineRepository; // tambahkan ini
     }
 
     public function getAll()
@@ -49,15 +53,21 @@ class MedicalRecordService
 
     public function createMedicalRecordWithDetail($data, $userId)
     {
-        $doctor = $this->docterRepository->getByUserId($userId);
+        $doctor = $this->userDetailRepository->getByUserId($userId);
 
         if (!$doctor) {
             return [null, 'Doctor not found'];
         }
 
         return DB::transaction(function () use ($data, $doctor) {
+
+            $visit = $this->visitRepository->getById($data['visit_id']);
+            if (!$visit) {
+                return [null, 'Visit not found'];
+            }
+
             $record = $this->medicalRecordRepository->store([
-                'patient_id' => $data['patient_id'],
+                'patient_id' => $visit->patient_id,
                 'medical_record_number' => $this->generateMedicalRecordNumber(),
                 'created_by' => $doctor->id,
                 'created_at' => now(),
@@ -65,7 +75,8 @@ class MedicalRecordService
             ]);
 
             $detailData = [
-                'doctor_id'         => $doctor->id,
+                'patient_id'        => $visit->patient_id,
+                'docter_id'         => $visit->docter_id,
                 'visit_id'          => $data['visit_id'],
                 'medicine_id'       => $data['medicine_id'],
                 'examination_date'  => $data['examination_date'],
@@ -77,6 +88,17 @@ class MedicalRecordService
             ];
 
             $detail = $this->medicalRecordDetailRepository->store($detailData);
+
+            // Kurangi stok obat
+            $medicine = $this->medicineRepository->getByID($data['medicine_id']);
+            if ($medicine) {
+                if ($medicine->stock <= 0) {
+                    return [null, 'Obat habis'];
+                }
+
+                $medicine->stock = max(0, $medicine->stock - 1);
+                $medicine->save();
+            }
 
             $response = [
                 'medical_record_id' => $record->id,
@@ -109,10 +131,9 @@ class MedicalRecordService
 
 
     public function generateMedicalRecordNumber()
-{
-    $date = date('Ymd');
-    $random = mt_rand(100, 999);
-    return "MRN{$date}{$random}";
-}
-
+    {
+        $date = date('Ymd');
+        $random = mt_rand(100, 999);
+        return "MRN{$date}{$random}";
+    }
 }
