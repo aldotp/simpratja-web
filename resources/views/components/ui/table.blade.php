@@ -6,7 +6,7 @@
     'variant' => 'default' /* default, light, dark */,
     'rounded' => 'lg' /* none, sm, md, lg, xl */,
     'shadow' => 'md' /* none, sm, md, lg, xl */,
-    'responsive' => true,
+    'responsive' => false,
     'class' => '',
 ])
 
@@ -75,16 +75,16 @@
     $responsiveClass = $responsive ? 'overflow-x-auto' : '';
 @endphp
 
-<div class="{{ $responsiveClass }}">
+<div class="min-h-[200px]">
     {{-- Top slot for buttons, search, filters --}}
     @if (isset($top))
         <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 bg-white dark:bg-gray-800">
+            class="flex flex-col md:flex-row place-content-end items-start md:items-center py-4 bg-white dark:bg-gray-800">
             {{ $top }}
         </div>
     @endif
 
-    <table {{ $attributes->merge(['class' => $tableClasses]) }}>
+    <table {{ $attributes->merge(['class' => $tableClasses, $responsiveClass]) }}>
         @if (isset($thead))
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 {{ $thead }}
