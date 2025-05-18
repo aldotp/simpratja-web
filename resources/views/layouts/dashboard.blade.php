@@ -1,11 +1,5 @@
 @extends('layouts.app')
 
-@push('styles')
-    <link href="{{ asset('vendor/bladewind/css/animate.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('vendor/bladewind/css/bladewind-ui.min.css') }}" rel="stylesheet" />
-    @vite('resources/css/utility.css')
-@endpush
-
 @section('main')
     <main
         class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400"
