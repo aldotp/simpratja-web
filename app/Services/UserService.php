@@ -225,4 +225,8 @@ class UserService {
         return $user;
     }
 
+    public function countDocter() {
+      $count = $this->userRepository->query()->where('role', 'docter')->count();
+      return $count;
+    }
 }

@@ -143,9 +143,9 @@ class DocterService
         return $this->userDetailRepository->delete($id);
     }
 
-    public function getPatientCount($doctorId)
+    public function getPatientCount($userId)
     {
-        $doctor = $this->userDetailRepository->getByUserId($doctorId);
+        $doctor = $this->userRepository->getAllUsersDetailByID($userId);
 
         if (!$doctor) {
             return 0;

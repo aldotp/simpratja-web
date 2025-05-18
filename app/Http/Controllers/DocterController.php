@@ -103,7 +103,9 @@ class DocterController
     public function getPatientCountByDocterID(Request $request)
     {
         $payload = $request->attributes->get('user_auth');
-        $userId = $payload['sub'];
+        $userId = $payload['id'];
+
+
         $patientCount = $this->docterService->getPatientCount($userId);
 
         return $this->response->responseSuccess([

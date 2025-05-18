@@ -66,6 +66,31 @@ class PatientController
         return $this->response->responseSuccess($patient, 'Data pendaftaran ditemukan');
     }
 
+    public function showRegistrationByRegistrationIDandNIK(Request $request)
+    {
+        $data = [
+            'nik' => $request->query('nik'),
+            'registration_number' => $request->query('registration_number'),
+        ];
+
+        $validator = Validator::make($data, [
+            'nik' => 'required',
+            'registration_number'=> 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+        $patient = $this->patientService->getRegisByRegistrationIDandNIK($data);
+
+        if (!$patient) {
+            return $this->response->responseError('Data pasien tidak ditemukan', 404);
+        }
+
+        return $this->response->responseSuccess($patient, 'Data pendaftaran ditemukan');
+    }
+
     public function getAllRegistration(Request $request)
     {
         $patients = $this->patientService->getAllRegistration($request->all());

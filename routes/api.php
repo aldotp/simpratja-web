@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PatientController;
@@ -66,6 +67,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/register-existing', [VisitController::class, 'registerExistingPatientVisit']);
         Route::get('/registrations/', [PatientController::class, 'getAllRegistration']);
         Route::get('/registrations/{id}', [PatientController::class, 'showRegistration']);
+        Route::get('/check-registrations-numbes/{id}', [PatientController::class, 'showRegistration']);
         Route::get('/queue-number/{id}', [VisitController::class, 'getQueueNumber']);
         Route::post('/feedbacks', [FeedbackController::class, 'store']);
 
@@ -74,6 +76,8 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/feedbacks', [FeedbackController::class, 'index']);
         Route::get('/feedbacks/{id}', [FeedbackController::class, 'show']);
+
+        Route::get('/dashboard', [AdminController::class, 'dashboard']);
     });
 
     // Endpoint Doctor

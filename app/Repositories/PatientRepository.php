@@ -5,6 +5,11 @@ use App\Models\Patient;
 
 class PatientRepository
 {
+    public function query()
+    {
+        return Patient::query();
+    }
+
     public function store($data) {
         return Patient::create($data);
     }

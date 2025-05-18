@@ -81,7 +81,7 @@ class VisitRepository
 
     public function query()
     {
-        return \App\Models\Visit::query();
+        return Visit::query();
     }
 
     public function queryWhere($conditions)

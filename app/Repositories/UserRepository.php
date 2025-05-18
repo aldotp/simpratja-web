@@ -120,5 +120,9 @@ class UserRepository
     }
 
 
+    public function query(){
+        return User::query();
+    }
+
 
 }
