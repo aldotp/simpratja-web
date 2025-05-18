@@ -45,7 +45,7 @@ class ReceiptExportController
         $viewData = [
             'regNumber'    => $data['visit_registration_number'] ?? '',
             'patientName'  => $data['patient_name'] ?? '',
-            'rmNumber'     => $data['patient_nik'] ?? '',
+            'docterName'     => $data['docter_name'] ?? '',
             'address'      => $data['patient_address'] ?? '',
             'registerDate' => $data['visit_examination_date'] ?? '',
             'examDate'     => $data['visit_examination_date'] ?? '',

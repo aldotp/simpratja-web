@@ -132,8 +132,8 @@
                 <div class="info-value">= {{ $patientName }}</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Nomor RM</div>
-                <div class="info-value">= {{ $rmNumber }}</div>
+                <div class="info-label">Nama Dokter</div>
+                <div class="info-value">= {{ $docterName }}</div>
             </div>
             <div class="info-row">
                 <div class="info-label">Alamat</div>

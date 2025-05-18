@@ -151,9 +151,21 @@ class PatientService
     {
         $data = DB::table('patients')
             ->join('visits', 'patients.id', '=', 'visits.patient_id')
+            ->join('users as docter_users', 'visits.docter_id', '=', 'docter_users.id')
+            ->join('user_details as docter', 'docter_users.id', '=', 'docter.user_id')
             ->where('patients.nik', $request['nik'])
             ->where('visits.registration_number', $request['registration_number'])
-            ->select('patients.*', 'visits.id as visit_id', 'visits.docter_id as visit_docter_id', 'visits.examination_date as visit_examination_date', 'visits.insurance as visit_insurance', 'visits.registration_number as visit_registration_number', 'visits.queue_number as visit_queue_number', 'visits.visit_status as visit_status')
+            ->select(
+                'patients.*',
+                'visits.id as visit_id',
+                'visits.docter_id as visit_docter_id',
+                'visits.examination_date as visit_examination_date',
+                'visits.insurance as visit_insurance',
+                'visits.registration_number as visit_registration_number',
+                'visits.queue_number as visit_queue_number',
+                'visits.visit_status as visit_status',
+                'docter.name as docter_name'
+            )
             ->first();
 
         if (!$data) {
@@ -174,6 +186,7 @@ class PatientService
             'visit_registration_number' => $data->visit_registration_number,
             'visit_queue_number' => $data->visit_queue_number,
             'visit_status' => $data->visit_status,
+            'docter_name' => $data->docter_name,
         ];
     }
 
