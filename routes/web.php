@@ -36,12 +36,18 @@ Route::get('/queue', function () {
     return view('queue');
 })->name('queue');
 
-Route::get('/dashboard/admin', function () {
-    return view('admin.dashboard.index');
-})->name('dashboard');
-Route::get('/users', function () {
-    return view('admin.users.index');
-})->name('dashboard');
+Route::prefix('admin')->group(function() {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard.index');
+    })->name('dashboard');
+    Route::get('/users', function () {
+        return view('admin.users.index');
+    })->name('users');
+    Route::get('/users/create', function () {
+        return view('admin.users.create');
+    })->name('create');
+})->name('admin');
+
 
 Route::prefix('v1')->group(function () {
 
