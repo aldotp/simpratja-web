@@ -1,7 +1,5 @@
 import Alpine from "alpinejs";
 import "./bootstrap";
-// import "./accordion";
-import "./dialog";
 
 window.Alpine = Alpine;
 

@@ -1,3 +1,4 @@
+import { Modal } from 'flowbite';
 /**
      * Dialog Manager - Provides utility functions for managing modals and toasts
      */
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         showModal: function(id) {
             const modalElement = document.getElementById(id);
             if (modalElement) {
-                const modal = new window.Flowbite.Modal(modalElement);
+                const modal = new Modal(modalElement);
                 modal.show();
                 return modal;
             }
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hideModal: function(id) {
             const modalElement = document.getElementById(id);
             if (modalElement) {
-                const modal = new window.Flowbite.Modal(modalElement);
+                const modal = new Modal(modalElement);
                 modal.hide();
                 return modal;
             }
