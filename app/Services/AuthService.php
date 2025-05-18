@@ -15,6 +15,28 @@ class AuthService {
         $this->userRepository = $userRepository;
     }
 
+    public function loginV3($request)
+    {
+        $user = $this->userRepository->findByNIK($request->nik);
+
+        if (!$user || !password_verify($request->password, $user->password)) {
+            return response()->json([
+                'user' => null,
+                'success' => false,
+                'message' => 'Invalid credentials',
+            ], 401);
+        }
+
+        auth('web')->login($user);
+
+        return response()->json([
+            'user' => $user,
+            'success' => true,
+            'message' => 'Login successful',
+        ]);
+    }
+
+
     public function loginV2($request)
     {
         $nik = $request->nik;
@@ -179,6 +201,16 @@ class AuthService {
 
         $userId = $sessionData['id'];
         $user = $this->userRepository->getUser($userId);
+
+        if (!$user) {
+            return null;
+        }
+
+        return $user;
+    }
+
+    public function getUserAuhenticatev3($request) {
+        $user = auth()->user();
 
         if (!$user) {
             return null;

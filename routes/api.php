@@ -21,13 +21,12 @@ Route::prefix('v2')->group(function () {
             Route::delete("/logout", [AuthController::class, 'logout']);
         });
     });
-
-
 });
+
 
 Route::prefix('v1')->group(function () {
     // Endpoint Admin
-    Route::prefix('admin')->middleware(['authv2', 'role:admin'])->group(function () {
+    Route::prefix('admin')->middleware(['authv3', 'role:admin'])->group(function () {
         Route::post('/users', [UserController::class, 'createUser']);
         Route::get('/users', [UserController::class, 'getAllUsers']);
         Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
@@ -55,7 +54,7 @@ Route::prefix('v1')->group(function () {
         Route::post("/forgot-password", [AuthController::class, 'forgotPassword']);
         Route::post("/reset-password", [AuthController::class, 'resetPassword']);
 
-        Route::group(['middleware' => ['authv2']], function() {
+        Route::group(['middleware' => ['authv3']], function() {
             Route::get("/profile", [AuthController::class, 'profile']);
             Route::delete("/logout", [AuthController::class, 'logout']);
         });
@@ -78,7 +77,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Endpoint Doctor
-    Route::prefix('docters')->middleware(['authv2', 'role:docter'])->group(function () {
+    Route::prefix('docters')->middleware(['authv3', 'role:docter'])->group(function () {
         Route::get('/visits', [VisitController::class, 'getAllVisits']);
         Route::get('/visits/{id}', [VisitController::class, 'getVisitByID']);
         Route::get('/medical-records/{id}', [MedicalRecordController::class, 'getMedicalRecordDetailByPatientID']);
@@ -101,7 +100,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Endpoint Staff
-    Route::prefix('staff')->middleware(['authv2', 'role:staff'])->group(function () {
+    Route::prefix('staff')->middleware(['authv3', 'role:staff'])->group(function () {
         Route::get('/patients', [PatientController::class, 'index']); // lihat data pasien
         Route::get('/patients/{id}', [PatientController::class, 'showRegistration']);
         Route::put('/patients/{id}', [PatientController::class, 'update']); // update data pasien

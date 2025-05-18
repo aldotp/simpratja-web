@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Response\Response;
 use App\Services\AuthService;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
 
 
  class AuthController
@@ -78,6 +80,27 @@ use Illuminate\Support\Facades\Validator;
             ->cookie($loginResult['cookie']);
     }
 
+    public function loginV3(Request $request)
+    {
+        $request->validate([
+            'nik' => 'required|integer',
+            'password' => 'required|string',
+        ]);
+
+        $user = \App\Models\User::where('nik', $request->nik)->first();
+
+        if (!$user || !password_verify($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        Auth::guard('web')->login($user);
+
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => $user,
+        ]);
+    }
+
     public function profile(Request $request) {
         $user = $this->authService->getUserAuhenticate($request);
 
@@ -97,6 +120,17 @@ use Illuminate\Support\Facades\Validator;
 
         return $this->response->responseSuccess($user, 'Profile retrieved successfully', 200);
     }
+
+    public function profilev3(Request $request) {
+        $user = $this->authService->getUserAuhenticatev3($request);
+
+        if (!$user) {
+            return $this->response->responseError('User not found', 404);
+        }
+
+        return $this->response->responseSuccess($user, 'Profile retrieved successfully', 200);
+    }
+
 
 
     public function logout()
