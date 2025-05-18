@@ -12,7 +12,7 @@ services:
             MYSQL_USER: simpratja
             MYSQL_PASSWORD: 1235678a
         volumes:
-            - ./data/mysql:/var/lib/mysql
+            - ./dbmysql/mysql:/var/lib/mysql
         restart: unless-stopped
         healthcheck:
             test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
