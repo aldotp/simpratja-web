@@ -16,7 +16,7 @@
                 <x-form.button class="!p-3" variant="secondary" onclick="window.location.href='{{ route('users') }}'">
                     <i class="fa-solid fa-angle-left"></i>
                 </x-form.button>
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
                     {{ __('Edit User') }}
                 </h2>
             </div>

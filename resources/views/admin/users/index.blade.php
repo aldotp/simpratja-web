@@ -11,10 +11,10 @@
 
         <x-ui.card class="mt-2">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
                     {{ __('Data User') }}
                 </h2>
-                <x-form.button class="!py-2 !px-2.5" onclick="window.location.href='{{ route('create') }}'">
+                <x-form.button class="!py-2 !px-2.5" onclick="window.location.href='{{ route('admin.users.create') }}'">
                     <i class="fas fa-plus mr-2"></i>
                     {{ __('Create') }}
                 </x-form.button>

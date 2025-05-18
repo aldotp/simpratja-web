@@ -135,7 +135,7 @@ use Illuminate\Support\Facades\Auth;
 
     public function logout()
     {
-        auth()->logout();
+        Auth::logout();
 
         $response = $this->response->responseSuccess(null, 'Successfully Logout successfully', 200);
 

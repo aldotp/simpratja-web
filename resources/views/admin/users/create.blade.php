@@ -14,10 +14,10 @@
         ]" />
         <x-ui.card class="mt-2">
             <div class="flex flex-row gap-4 items-center">
-                <x-form.button class="!p-3" variant="secondary" onclick="window.location.href='{{ route('users') }}'">
+                <x-form.button class="!p-3" variant="secondary" onclick="window.location.href='{{ route('admin.users.index') }}'">
                     <i class="fa-solid fa-angle-left"></i>
                 </x-form.button>
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
                     {{ __('Create User') }}
                 </h2>
             </div>
