@@ -35,4 +35,5 @@ class ReportRepository
     {
         return Report::count();
     }
+
 }

@@ -147,6 +147,36 @@ class PatientService
         return "REG/{$kodeKunjungan}/{$examinationDate}/{$nomorUrut}";
     }
 
+    public function getRegisByRegistrationIDandNIK($request)
+    {
+        $data = DB::table('patients')
+            ->join('visits', 'patients.id', '=', 'visits.patient_id')
+            ->where('patients.nik', $request['nik'])
+            ->where('visits.registration_number', $request['registration_number'])
+            ->select('patients.*', 'visits.id as visit_id', 'visits.docter_id as visit_docter_id', 'visits.examination_date as visit_examination_date', 'visits.insurance as visit_insurance', 'visits.registration_number as visit_registration_number', 'visits.queue_number as visit_queue_number', 'visits.visit_status as visit_status')
+            ->first();
+
+        if (!$data) {
+            return null;
+        }
+
+        return [
+            'patient_id' => $data->id,
+            'patient_name' => $data->name,
+            'patient_nik' => $data->nik,
+            'patient_gender' => $data->gender,
+            'patient_phone_number' => $data->phone_number,
+            'patient_address' => $data->address,
+            'visit_id' => $data->visit_id,
+            'visit_docter_id' => $data->visit_docter_id,
+            'visit_examination_date' => $data->visit_examination_date,
+            'visit_insurance' => $data->visit_insurance,
+            'visit_registration_number' => $data->visit_registration_number,
+            'visit_queue_number' => $data->visit_queue_number,
+            'visit_status' => $data->visit_status,
+        ];
+    }
+
     public function getRegistration($id)
     {
         $patient = $this->patientRepository->getByID($id);
@@ -204,6 +234,7 @@ class PatientService
                 'patient_nik' => $visit->patient->nik ?? null,
                 'patient_gender' => $visit->patient->gender ?? null,
                 'patient_phone_number' => $visit->patient->phone_number ?? null,
+                'patient_address' => $visit->patient->address?? null,
                 'visit_id' => $visit->id,
                 'visit_docter_id' => $visit->docter_id,
                 'visit_docter_name' => $visit->docter->name ?? null,
@@ -214,5 +245,18 @@ class PatientService
                 'visit_status' => $visit->visit_status,
             ];
         });
+    }
+
+    public function delete($id)
+    {
+        $patient = $this->patientRepository->getByID($id);
+
+        if (!$patient) {
+            return null;
+        }
+
+        $patient->delete();
+
+        return $patient;
     }
 }

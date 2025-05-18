@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\LeaderController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\ReceiptExportController;
 
 
 
@@ -51,7 +53,6 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // Endpoint Admin
     Route::prefix('admin')->middleware(['authv3', 'role:admin'])->group(function () {
         Route::post('/users', [UserController::class, 'createUser']);
         Route::get('/users', [UserController::class, 'getAllUsers']);
@@ -70,15 +71,18 @@ Route::prefix('v1')->group(function () {
         Route::post('/reports', [ReportController::class, 'store']);
         Route::put('/reports/{id}', [ReportController::class, 'update']);
         Route::get('/reports/{id}', [ReportController::class, 'show']);
+
+        Route::get('/dashboard', [AdminController::class, 'dashboard']);
     });
 
 
-    // Endpoint Patients
     Route::prefix('patients')->group(function () {
         Route::post('/register', [PatientController::class, 'register']);
         Route::post('/register-existing', [VisitController::class, 'registerExistingPatientVisit']);
         Route::get('/registrations/', [PatientController::class, 'getAllRegistration']);
         Route::get('/registrations/{id}', [PatientController::class, 'showRegistration']);
+        Route::get('/check-registrations/', [PatientController::class, 'showRegistrationByRegistrationIDandNIK']);
+        Route::get('/export-receipt', [ReceiptExportController::class, 'exportQueueToPDF']);
         Route::get('/queue-number/{id}', [VisitController::class, 'getQueueNumber']);
         Route::post('/feedbacks', [FeedbackController::class, 'store']);
 
@@ -89,7 +93,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/feedbacks/{id}', [FeedbackController::class, 'show']);
     });
 
-    // Endpoint Doctor
     Route::prefix('docters')->middleware(['authv3', 'role:docter'])->group(function () {
         Route::get('/visits', [VisitController::class, 'getAllVisits']);
         Route::get('/visits/{id}', [VisitController::class, 'getVisitByID']);
@@ -134,7 +137,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Endpoint Leaders
-    Route::prefix('leader')->middleware(['authv2', 'role:leader'])->group(function () {
+    Route::prefix('leader')->middleware(['authv3', 'role:leader'])->group(function () {
         Route::get('/reports', [ReportController::class, 'index']);
         Route::get('/feedbacks', [FeedbackController::class, 'index']);
         Route::get('/feedbacks/{id}', [FeedbackController::class, 'show']);
