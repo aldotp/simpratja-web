@@ -22,6 +22,25 @@ Route::get('/portal', function () {
     return view('portal');
 })->name('portal');
 
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/queue', function () {
+    return view('queue');
+})->name('queue');
+
+Route::get('/dashboard/admin', function () {
+    return view('admin.dashboard.index');
+})->name('dashboard');
+Route::get('/users', function () {
+    return view('admin.users.index');
+})->name('dashboard');
+
 Route::prefix('v1')->group(function () {
 
     Route::prefix('auth')->group(function () {

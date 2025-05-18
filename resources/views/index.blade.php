@@ -120,7 +120,8 @@
                 <div class="md:w-1/2 mb-10 md:mb-0">
                     <div class="grid grid-cols-2 gap-4">
                         <img src="https://placehold.co/300x300" alt="Telemedicine" class="rounded-lg shadow-md">
-                        <img src="https://placehold.co/300x300" alt="Doctor with patient" class="rounded-lg shadow-md mt-8">
+                        <img src="https://placehold.co/300x300" alt="Doctor with patient"
+                            class="rounded-lg shadow-md mt-8">
                     </div>
                 </div>
 
@@ -153,174 +154,107 @@
                     outpatient healthcare services.</p>
             </div>
 
-            <div class="testimonial-carousel relative">
-                <!-- Carousel Navigation Arrows -->
-                <div class="testimonial-arrow prev">
-                    <i class="fas fa-chevron-left text-primary-600"></i>
-                </div>
-                <div class="testimonial-arrow next">
-                    <i class="fas fa-chevron-right text-primary-600"></i>
-                </div>
-
-                <!-- Testimonial Track/Wrapper -->
-                <div class="testimonial-track swiper-wrapper px-4">
-                    <!-- Testimonial 1 -->
-                    <div class="testimonial-slide p-2">
-                        <div
-                            class="testimonial-card bg-white border border-gray-100 rounded-lg p-6 shadow-sm h-full flex flex-col">
-                            <div class="flex text-yellow-400 mb-4">
+            <!-- Flowbite Carousel Component -->
+            <div id="testimonial-carousel" class="relative w-full" data-carousel="slide" data-carousel-interval="5000">
+                <!-- Carousel wrapper -->
+                <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+                    <!-- Item 1 -->
+                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                        <div class="flex flex-col items-center p-8 text-center bg-white rounded-lg">
+                            <img class="w-24 h-24 mb-4 rounded-full object-cover" src="https://placehold.co/200x200"
+                                alt="Patient 1">
+                            <h3 class="text-lg font-semibold text-gray-800">Budi Santoso</h3>
+                            <p class="text-sm text-gray-500 mb-4">Pasien Rawat Jalan</p>
+                            <div class="flex text-yellow-400 mb-3">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                             </div>
-                            <p class="text-gray-600 italic mb-6 grow">
-                                "I was amazed by how quickly I was able to get a consultation. The doctor was very
-                                thorough and took the time to explain everything to me. The follow-up was excellent
-                                too!"
-                            </p>
-                            <div class="flex items-center mt-auto">
-                                <img src=<img src="https://placehold.co/50x50" alt="Patient"
-                                    class="w-12 h-12 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-medium text-gray-800">Sarah Johnson</h4>
-                                    <p class="text-sm text-gray-500">Patient since 2021</p>
-                                </div>
-                            </div>
+                            <p class="text-gray-600">"Layanan rawat jalan di sini sangat membantu saya. Dokternya ramah
+                                dan profesional. Proses pendaftaran mudah dan tidak perlu menunggu lama. Saya sangat
+                                merekomendasikan layanan ini untuk semua."</p>
                         </div>
                     </div>
-
-                    <!-- Testimonial 2 -->
-                    <div class="testimonial-slide p-2">
-                        <div
-                            class="testimonial-card bg-white border border-gray-100 rounded-lg p-6 shadow-sm h-full flex flex-col">
-                            <div class="flex text-yellow-400 mb-4">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="text-gray-600 italic mb-6 grow">
-                                "The 24-hour consultation service has been a lifesaver for my family. Being able to
-                                speak with a healthcare professional at any time gives us peace of mind, especially with
-                                young children."
-                            </p>
-                            <div class="flex items-center mt-auto">
-                                <img src="https://placehold.co/50x50" alt="Patient" class="w-12 h-12 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-medium text-gray-800">Michael Rodriguez</h4>
-                                    <p class="text-sm text-gray-500">Patient since 2020</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Testimonial 3 -->
-                    <div class="testimonial-slide p-2">
-                        <div
-                            class="testimonial-card bg-white border border-gray-100 rounded-lg p-6 shadow-sm h-full flex flex-col">
-                            <div class="flex text-yellow-400 mb-4">
+                    <!-- Item 2 -->
+                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                        <div class="flex flex-col items-center p-8 text-center bg-white rounded-lg">
+                            <img class="w-24 h-24 mb-4 rounded-full object-cover" src="https://placehold.co/200x200"
+                                alt="Patient 2">
+                            <h3 class="text-lg font-semibold text-gray-800">Siti Rahayu</h3>
+                            <p class="text-sm text-gray-500 mb-4">Pasien Konsultasi Online</p>
+                            <div class="flex text-yellow-400 mb-3">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star-half-alt"></i>
                             </div>
-                            <p class="text-gray-600 italic mb-6 grow">
-                                "I appreciate how easy it is to access my medical records through the platform. The
-                                doctors are knowledgeable and caring, and the prescription service is very convenient."
-                            </p>
-                            <div class="flex items-center mt-auto">
-                                <img src="https://placehold.co/50x50" alt="Patient" class="w-12 h-12 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-medium text-gray-800">Emily Chen</h4>
-                                    <p class="text-sm text-gray-500">Patient since 2022</p>
-                                </div>
-                            </div>
+                            <p class="text-gray-600">"Konsultasi online 24 jam sangat membantu saya yang memiliki
+                                jadwal kerja padat. Dokter memberikan saran yang jelas dan resep yang tepat. Aplikasinya
+                                juga mudah digunakan."</p>
                         </div>
                     </div>
-
-                    <!-- Testimonial 4 -->
-                    <div class="testimonial-slide p-2">
-                        <div
-                            class="testimonial-card bg-white border border-gray-100 rounded-lg p-6 shadow-sm h-full flex flex-col">
-                            <div class="flex text-yellow-400 mb-4">
+                    <!-- Item 3 -->
+                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                        <div class="flex flex-col items-center p-8 text-center bg-white rounded-lg">
+                            <img class="w-24 h-24 mb-4 rounded-full object-cover" src="https://placehold.co/200x200"
+                                alt="Patient 3">
+                            <h3 class="text-lg font-semibold text-gray-800">Ahmad Hidayat</h3>
+                            <p class="text-sm text-gray-500 mb-4">Pasien Reguler</p>
+                            <div class="flex text-yellow-400 mb-3">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                             </div>
-                            <p class="text-gray-600 italic mb-6 grow">
-                                "As someone with a chronic condition, having access to quality healthcare without long
-                                wait times has been life-changing. The staff is professional and the service is
-                                excellent."
-                            </p>
-                            <div class="flex items-center mt-auto">
-                                <img src="https://placehold.co/50x50" alt="Patient" class="w-12 h-12 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-medium text-gray-800">David Thompson</h4>
-                                    <p class="text-sm text-gray-500">Patient since 2019</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Testimonial 5 -->
-                    <div class="testimonial-slide p-2">
-                        <div
-                            class="testimonial-card bg-white border border-gray-100 rounded-lg p-6 shadow-sm h-full flex flex-col">
-                            <div class="flex text-yellow-400 mb-4">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="text-gray-600 italic mb-6 grow">
-                                "I was skeptical about online consultations at first, but the quality of care I received
-                                exceeded my expectations. The doctors are thorough and the platform is easy to use."
-                            </p>
-                            <div class="flex items-center mt-auto">
-                                <img src="https://placehold.co/50x50" alt="Patient" class="w-12 h-12 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-medium text-gray-800">Sophia Williams</h4>
-                                    <p class="text-sm text-gray-500">Patient since 2021</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Testimonial 6 -->
-                    <div class="testimonial-slide p-2">
-                        <div
-                            class="testimonial-card bg-white border border-gray-100 rounded-lg p-6 shadow-sm h-full flex flex-col">
-                            <div class="flex text-yellow-400 mb-4">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="text-gray-600 italic mb-6 grow">
-                                "The convenience of getting medical advice from home has been invaluable. The doctors
-                                are attentive and the prescription delivery service is prompt and reliable."
-                            </p>
-                            <div class="flex items-center mt-auto">
-                                <img src="https://placehold.co/50x50" alt="Patient" class="w-12 h-12 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-medium text-gray-800">James Wilson</h4>
-                                    <p class="text-sm text-gray-500">Patient since 2020</p>
-                                </div>
-                            </div>
+                            <p class="text-gray-600">"Sistem pencatatan rekam medis sangat terorganisir. Saya bisa
+                                dengan mudah melihat riwayat pengobatan saya. Staf medis juga selalu mengingatkan jadwal
+                                kontrol berikutnya."</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Testimonial Dots -->
-                <div class="testimonial-dots"></div>
+                <!-- Slider indicators -->
+                <div class="absolute z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse bottom-5 left-1/2">
+                    <button type="button"
+                        class="w-3 h-3 rounded-full bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800"
+                        aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+                    <button type="button"
+                        class="w-3 h-3 rounded-full bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800"
+                        aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
+                    <button type="button"
+                        class="w-3 h-3 rounded-full bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800"
+                        aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
+                </div>
+                <!-- Slider controls -->
+                <button type="button"
+                    class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                    data-carousel-prev>
+                    <span
+                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="M5 1 1 5l4 4" />
+                        </svg>
+                        <span class="sr-only">Previous</span>
+                    </span>
+                </button>
+                <button type="button"
+                    class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                    data-carousel-next>
+                    <span
+                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="sr-only">Next</span>
+                    </span>
+                </button>
             </div>
         </div>
     </section>
@@ -352,99 +286,92 @@
             </div>
 
             <div class="max-w-3xl mx-auto">
-                <!-- FAQ Item 1 -->
-                <div class="border-b border-gray-200 py-4">
-                    <button class="accordion-toggle w-full flex justify-between items-center focus:outline-none">
-                        <span class="text-lg font-medium text-gray-800">What do you get from this consultation?</span>
-                        <i class="fas fa-plus text-primary-600 accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content mt-2 text-gray-600">
-                        <p>The service will provide you with consultations with doctors who are experts in this problem
-                            you are facing. Then this service is operated for 24 hours which can be accessed quickly and
-                            easily through the application or website. The service also provides prescriptions and
-                            medical records, with the added benefit of being able to be consulted and recorded.</p>
+                <!-- FAQ Section with Healthcare Theme -->
+                <div id="accordion-flush" data-accordion="collapse"
+                    data-active-classes="bg-white text-primary-700 font-medium" data-inactive-classes="text-gray-600">
+                    <h2 id="accordion-flush-heading-1">
+                        <button type="button"
+                            class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-600 border-b border-gray-200 hover:text-primary-600 gap-3"
+                            data-accordion-target="#accordion-flush-body-1" aria-expanded="true"
+                            aria-controls="accordion-flush-body-1">
+                            <span>Apa itu layanan rawat jalan?</span>
+                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0 text-primary-600"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M9 5 5 1 1 5" />
+                            </svg>
+                        </button>
+                    </h2>
+                    <div id="accordion-flush-body-1" class="hidden" aria-labelledby="accordion-flush-heading-1">
+                        <div class="py-5 border-b border-gray-200">
+                            <p class="mb-2 text-gray-600">Layanan rawat jalan adalah perawatan medis yang diberikan
+                                tanpa perlu menginap di rumah sakit. Pasien dapat berkonsultasi dengan dokter,
+                                mendapatkan diagnosis, pengobatan, dan tindak lanjut tanpa harus dirawat inap.</p>
+                            <p class="text-gray-600">Layanan kami menawarkan konsultasi 24 jam, resep medis, dan akses
+                                ke catatan kesehatan Anda kapan saja. <a href="patient-registration.html"
+                                    class="text-primary-600 hover:underline">Daftar sekarang</a> untuk mendapatkan
+                                akses ke layanan rawat jalan kami.</p>
+                        </div>
+                    </div>
+                    <h2 id="accordion-flush-heading-2">
+                        <button type="button"
+                            class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-600 border-b border-gray-200 hover:text-primary-600 gap-3"
+                            data-accordion-target="#accordion-flush-body-2" aria-expanded="false"
+                            aria-controls="accordion-flush-body-2">
+                            <span>Bagaimana cara mendaftar untuk konsultasi?</span>
+                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0 text-primary-600"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M9 5 5 1 1 5" />
+                            </svg>
+                        </button>
+                    </h2>
+                    <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
+                        <div class="py-5 border-b border-gray-200">
+                            <p class="mb-2 text-gray-600">Untuk mendaftar konsultasi, Anda dapat menggunakan tombol
+                                "Book Now" di halaman utama atau mengunjungi halaman pendaftaran pasien. Isi formulir
+                                dengan informasi yang diperlukan dan pilih jadwal yang tersedia.</p>
+                            <p class="text-gray-600">Setelah pendaftaran berhasil, Anda akan menerima konfirmasi
+                                melalui email atau SMS dengan detail janji temu Anda. Anda juga dapat <a
+                                    href="queue-status.html" class="text-primary-600 hover:underline">memeriksa status
+                                    antrian</a> secara real-time melalui portal pasien kami.</p>
+                        </div>
+                    </div>
+                    <h2 id="accordion-flush-heading-3">
+                        <button type="button"
+                            class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-600 border-b border-gray-200 hover:text-primary-600 gap-3"
+                            data-accordion-target="#accordion-flush-body-3" aria-expanded="false"
+                            aria-controls="accordion-flush-body-3">
+                            <span>Apakah layanan konsultasi tersedia 24 jam?</span>
+                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0 text-primary-600"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M9 5 5 1 1 5" />
+                            </svg>
+                        </button>
+                    </h2>
+                    <div id="accordion-flush-body-3" class="hidden" aria-labelledby="accordion-flush-heading-3">
+                        <div class="py-5 border-b border-gray-200">
+                            <p class="mb-2 text-gray-600">Ya, layanan konsultasi kami tersedia 24 jam sehari, 7 hari
+                                seminggu. Kami memahami bahwa masalah kesehatan dapat terjadi kapan saja, dan tim medis
+                                kami siap membantu Anda setiap saat.</p>
+                            <p class="mb-2 text-gray-600">Untuk konsultasi darurat di luar jam kerja reguler, Anda
+                                dapat menggunakan fitur konsultasi online atau menghubungi nomor darurat yang tersedia
+                                di portal pasien.</p>
+                            <p class="mb-2 text-gray-600">Layanan yang tersedia 24 jam meliputi:</p>
+                            <ul class="ps-5 text-gray-600 list-disc">
+                                <li>Konsultasi medis umum</li>
+                                <li>Bantuan darurat non-kritis</li>
+                                <li>Pembaruan resep obat mendesak</li>
+                                <li>Panduan perawatan diri untuk kondisi ringan</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
-                <!-- FAQ Item 2 -->
-                <div class="border-b border-gray-200 py-4">
-                    <button class="accordion-toggle w-full flex justify-between items-center focus:outline-none">
-                        <span class="text-lg font-medium text-gray-800">What are the benefits of having a health
-                            consultation?</span>
-                        <i class="fas fa-plus text-primary-600 accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content mt-2 text-gray-600">
-                        <p>Health consultations allow you to detect potential health issues early, get professional
-                            medical advice, understand your treatment options, and maintain your overall wellbeing.
-                            Regular consultations can prevent serious conditions from developing and help you manage
-                            existing health concerns effectively.</p>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 3 -->
-                <div class="border-b border-gray-200 py-4">
-                    <button class="accordion-toggle w-full flex justify-between items-center focus:outline-none">
-                        <span class="text-lg font-medium text-gray-800">Does this service have official experts and
-                            certifications?</span>
-                        <i class="fas fa-plus text-primary-600 accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content mt-2 text-gray-600">
-                        <p>Yes, all our healthcare professionals are fully licensed and certified in their respective
-                            fields. We maintain strict verification processes to ensure that only qualified medical
-                            experts provide consultations through our platform. You can view their credentials and
-                            specializations before booking an appointment.</p>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 4 -->
-                <div class="border-b border-gray-200 py-4">
-                    <button class="accordion-toggle w-full flex justify-between items-center focus:outline-none">
-                        <span class="text-lg font-medium text-gray-800">How do I schedule an appointment?</span>
-                        <i class="fas fa-plus text-primary-600 accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content mt-2 text-gray-600">
-                        <p>Scheduling an appointment is simple. You can book through our website or mobile app. Select
-                            your preferred doctor, choose an available time slot, fill in your details, and confirm your
-                            appointment. You'll receive a confirmation email with all the necessary information for your
-                            consultation.</p>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 5 -->
-                <div class="border-b border-gray-200 py-4">
-                    <button class="accordion-toggle w-full flex justify-between items-center focus:outline-none">
-                        <span class="text-lg font-medium text-gray-800">How does the queue system work?</span>
-                        <i class="fas fa-plus text-primary-600 accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content mt-2 text-gray-600">
-                        <p>Our queue system provides real-time updates on wait times for each department. After
-                            registration, you can check your position in the queue and estimated wait time. The system
-                            automatically notifies you when your turn is approaching, allowing you to plan your visit
-                            efficiently and minimize waiting time at the facility.</p>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 6 -->
-                <div class="border-b border-gray-200 py-4">
-                    <button class="accordion-toggle w-full flex justify-between items-center focus:outline-none">
-                        <span class="text-lg font-medium text-gray-800">How do I access the patient portal?</span>
-                        <i class="fas fa-plus text-primary-600 accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content mt-2 text-gray-600">
-                        <p>You can access the patient portal by clicking on the "Patient Portal" link in the navigation
-                            menu. New patients will need to register by providing essential information, while existing
-                            patients can log in using their credentials. The portal provides access to your medical
-                            records, appointment scheduling, queue status, and more.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-10">
-                <h3 class="text-xl font-medium text-gray-800 mb-4">Have Any Question?</h3>
-                <a href="#contact"
-                    class="inline-block bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-md font-medium transition duration-300">
-                    Ask Now
-                </a>
             </div>
         </div>
     </section>
@@ -515,7 +442,8 @@
 
                         <div class="space-y-6">
                             <div class="flex items-start">
-                                <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                                <div
+                                    class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
                                     <i class="fas fa-map-marker-alt text-primary-600"></i>
                                 </div>
                                 <div>
@@ -525,7 +453,8 @@
                             </div>
 
                             <div class="flex items-start">
-                                <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                                <div
+                                    class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
                                     <i class="fas fa-phone-alt text-primary-600"></i>
                                 </div>
                                 <div>
@@ -536,7 +465,8 @@
                             </div>
 
                             <div class="flex items-start">
-                                <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                                <div
+                                    class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
                                     <i class="fas fa-envelope text-primary-600"></i>
                                 </div>
                                 <div>
@@ -547,7 +477,8 @@
                             </div>
 
                             <div class="flex items-start">
-                                <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                                <div
+                                    class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
                                     <i class="fas fa-clock text-primary-600"></i>
                                 </div>
                                 <div>

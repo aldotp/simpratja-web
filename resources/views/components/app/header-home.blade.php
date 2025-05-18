@@ -8,14 +8,14 @@
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex space-x-8">
             <a href="{{ route('home') }}" class="text-gray-700 hover:text-primary-600 font-medium">Home</a>
-            <a href="#about" class="text-gray-700 hover:text-primary-600 font-medium">About</a>
-            <a href="#" class="text-gray-700 hover:text-primary-600 font-medium">Queue</a>
+            <a href="{{ route('about') }}" class="text-gray-700 hover:text-primary-600 font-medium">About</a>
+            <a href="{{ route('queue') }}" class="text-gray-700 hover:text-primary-600 font-medium">Queue</a>
         </nav>
 
         <div class="flex items-center space-x-4">
-            <a href="#"
+            <a href="{{ route('login') }}"
                 class="hidden md:block border border-primary-600 text-primary-600 hover:bg-primary-50 px-6 py-2 rounded-md transition duration-300">Login</a>
-            <a href="#"
+            <a href="{{ route('portal') }}"
                 class="hidden md:block bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-md transition duration-300">Portal</a>
 
             <!-- Mobile Menu Button -->
@@ -34,8 +34,8 @@
         <div class="container mx-auto px-4 py-2 space-y-2">
             <a href="{{ route('home') }}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Home</a>
             <a href="#about" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">About</a>
-            <a href="#" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Queue</a>
-            <a href="#" class="block py-2 text-primary-600 font-medium">Login</a>
+            <a href="{{ route('queue') }}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Queue</a>
+            <a href="{{ route('login') }}" class="block py-2 text-primary-600 font-medium">Login</a>
         </div>
     </div>
 </header>
