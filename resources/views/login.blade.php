@@ -1,4 +1,3 @@
-@extends('layouts.app')
 @push('styles')
     <style>
         .login-bg {
@@ -40,7 +39,8 @@
                         <p class="text-gray-600 mt-2">Access your healthcare information securely</p>
                     </div>
 
-                    <form id="login-form" class="space-y-6">
+                    <form id="login-form" method="POST" action="{{ route('login.submit') }}" class="space-y-6">
+                        @csrf
                         <div>
                             <x-form.input type="text" id="nik" name="nik" label="NIK"
                                 placeholder="Masukkan NIK" required="true" />

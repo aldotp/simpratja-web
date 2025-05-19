@@ -5,11 +5,11 @@
 <div class="relative inline-flex" x-data="{ open: false }">
     <button class="inline-flex justify-center items-center group" aria-haspopup="true" @click.prevent="open = !open"
         :aria-expanded="open">
-        <img class="w-8 h-8 rounded-full" src="#" width="32" height="32"
-            alt="avatar" />
+        <img class="w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name={{ auth()->user()->detail->name }}"
+            width="32" height="32" alt="avatar" />
         <div class="flex items-center truncate">
             <span
-                class="truncate ml-2 text-sm font-medium text-gray-600 dark:text-gray-100 group-hover:text-gray-800 dark:group-hover:text-white">Test</span>
+                class="truncate ml-2 text-sm font-medium text-gray-600 dark:text-gray-100 group-hover:text-gray-800 dark:group-hover:text-white">{{ auth()->user()->detail->name }}</span>
             <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" viewBox="0 0 12 12">
                 <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
             </svg>
@@ -22,22 +22,21 @@
         x-transition:leave="transition ease-out duration-200" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0" x-cloak>
         <div class="pt-0.5 pb-2 px-3 mb-1 border-b border-gray-200 dark:border-gray-700/60">
-            <div class="font-medium text-gray-800 dark:text-gray-100">Test</div>
-            <div class="text-xs text-gray-500 dark:text-gray-400 italic">Administrator</div>
+            <div class="font-medium text-gray-800 dark:text-gray-100">{{ auth()->user()->detail->name }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 italic">{{ auth()->user()->role }}</div>
         </div>
         <ul>
             <li>
                 <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3"
-                    href="#" @click="open = false" @focus="open = true"
-                    @focusout="open = false">Settings</a>
+                    href="#" @click="open = false" @focus="open = true" @focusout="open = false">Settings</a>
             </li>
             <li>
-                <form method="POST" action="#" x-data>
+                <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
+                    @method('DELETE')
 
                     <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3"
-                        href="#" @click.prevent="$root.submit();" @focus="open = true"
-                        @focusout="open = false">
+                        href="#" @click.prevent="$root.submit();" @focus="open = true" @focusout="open = false">
                         {{ __('Sign Out') }}
                     </a>
                 </form>

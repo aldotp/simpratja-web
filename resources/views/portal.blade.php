@@ -35,7 +35,9 @@
                                 baru. Semua informasi dijaga kerahasiaan dan keamanannya.</p>
                         </div>
 
-                        <form id="registration-form" class="space-y-6">
+                        <form id="registration-form" class="space-y-6" action="{{ route('patient.register') }}"
+                            method="POST">
+                            @csrf
                             <div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <x-form.input name="nik" id="nik" label="NIK"
@@ -47,24 +49,22 @@
                                         placeholder="Pilih tanggal lahir" />
                                     <x-form.select name="gender" id="gender" label="Jenis Kelamin"
                                         placeholder="Pilih jenis kelamin">
-                                        <option value="male">Laki Laki</option>
-                                        <option value="female">Perempuan</option>
+                                        <option value="0">Perempuan</option>
+                                        <option value="1">Laki Laki</option>
                                     </x-form.select>
                                     <x-form.select name="blood-type" id="blood-type" label="Gol. Darah"
                                         placeholder="Pilih Golongan Darah">
-                                        <option value="A">A</option>
-                                        <option value="B">B</option>
-                                        <option value="AB">AB</option>
-                                        <option value="O">O</option>
+                                        <option value="1">A</option>
+                                        <option value="2">B</option>
+                                        <option value="3">AB</option>
+                                        <option value="4">O</option>
                                     </x-form.select>
                                     <x-form.input name="religion" id="religion" label="Agama"
                                         placeholder="Masukkan Agama" />
                                     <x-form.select name="marital-status" id="marital-status" label="Status"
                                         placeholder="Pilih Status">
-                                        <option value="single">Belum Menikah</option>
-                                        <option value="married">Menikah</option>
-                                        <option value="divorced">Cerai</option>
-                                        <option value="widowed">Janda/Duda</option>
+                                        <option value="false">Belum Menikah</option>
+                                        <option value="true">Menikah</option>
                                     </x-form.select>
                                     <x-form.input type="tel" name="phone" id="phone" label="No. HP"
                                         placeholder="Masukkan Nomor HP" required />
@@ -145,8 +145,7 @@
                             </div>
 
                             <div class="mt-6">
-                                <x-form.button type="submit"
-                                    class="w-full transition duration-300">
+                                <x-form.button type="submit" class="w-full transition duration-300">
                                     Daftar Sekarang
                                 </x-form.button>
                             </div>

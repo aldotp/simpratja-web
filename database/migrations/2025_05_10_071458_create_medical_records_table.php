@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('medical_record_number', 20);
             $table->timestamps();
 
-            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->foreign('patient_id')->references('id')->on('patients')->cascadeOnDelete();
         });
 
     }

@@ -22,8 +22,8 @@ return new class extends Migration
             $table->tinyInteger('visit_status')->length(1);
             $table->timestamps();
 
-            $table->foreign('patient_id')->references('id')->on('patients');
-            $table->foreign('docter_id')->references('id')->on('users');
+            $table->foreign('patient_id')->references('id')->on('patients')->cascadeOnDelete();
+            $table->foreign('docter_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

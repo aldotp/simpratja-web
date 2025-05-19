@@ -66,11 +66,16 @@ class UserRepository
     public function getAllUsersDetail($filters = [])
     {
 
-        $query = DB::table('users')
-        ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-        ->select("users.id", "users.nik", "users.role", "user_details.name", "user_details.phone_number", "user_details.gender", "user_details.quota", "users.created_at", "users.updated_at");
+        // $query = DB::table('users')
+        // ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
+        // ->select("users.id", "users.nik", "users.role", "user_details.name", "user_details.phone_number", "user_details.gender", "user_details.quota", "users.created_at", "users.updated_at");
 
-        return $query->get();
+       $user = User::all();
+
+
+
+
+        return $user;
 
     }
 

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer("rating")->length(1);
             $table->timestamps();
 
-            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->foreign('patient_id')->references('id')->on('patients')->cascadeOnDelete();
         });
     }
 

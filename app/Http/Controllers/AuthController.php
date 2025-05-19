@@ -131,22 +131,20 @@ use Illuminate\Support\Facades\Auth;
         return $this->response->responseSuccess($user, 'Profile retrieved successfully', 200);
     }
 
+    // public function logout()
+    // {
+    //     Auth::logout();
 
+    //     $response = $this->response->responseSuccess(null, 'Successfully Logout successfully', 200);
 
-    public function logout()
-    {
-        auth()->logout();
+    //     if (method_exists($response, 'header')) {
+    //         $response->headers->remove('Authorization');
+    //     }
 
-        $response = $this->response->responseSuccess(null, 'Successfully Logout successfully', 200);
+    //     $cookie = cookie()->forget('user_session');
 
-        if (method_exists($response, 'header')) {
-            $response->headers->remove('Authorization');
-        }
-
-        $cookie = cookie()->forget('user_session');
-
-        return $response->withCookie($cookie);
-    }
+    //     return $response->withCookie($cookie);
+    // }
 
     public function refreshToken(Request $request) {
         $data =  $this->authService->refreshToken($request);
@@ -178,9 +176,7 @@ use Illuminate\Support\Facades\Auth;
     public function resetPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6'
+            'nik' => 'required',
         ]);
 
         if ($validator->fails()) {
