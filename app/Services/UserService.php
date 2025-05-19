@@ -21,19 +21,7 @@ class UserService {
     {
         $users = $this->userRepository->getAllUsersDetail($request);
 
-      return $users->map(function ($data) {
-        return [
-            "id" => $data->id,
-            "name" => $data->name,
-            "nik" => $data->nik,
-            "role" => $data->role,
-            "phone_number" => $data->phone_number,
-            "gender" => $data->gender,
-            "quota" => $data->quota,
-            "created_at" => $data->created_at,
-            "updated_at" => $data->updated_at,
-        ];
-    });
+      return $users;
     }
 
     public function getUser($id)
@@ -214,8 +202,8 @@ class UserService {
     }
 
 
-    public function resetPassword($id){
-        $user = $this->userRepository->getUser($id);
+    public function resetPassword($nik){
+        $user = $this->userRepository->findByNik($nik);
         if (!$user) {
             return null;
         }

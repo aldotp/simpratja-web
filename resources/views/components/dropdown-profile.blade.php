@@ -31,8 +31,9 @@
                     href="#" @click="open = false" @focus="open = true" @focusout="open = false">Settings</a>
             </li>
             <li>
-                <form method="DELETE" action="{{ route('logout') }}" x-data>
+                <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
+                    @method('DELETE')
 
                     <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3"
                         href="#" @click.prevent="$root.submit();" @focus="open = true" @focusout="open = false">

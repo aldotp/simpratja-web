@@ -227,18 +227,9 @@ class AuthService {
 
     public function resetPassword($data)
     {
-        $user = $this->userRepository->findByEmail($data['email']);
-        if (!$user || $user->remember_token !== $data['token']) {
-            return ['success' => false, 'message' => 'Token tidak valid'];
-        }
+        $user = $this->userRepository->findByNIK($data['nik']);
 
-        if (now()->gt($user->reset_password_expired_at)) {
-            return ['success' => false, 'message' => 'Token sudah kadaluarsa'];
-        }
-
-        $user->password = bcrypt($data['password']);
-        $user->remember_token = null;
-        $user->reset_password_expired_at = null;
+        $user->password = bcrypt("12345678a");
         $user->save();
 
         return ['success' => true, 'message' => 'Password berhasil direset'];

@@ -16,10 +16,10 @@ class UserController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $users = $this->userService->getAllUsers();
-        return view('admin.users.index');
+        $users = $this->userService->getAllUsers($request);
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -52,7 +52,7 @@ class UserController
             return redirect()->back()->with('error', $result['message']);
         }
 
-        return redirect()->route('admin.users.index')->with('success', $result['message']);
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully');
     }
 
     /**
@@ -88,5 +88,15 @@ class UserController
     public function destroy(string $id)
     {
         //
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $user = $this->userService->resetPassword($request->nik);
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
+
+        return redirect()->back()->with('success', 'Password reset successfully');
     }
 }

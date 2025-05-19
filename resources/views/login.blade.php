@@ -61,10 +61,6 @@
                             Sign In
                         </x-form.button>
                     </form>
-
-                    @if (session('error'))
-                        <x-dialog.toast show type="error" message="{{ session('error') }}" />
-                    @endif
                 </div>
             </div>
         </div>

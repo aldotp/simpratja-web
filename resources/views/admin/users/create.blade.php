@@ -22,7 +22,7 @@
                 </h2>
             </div>
 
-            <form action="#" method="POST" class="space-y-4 mt-4">
+            <form action="{{route('admin.users.store')}}" method="POST" class="space-y-4 mt-4">
                 @csrf
 
                 <x-form.input name="name" id="name" label="Nama Lengkap" placeholder="Masukkan Nama Lengkap"
@@ -34,15 +34,15 @@
                     placeholder="Masukkan No. Handphone" required :value="old('phone_number')" />
 
                 <x-form.select name="gender" id="gender" label="Jenis Kelamin" required>
-                    <option value="L" {{ old('gender') == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                    <option value="P" {{ old('gender') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                    <option value="0" {{ old('gender') == '0' ? 'selected' : '' }}>Perempuan</option>
+                    <option value="1" {{ old('gender') == '1' ? 'selected' : '' }}>Laki-laki</option>
                 </x-form.select>
 
                 <x-form.select name="role" id="role" label="Role" required>
                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>Staff</option>
                     <option value="doctor" {{ old('role') == 'doctor' ? 'selected' : '' }}>Dokter</option>
-                    <option value="nurse" {{ old('role') == 'nurse' ? 'selected' : '' }}>Perawat</option>
+                    <option value="leader" {{ old('role') == 'leader' ? 'selected' : '' }}>Leader</option>
                 </x-form.select>
 
                 <div class="flex justify-end mt-6">

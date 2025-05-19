@@ -34,7 +34,3 @@
         </div>
     </main>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('vendor/bladewind/js/helpers.js') }}"></script>
-@endpush

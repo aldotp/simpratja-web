@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\Auth;
 class AuthController
 {
     private $authService;
-    private $response;
 
-    public function __construct(Response $response, AuthService $authService) {
-        $this->response = $response;
+    public function __construct(AuthService $authService) {
         $this->authService = $authService;
+    }
+
+    public function index() {
+        return view('login');
     }
 
     private function redirectRoute($role) {
@@ -32,7 +34,7 @@ class AuthController
                 return redirect()->route('home');
         }
     }
-    
+
     public function login(Request $request): RedirectResponse
     {
         $request->validate([
@@ -46,14 +48,9 @@ class AuthController
 
     }
 
-    public function logout(Request $request): RedirectResponse
+    public function logout(): RedirectResponse
     {
         Auth::logout();
-     
-        $request->session()->invalidate();
-     
-        $request->session()->regenerateToken();
-     
         return redirect()->route('home');
     }
 }

@@ -49,10 +49,10 @@ class PatientController
         list($response, $error) = $this->patientService->registerPatientWithVisit($data);
 
         if ($error) {
-            return $this->response->responseError($error, 422);
+            return redirect()->back()->with('error', $error);
         }
 
-        return $this->response->responseSuccess($response, 'Pendaftaran pasien & visit berhasil');
+        return redirect()->back()->with('success', 'Pendaftaran pasien berhasil');
     }
 
     public function showRegistration($id)

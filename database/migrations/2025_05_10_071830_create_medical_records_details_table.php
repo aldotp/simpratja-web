@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('complaint', 255);
             $table->string('diagnosis', 255);
             $table->timestamps();
-            $table->foreign('medical_record_id')->references('id')->on('medical_records');
-            $table->foreign('docter_id')->references('id')->on('users');
-            $table->foreign('visit_id')->references('id')->on('visits');
-            $table->foreign('medicine_id')->references('id')->on('medicines');
+            $table->foreign('medical_record_id')->references('id')->on('medical_records')->cascadeOnDelete();
+            $table->foreign('docter_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('visit_id')->references('id')->on('visits')->cascadeOnDelete();
+            $table->foreign('medicine_id')->references('id')->on('medicines')->cascadeOnDelete();
         });
     }
 

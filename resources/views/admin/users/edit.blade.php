@@ -13,7 +13,8 @@
         ]" />
         <x-ui.card class="mt-2">
             <div class="flex flex-row gap-4 items-center">
-                <x-form.button class="!p-3" variant="secondary" onclick="window.location.href='{{ route('users') }}'">
+                <x-form.button class="!p-3" variant="secondary"
+                    onclick="window.location.href='{{ route('admin.users.index') }}'">
                     <i class="fa-solid fa-angle-left"></i>
                 </x-form.button>
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
@@ -21,8 +22,9 @@
                 </h2>
             </div>
 
-            <form action="#" method="PUT" class="space-y-4 mt-4">
+            <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="space-y-4 mt-4">
                 @csrf
+                @method('PUT')
 
                 <x-form.input name="name" id="name" label="Nama Lengkap" placeholder="Masukkan Nama Lengkap"
                     required :value="old('name', $user->name)" />
@@ -33,9 +35,9 @@
                     placeholder="Masukkan No. Handphone" required :value="old('phone_number', $user->phone_number)" />
 
                 <x-form.select name="gender" id="gender" label="Jenis Kelamin" required>
-                    <option value="L" {{ old('gender', $user->gender) == 'L' ? 'selected' : '' }}>Laki-laki
+                    <option value="0" {{ old('gender', $user->gender) == '0' ? 'selected' : '' }}>Perempuan
                     </option>
-                    <option value="P" {{ old('gender', $user->gender) == 'P' ? 'selected' : '' }}>Perempuan
+                    <option value="1" {{ old('gender', $user->gender) == '1' ? 'selected' : '' }}>Laki-laki
                     </option>
                 </x-form.select>
 
@@ -43,12 +45,12 @@
                     <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="staff" {{ old('role', $user->role) == 'staff' ? 'selected' : '' }}>Staff</option>
                     <option value="doctor" {{ old('role', $user->role) == 'doctor' ? 'selected' : '' }}>Dokter</option>
-                    <option value="nurse" {{ old('role', $user->role) == 'nurse' ? 'selected' : '' }}>Perawat</option>
+                    <option value="leader" {{ old('role', $user->role) == 'leader' ? 'selected' : '' }}>Leader</option>
                 </x-form.select>
 
                 <div class="flex justify-end mt-6">
                     <x-form.button type="submit" variant="primary">
-                        Tambah User
+                        Edit User
                     </x-form.button>
                 </div>
             </form>
