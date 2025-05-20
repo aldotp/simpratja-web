@@ -4,26 +4,26 @@
         <x-ui.breadcrumb rounded="true" :items="[
             ['label' => 'Admin'],
             [
-                'label' => 'Users',
-                'url' => '/admin/users',
+                'label' => 'Doctors',
+                'url' => '/admin/doctors',
             ],
             [
                 'label' => 'Create',
-                'url' => '/admin/users/create',
+                'url' => '/admin/doctors/create',
             ],
         ]" />
         <x-ui.card class="mt-2">
             <div class="flex flex-row gap-4 items-center">
                 <x-form.button class="!p-3" variant="secondary"
-                    onclick="window.location.href='{{ route('admin.users.index') }}'">
+                    onclick="window.location.href='{{ route('admin.doctors.index') }}'">
                     <i class="fa-solid fa-angle-left"></i>
                 </x-form.button>
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
-                    {{ __('Create User') }}
+                    {{ __('Create Dokter') }}
                 </h2>
             </div>
 
-            <form action="{{ route('admin.users.store') }}" method="POST" class="space-y-4 mt-4">
+            <form action="{{ route('admin.doctors.store') }}" method="POST" class="space-y-4 mt-4">
                 @csrf
 
                 <x-form.input name="name" id="name" label="Nama Lengkap" placeholder="Masukkan Nama Lengkap"
@@ -39,15 +39,12 @@
                     <option value="1" {{ old('gender') == '1' ? 'selected' : '' }}>Laki-laki</option>
                 </x-form.select>
 
-                <x-form.select name="role" id="role" label="Role" required>
-                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>Staff</option>
-                    <option value="leader" {{ old('role') == 'leader' ? 'selected' : '' }}>Leader</option>
-                </x-form.select>
+                <x-form.input name="quota" id="quota" label="Kuota" type="number"
+                    placeholder="Masukkan Kuota Pasien" required :value="old('quota')" />
 
                 <div class="flex justify-end mt-6">
                     <x-form.button type="submit" variant="primary">
-                        Tambah User
+                        Tambah Dokter
                     </x-form.button>
                 </div>
             </form>

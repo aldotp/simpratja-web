@@ -26,16 +26,16 @@
             <div class="text-xs text-gray-500 dark:text-gray-400 italic">{{ auth()->user()->role }}</div>
         </div>
         <ul>
-            <li>
+            {{-- <li>
                 <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3"
                     href="#" @click="open = false" @focus="open = true" @focusout="open = false">Settings</a>
-            </li>
+            </li> --}}
             <li>
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
                     @method('DELETE')
 
-                    <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3"
+                    <a class="font-medium text-sm text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex items-center py-1 px-3"
                         href="#" @click.prevent="$root.submit();" @focus="open = true" @focusout="open = false">
                         {{ __('Sign Out') }}
                     </a>

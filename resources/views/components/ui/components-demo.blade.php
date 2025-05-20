@@ -33,6 +33,30 @@
     <div class="max-w-6xl mx-auto space-y-8">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Demo Komponen UI</h1>
 
+        <!-- Alert Demo -->
+        <div class="space-y-4">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Alert</h2>
+            <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                <x-ui.demo.alert-demo />
+            </div>
+        </div>
+
+        <!-- Card Demo -->
+        <div class="space-y-4">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Card</h2>
+            <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                <x-ui.demo.card-demo />
+            </div>
+        </div>
+
+        <!-- Badge Demo -->
+        <div class="space-y-4">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Badge</h2>
+            <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                <x-ui.demo.badge-demo />
+            </div>
+        </div>
+
         <!-- Breadcrumb Demo -->
         <div class="space-y-4">
             <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Breadcrumb</h2>
@@ -220,6 +244,8 @@
                     </nav>
                 </div>
             </div>
+
+
 
             <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
                 <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-4">Pagination Sederhana (Prev/Next)</h3>

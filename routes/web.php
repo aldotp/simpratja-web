@@ -7,8 +7,8 @@ use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\PatientController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\DocterController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Web\DoctorController;
+use App\Http\Controllers\Web\ReportController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\LeaderController;
 use App\Http\Controllers\MedicalRecordController;
@@ -42,4 +42,6 @@ Route::prefix('admin')->name('admin.')->middleware(['authv3', 'role:admin'])->gr
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('/users', UserController::class)->names('users');
     Route::post("/reset-password", [UserController::class, 'resetPassword'])->name('reset-password');
+    Route::resource('/doctors', DoctorController::class)->names('doctors');
+    Route::resource('/reports', ReportController::class)->names('reports');
 });

@@ -70,10 +70,7 @@ class UserRepository
         // ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
         // ->select("users.id", "users.nik", "users.role", "user_details.name", "user_details.phone_number", "user_details.gender", "user_details.quota", "users.created_at", "users.updated_at");
 
-       $user = User::all();
-
-
-
+       $user = User::whereNot('role', 'docter')->get();
 
         return $user;
 

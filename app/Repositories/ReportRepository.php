@@ -31,6 +31,15 @@ class ReportRepository
         return $report;
     }
 
+    public function delete($id)
+    {
+        $report = Report::find($id);
+        if (!$report) {
+            return false;
+        }
+        return $report->delete();
+    }
+
     public function countAll()
     {
         return Report::count();
