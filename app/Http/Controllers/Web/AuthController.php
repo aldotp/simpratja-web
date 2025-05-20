@@ -31,7 +31,7 @@ class AuthController
             case 'leader':
                 return redirect()->route('leader.dashboard');
             default:
-                return redirect()->route('home');
+                return redirect()->route('login');
         }
     }
 
@@ -41,11 +41,13 @@ class AuthController
             'nik' => 'required|integer',
             'password' => 'required|string',
         ]);
-
-        $user = $this->authService->loginV3($request);
-
-        return $this->redirectRoute($user->role);
-
+        try {
+            $user = $this->authService->loginV3($request);
+            return $this->redirectRoute($user->role);
+        } catch (\Exception $e) {
+            toastr()->error($e->getMessage());
+            return redirect()->route('login');
+        }
     }
 
     public function logout(): RedirectResponse

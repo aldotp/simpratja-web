@@ -13,6 +13,9 @@
         'primary' => 'bg-primary-600 hover:bg-primary-700 text-white',
         'secondary' => 'bg-gray-200 hover:bg-gray-300 text-gray-800',
         'outline' => 'bg-transparent border border-primary-600 text-primary-600 hover:bg-primary-50',
+        'info' => 'bg-blue-600 hover:bg-blue-700 text-white',
+        'success' => 'bg-green-600 hover:bg-green-700 text-white',
+        'warning' => 'bg-yellow-600 hover:bg-yellow-700 text-white',
         'danger' => 'bg-red-600 hover:bg-red-700 text-white',
     ];
 

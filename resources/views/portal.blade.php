@@ -13,13 +13,13 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8" x-data="{ activeTab: 'new-patient' }">
                     <div class="flex border-b border-gray-200">
                         <button
-                            x-on:click="activeTab = 'new-patient'; document.getElementById('queue-status-section').classList.add('hidden')"
+                            x-on:click="activeTab = 'new-patient'; document.getElementById('section-detail-patient').classList.add('hidden')"
                             :class="activeTab === 'new-patient' ?
                                 'flex-1 py-4 px-6 text-center font-medium text-primary-600 border-b-2 border-primary-500 bg-primary-50' :
                                 'flex-1 py-4 px-6 text-center font-medium text-gray-500 hover:text-primary-600'">Pasien
                             Baru</button>
                         <button
-                            x-on:click="activeTab = 'existing-patient'; document.getElementById('queue-status-section').classList.add('hidden')"
+                            x-on:click="activeTab = 'existing-patient'; document.getElementById('section-detail-patient').classList.add('hidden')"
                             :class="activeTab === 'existing-patient' ?
                                 'flex-1 py-4 px-6 text-center font-medium text-primary-600 border-b-2 border-primary-500 bg-primary-50' :
                                 'flex-1 py-4 px-6 text-center font-medium text-gray-500 hover:text-primary-600'">Pasien
@@ -64,7 +64,7 @@
                                     <x-form.select name="marital-status" id="marital-status" label="Status"
                                         placeholder="Pilih Status">
                                         <option value="false">Belum Menikah</option>
-                                        <option value="true">Menikah</option>
+                                        <option value="true">Sudah Menikah</option>
                                     </x-form.select>
                                     <x-form.input type="tel" name="phone" id="phone" label="No. HP"
                                         placeholder="Masukkan Nomor HP" required />
@@ -81,11 +81,6 @@
                                 <div class="space-y-4">
                                     <x-form.datepicker name="tgl-periksa" id="tgl-periksa" label="Tanggal Periksa"
                                         placeholder="Pilih tanggal periksa" />
-                                    <x-form.select name="penjamin" id="penjamin" label="Penjamin"
-                                        placeholder="Pilih penjamin">
-                                        <option value="x">Contoh 1</option>
-                                        <option value="y">Contoh 2</option>
-                                    </x-form.select>
                                     <x-form.select name="dokter" id="dokter" label="Dokter"
                                         placeholder="Pilih dokter">
                                         <option value="x">Contoh 1</option>
@@ -113,198 +108,103 @@
 
                     <!-- Existing Patient Login -->
                     <div x-show="activeTab === 'existing-patient'" class="p-6 md:p-8">
-                        <div class="mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-2">Pendaftaran Pasien Lama</h2>
-                            <p class="text-gray-600">Silakan isi formulir di bawah ini untuk mendaftar sebagai pasien
-                                lama. Semua informasi dijaga kerahasiaan dan keamanannya.</p>
+                        <div class="mb-6  text-center">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-2">Pasien Lama</h2>
+                            <p class="text-gray-600">Silakan isi formulir di bawah ini untuk mencari informasi pasien.
+                                Semua informasi dijaga kerahasiaan dan keamanannya.</p>
                         </div>
 
-                        <form id="login-form">
+                        <form id="existing-patient-form" @submit.prevent="getDetailExistingPatient()">
 
                             <div class="space-y-4">
-                                <x-form.input name="nik" id="nik" label="NIK"
-                                    placeholder="Masukkan NIK" required />
+                                <div class="grid grid-cols-2 gap-4">
+                                    <x-form.input name="no_rm" id="no_rm" label="Rekam Medis"
+                                        placeholder="Masukkan Rekam Medis" required />
 
-                                <x-form.input name="first_name" id="first_name" label="Nama Lengkap"
-                                    placeholder="Masukkan Nama Lengkap" required />
-
-                                <x-form.datepicker name="tgl-periksa" id="tgl-periksa" label="Tanggal Periksa"
-                                    placeholder="Pilih tanggal periksa" />
-
-                                <x-form.select name="penjamin" id="penjamin" label="Penjamin"
-                                    placeholder="Pilih penjamin">
-                                    <option value="x">Contoh 1</option>
-                                    <option value="y">Contoh 2</option>
-                                </x-form.select>
-
-                                <x-form.select name="dokter" id="dokter" label="Dokter"
-                                    placeholder="Pilih dokter">
-                                    <option value="x">Contoh 1</option>
-                                    <option value="y">Contoh 2</option>
-                                </x-form.select>
+                                    <x-form.datepicker name="tgl-lahir" id="tgl-lahir" label="Tanggal Lahir" required
+                                        placeholder="Pilih tanggal lahir" />
+                                </div>
                             </div>
 
                             <div class="mt-6">
-                                <x-form.button type="submit" class="w-full transition duration-300">
-                                    Daftar Sekarang
+                                <x-form.button id="btn-search-patient" type="submit"
+                                    class="w-full transition duration-300">
+                                    Cari Pasien
                                 </x-form.button>
                             </div>
                         </form>
                     </div>
                 </div>
 
-                <!-- Queue Status Section (Hidden by default) -->
-                <div id="queue-status-section" class="hidden bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="p-6 md:p-8">
-                        <div class="flex flex-col md:flex-row items-center justify-between mb-8">
-                            <div class="flex items-center mb-4 md:mb-0">
-                                <div
-                                    class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mr-4 pulse">
-                                    <i class="fas fa-user-clock text-primary-600 text-2xl"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-2xl font-bold text-gray-800">Your Queue Status</h2>
-                                    <p class="text-gray-600">Last updated: <span id="last-updated">May 11, 2023 10:05
-                                            AM</span></p>
-                                </div>
-                            </div>
-                            <button id="refresh-queue-button"
-                                class="bg-primary-50 hover:bg-primary-100 text-primary-600 px-4 py-2 rounded-md font-medium transition duration-300 flex items-center">
-                                <i class="fas fa-sync-alt mr-2"></i> Refresh
-                            </button>
+                <x-ui.card id="section-detail-patient" class="hidden bg-white rounded-lg shadow-md overflow-hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Detail Pasien</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Nama Pasien</h3>
+                            <p id="patient-name" class="text-gray-600"></p>
                         </div>
-
-                        <div class="bg-primary-50 rounded-lg p-6 mb-8">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div class="text-center">
-                                    <p class="text-gray-600 mb-1">Your Position</p>
-                                    <div class="text-4xl font-bold text-primary-600">#3</div>
-                                    <p class="text-sm text-gray-500 mt-1">in line</p>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-gray-600 mb-1">Estimated Wait Time</p>
-                                    <div class="text-4xl font-bold text-primary-600">15</div>
-                                    <p class="text-sm text-gray-500 mt-1">minutes</p>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-gray-600 mb-1">Department</p>
-                                    <div class="text-xl font-bold text-primary-600">General Medicine</div>
-                                    <p class="text-sm text-gray-500 mt-1">Dr. Sarah Johnson</p>
-                                </div>
-                            </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">NIK</h3>
+                            <p id="patient-nik" class="text-gray-600"></p>
                         </div>
-
-                        <div class="mb-8">
-                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Current Department Wait Times</h3>
+                        <!-- Informasi Medis -->
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Medical Check Up</h3>
+                            <!-- Informasi Medis -->
                             <div class="space-y-4">
-                                <div
-                                    class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-300">
-                                    <div class="flex justify-between items-center">
-                                        <div>
-                                            <h4 class="font-medium text-gray-800">General Medicine</h4>
-                                            <p class="text-sm text-gray-600">7 patients waiting</p>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="flex items-center">
-                                                <span class="queue-status-indicator queue-status-medium"></span>
-                                                <span class="text-sm font-medium">25 min wait</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-300">
-                                    <div class="flex justify-between items-center">
-                                        <div>
-                                            <h4 class="font-medium text-gray-800">Pediatrics</h4>
-                                            <p class="text-sm text-gray-600">3 patients waiting</p>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="flex items-center">
-                                                <span class="queue-status-indicator queue-status-low"></span>
-                                                <span class="text-sm font-medium">10 min wait</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-300">
-                                    <div class="flex justify-between items-center">
-                                        <div>
-                                            <h4 class="font-medium text-gray-800">Cardiology</h4>
-                                            <p class="text-sm text-gray-600">12 patients waiting</p>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="flex items-center">
-                                                <span class="queue-status-indicator queue-status-high"></span>
-                                                <span class="text-sm font-medium">45 min wait</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-300">
-                                    <div class="flex justify-between items-center">
-                                        <div>
-                                            <h4 class="font-medium text-gray-800">Dermatology</h4>
-                                            <p class="text-sm text-gray-600">5 patients waiting</p>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="flex items-center">
-                                                <span class="queue-status-indicator queue-status-medium"></span>
-                                                <span class="text-sm font-medium">20 min wait</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <x-form.datepicker name="tgl-periksa" datepicker-min-date="{{ now() }}"
+                                    id="tgl-periksa-existing" label="Tanggal Periksa"
+                                    placeholder="Pilih tanggal periksa" x-init="$nextTick(() => {
+                                        new Datepicker($el, { format: 'dd/mm/yyyy' });
+                                    })" />
+                                <x-form.select name="dokter" id="dokter" label="Dokter"
+                                    placeholder="Pilih dokter">
+                                    <option value="x">Contoh 1</option>
+                                    <option value="y">Contoh 2</option>
+                                </x-form.select>
                             </div>
-                        </div>
-
-                        <div class="bg-gray-50 rounded-lg p-6">
-                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Estimated Consultation Duration</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h4 class="font-medium text-gray-800 mb-2">General Consultation</h4>
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mr-3">
-                                            <i class="fas fa-clock text-primary-600"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-gray-600">Approximately <span class="font-medium">15-20
-                                                    minutes</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium text-gray-800 mb-2">Specialist Consultation</h4>
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mr-3">
-                                            <i class="fas fa-user-md text-primary-600"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-gray-600">Approximately <span class="font-medium">20-30
-                                                    minutes</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 text-center">
-                            <button id="back-to-portal"
-                                class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-md font-medium transition duration-300">
-                                Back to Patient Portal
-                            </button>
                         </div>
                     </div>
-                </div>
+                </x-ui.card>
             </div>
         </div>
     </main>
-    <!-- Alpine.js sudah diimpor di resources/js/app.js -->
+    <script>
+        async function getDetailExistingPatient() {
+            const no_rm = document.getElementById('no_rm').value;
+            const tgl_lahir = document.getElementById('tgl-lahir').value;
+
+            const response = await fetch('/api/v1/get-patient', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        no_rm: no_rm,
+                        tgl_lahir: tgl_lahir,
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status == 'success') {
+                        document.getElementById('section-detail-patient').classList.remove('hidden');
+                        document.getElementById('btn-search-patient').classList.add('hidden');
+
+                        // Update the detail section with patient data
+                        document.getElementById('patient-name').innerText = data.patient.name;
+                        document.getElementById('patient-nik').innerText = data.patient.nik;
+                        document.getElementById('patient-gender').innerText = data.patient.gender;
+                        document.getElementById('patient-phone').innerText = data.patient.phone_number;
+                        document.getElementById('patient-address').innerText = data.patient.address;
+                        document.getElementById('tgl-periksa').value = '';
+                        document.getElementById('dokter').value = '';
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                })
+        }
+    </script>
 </x-home-layout>

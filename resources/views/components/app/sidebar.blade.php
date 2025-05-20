@@ -78,10 +78,11 @@
                         <li
                             class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['doctors'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['doctors'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                                href="{{ route('admin.doctors.index') }}">
                                 <div class="flex items-center justify-between">
                                     <div class="grow flex items-center">
-                                        <i class="fa-solid fa-user-doctor fill-current text-gray-400 dark:text-gray-500"></i>
+                                        <i
+                                            class="fa-solid fa-user-doctor fill-current text-gray-400 dark:text-gray-500"></i>
                                         <span
                                             class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Doctors</span>
                                     </div>
@@ -92,7 +93,7 @@
                         <li
                             class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['reports'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['reports'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                                href="{{route('admin.reports.index')}}">
                                 <div class="flex items-center">
                                     <i class="fa-solid fa-file-lines fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span

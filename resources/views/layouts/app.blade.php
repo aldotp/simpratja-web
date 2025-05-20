@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dialog.js'])
     @endif
     @stack('styles')
 </head>
@@ -18,9 +18,9 @@
 <body>
     @yield('main')
 
+    <x-dialog.toast id="toast-app" />
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    @vite('resources/js/dialog.js')
     @stack('scripts')
 </body>
 

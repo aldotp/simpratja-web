@@ -12,7 +12,7 @@
 
 @php
     // Base classes
-    $baseClasses = 'w-full text-left text-gray-500 dark:text-gray-400';
+    $baseClasses = 'w-full text-left text-gray-500 dark:text-gray-400 min-h-[200px]';
 
     // Variant classes
     $variantClasses = [
@@ -75,7 +75,7 @@
     $responsiveClass = $responsive ? 'overflow-x-auto' : '';
 @endphp
 
-<div class="min-h-[200px]">
+<div>
     {{-- Top slot for buttons, search, filters --}}
     @if (isset($top))
         <div

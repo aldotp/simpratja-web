@@ -65,4 +65,11 @@
             </div>
         </div>
     </section>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            @if (session('toast'))
+                DialogManager.showToast(@json(session('toast')));
+            @endif
+        });
+    </script>
 </x-home-layout>

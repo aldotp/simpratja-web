@@ -33,6 +33,11 @@ class ReportService
         return $this->reportRepository->update($id, $data);
     }
 
+    public function delete($id)
+    {
+        return $this->reportRepository->delete($id);
+    }
+
     public function countAll()
     {
         return $this->reportRepository->countAll();
