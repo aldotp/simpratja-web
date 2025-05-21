@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReceiptExportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PatientController;
@@ -71,10 +72,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/register-existing', [PatientController::class, 'registerExistingPatientVisit']);
         Route::get('/registrations', [PatientController::class, 'getAllRegistration']);
         Route::get('/registrations/{id}', [PatientController::class, 'showRegistration']);
-        Route::get('/check-registrations-number/{id}', [PatientController::class, 'showRegistration']);
+        Route::get('/check-registration-number', [PatientController::class, 'showRegistrationByRegistrationIDandNIK']);
         Route::get('/check-medical_number', [MedicalRecordController::class, 'getExistingPatient']);
         Route::get('/queue-number/{id}', [VisitController::class, 'getQueueNumber']);
         Route::post('/feedbacks', [FeedbackController::class, 'store']);
+        Route::get('/export-receipt', [ReceiptExportController::class, 'exportQueueToPDF']);
 
         Route::get('/', [PatientController::class, 'index']);
         Route::put('/{id}', [PatientController::class, 'update']);
