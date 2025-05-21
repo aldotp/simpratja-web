@@ -26,8 +26,12 @@ Route::prefix('v2')->group(function () {
 
 
 Route::prefix('v1')->group(function () {
+
+
+    Route::get("/medicines", [MedicineController::class, 'dropdownMedicine']);
+    Route::get("/docters", [DocterController::class, 'dropdownDocter']);
     // Endpoint Admin
-    Route::prefix('admin')->middleware(['authv3', 'role:admin'])->group(function () {
+    Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/users', [UserController::class, 'createUser']);
         Route::get('/users', [UserController::class, 'getAllUsers']);
         Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
@@ -55,7 +59,7 @@ Route::prefix('v1')->group(function () {
         Route::post("/forgot-password", [AuthController::class, 'forgotPassword']);
         Route::post("/reset-password", [AuthController::class, 'resetPassword']);
 
-        Route::group(['middleware' => ['authv3']], function() {
+        Route::group(['middleware' => ['auth']], function() {
             Route::get("/profile", [AuthController::class, 'profile']);
             Route::delete("/logout", [AuthController::class, 'logout']);
         });
@@ -64,10 +68,11 @@ Route::prefix('v1')->group(function () {
     // Endpoint Patients
     Route::prefix('patients')->group(function () {
         Route::post('/register', [PatientController::class, 'register']);
-        Route::post('/register-existing', [VisitController::class, 'registerExistingPatientVisit']);
-        Route::get('/registrations/', [PatientController::class, 'getAllRegistration']);
+        Route::post('/register-existing', [PatientController::class, 'registerExistingPatientVisit']);
+        Route::get('/registrations', [PatientController::class, 'getAllRegistration']);
         Route::get('/registrations/{id}', [PatientController::class, 'showRegistration']);
-        Route::get('/check-registrations-numbes/{id}', [PatientController::class, 'showRegistration']);
+        Route::get('/check-registrations-number/{id}', [PatientController::class, 'showRegistration']);
+        Route::get('/check-medical_number', [MedicalRecordController::class, 'getExistingPatient']);
         Route::get('/queue-number/{id}', [VisitController::class, 'getQueueNumber']);
         Route::post('/feedbacks', [FeedbackController::class, 'store']);
 
@@ -81,12 +86,14 @@ Route::prefix('v1')->group(function () {
     });
 
     // Endpoint Doctor
-    Route::prefix('docters')->middleware(['authv3', 'role:docter'])->group(function () {
+    Route::prefix('docters')->middleware(['auth', 'role:docter'])->group(function () {
         Route::get('/visits', [VisitController::class, 'getAllVisits']);
         Route::get('/visits/{id}', [VisitController::class, 'getVisitByID']);
         Route::get('/medical-records/{id}', [MedicalRecordController::class, 'getMedicalRecordDetailByPatientID']);
         Route::post('/medical-records', [MedicalRecordController::class, 'createMedicalRecord']);
         Route::get('/medical-records', [MedicalRecordController::class, 'getAllMedicalRecord']);
+
+        Route::put('/check-up-patients/{id}', [DocterController::class, 'checkUpPatient']);
 
         Route::get('/patients', [PatientController::class, 'index']); // lihat data pasien
         Route::get('/patients/{id}', [PatientController::class, 'showRegistration']);
@@ -100,11 +107,17 @@ Route::prefix('v1')->group(function () {
         Route::put('/medicines/{id}', [MedicineController::class, 'update']);
         Route::delete('/medicines/{id}', [MedicineController::class, 'destroy']);
 
+
+        Route::get('/reports', [ReportController::class, 'index']);
+        Route::post('/reports', [ReportController::class, 'store']);
+        Route::put('/reports/{id}', [ReportController::class, 'update']);
+        Route::get('/reports/{id}', [ReportController::class, 'show']);
+
         Route::get('/dashboard/counts', [DocterController::class, 'getPatientCountByDocterID']); // tambahkan ini
     });
 
     // Endpoint Staff
-    Route::prefix('staff')->middleware(['authv3', 'role:staff'])->group(function () {
+    Route::prefix('staff')->middleware(['auth', 'role:staff'])->group(function () {
         Route::get('/patients', [PatientController::class, 'index']); // lihat data pasien
         Route::get('/patients/{id}', [PatientController::class, 'showRegistration']);
         Route::put('/patients/{id}', [PatientController::class, 'update']); // update data pasien
@@ -118,14 +131,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/feedbacks', [FeedbackController::class, 'index']);
         Route::get('/feedbacks/{id}', [FeedbackController::class, 'show']);
 
-        Route::post('/visits/validate/{id}', [VisitController::class, 'validateVisits']); // validasi kunjungan
+        Route::post('/visits/validate/{id}', [StaffController::class, 'validateRegisterPatient']); // validasi kunjungan
         Route::get('/visits', [VisitController::class, 'getAllVisits']);
         Route::get('/visits/{id}', [VisitController::class, 'getVisitByID']);
         Route::get('/medicines', [MedicineController::class, 'index']);
     });
 
     // Endpoint Leaders
-    Route::prefix('leader')->middleware(['authv2', 'role:leader'])->group(function () {
+    Route::prefix('leader')->middleware(['auth', 'role:leader'])->group(function () {
         Route::get('/reports', [ReportController::class, 'index']);
         Route::get('/feedbacks', [FeedbackController::class, 'index']);
         Route::get('/feedbacks/{id}', [FeedbackController::class, 'show']);

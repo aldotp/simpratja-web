@@ -16,10 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('docter_id');
             $table->date('examination_date');
-            $table->string('insurance', 50);
             $table->string('registration_number', 20);
             $table->integer('queue_number')->length(10);
-            $table->tinyInteger('visit_status')->length(1);
+            $table->enum('visit_status', ['register', 'queue', 'done',]);
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients')->cascadeOnDelete();

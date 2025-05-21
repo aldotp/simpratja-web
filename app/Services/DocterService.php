@@ -4,20 +4,30 @@ namespace App\Services;
 
 use App\Repositories\UserDetailRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\VisitRepository;
+use App\Repositories\MedicalRecordDetailRepository;
+use App\Repositories\MedicalRecordRepository;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\CustomException;
+use App\Models\MedicalRecordDetail;
 
 class DocterService
 {
     protected $userDetailRepository;
     protected $userService;
     protected $userRepository;
+    protected $visitRepository;
+    protected $medicalRecordDetailRepository;
+    protected $medicalRecordRepository;
 
-    public function __construct(UserDetailRepository $userDetailRepository, UserService $userService, UserRepository $userRepository)
+    public function __construct(UserDetailRepository $userDetailRepository, UserService $userService, UserRepository $userRepository, VisitRepository $visitRepository, MedicalRecordDetailRepository $medicalRecordDetailRepository, MedicalRecordRepository $medicalRecordRepository)
     {
         $this->userDetailRepository = $userDetailRepository;
         $this->userService = $userService;
         $this->userRepository = $userRepository;
+        $this->visitRepository = $visitRepository;
+        $this->medicalRecordDetailRepository = $medicalRecordDetailRepository;
+        $this->medicalRecordRepository = $medicalRecordRepository;
     }
 
     public function getAll($filters = [])
@@ -152,5 +162,62 @@ class DocterService
         }
 
         return $this->userDetailRepository->countPatientsByDoctor($doctor->id);
+    }
+
+
+    public function checkUpPatient($id,$data)
+    {
+
+        return DB::transaction(function () use ($id,$data) {
+
+            $visit = $this->visitRepository->getById($id);
+            if (!$visit) {
+                return [null, 'Visit not found'];
+            }
+
+
+           $medicalRecord = $this->medicalRecordRepository->query()
+                            ->where('patient_id', $visit->patient_id)->first();
+            if(!$medicalRecord) {
+                return null;
+            }
+
+
+            $detailData = [
+                'patient_id'        => $visit->patient_id,
+                'docter_id'         => $visit->docter_id,
+                'visit_id'          => $visit->id,
+                'examination_date'  => $visit->examination_date,
+                'medical_record_id' => $medicalRecord->id,
+                'medicine_id'       => $data['medicine_id'],
+                'diagnosis'         => $data['diagnosis'],
+                'complaint'         => $data['complaint'],
+                'created_at'        => now(),
+                'updated_at'        => now(),
+            ];
+
+            $detail = $this->medicalRecordDetailRepository->store($detailData);
+            if (!$detail) {
+                return null;
+            }
+
+          $updateData =  $this->visitRepository->update($visit->id, ['visit_status' => 'done']);
+
+
+          if ($updateData) {
+              return null;
+          }
+
+            $response = [
+                'detail_id' => $detail->id,
+                'visit_id' => $detail->visit_id,
+                'medicine_id' => $detail->medicine_id,
+                'examination_date' => $detail->examination_date,
+                'complaint' => $detail->complaint,
+                'diagnosis' => $detail->diagnosis,
+            ];
+
+            return $response;
+        });
     }
 }

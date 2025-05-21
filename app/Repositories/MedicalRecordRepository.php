@@ -59,4 +59,9 @@ class MedicalRecordRepository
             )
             ->get();
     }
+
+    public function query()
+    {
+        return Medical_Record::query();
+    }
 }

@@ -29,9 +29,9 @@ class MedicalRecordDetail extends Model
     }
 
     // Relasi ke Doctor
-    public function doctor()
+    public function docter()
     {
-        return $this->belongsTo(Docter::class, 'doctor_id');
+        return $this->belongsTo(User::class, 'doctor_id', 'id');
     }
 
     // Relasi ke Visit

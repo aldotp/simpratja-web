@@ -89,7 +89,7 @@ class MedicalRecordService
 
             $detail = $this->medicalRecordDetailRepository->store($detailData);
 
-            // Kurangi stok obat
+
             $medicine = $this->medicineRepository->getByID($data['medicine_id']);
             if ($medicine) {
                 if ($medicine->stock <= 0) {
@@ -135,5 +135,18 @@ class MedicalRecordService
         $date = date('Ymd');
         $random = mt_rand(100, 999);
         return "MRN{$date}{$random}";
+    }
+
+
+    public function getExistingPatient($request)
+    {
+
+       $data =  $this->medicalRecordRepository->query()
+        ->join("patients", "patients.id", "=", "medical_records.patient_id")
+        ->where('medical_records.medical_record_number', $request['medical_record_number'])
+        ->where('patients.birth_date', $request['birth_date'])->select("patients.id", "patients.name", "patients.nik")
+        ->first();
+
+        return $data;
     }
 }

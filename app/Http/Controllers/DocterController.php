@@ -112,4 +112,27 @@ class DocterController
             'patient_count' => $patientCount
         ], 'Patient count retrieved successfully');
     }
+
+
+    public function dropdownDocter(Request $request) {
+        $docters = $this->docterService->getAll();
+        return $this->response->responseSuccess($docters, 'All doctors retrieved');
+    }
+
+
+    public function checkUpPatient($id,Request $request) {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'medicine_id' => 'required',
+            'diagnosis' => 'required|string',
+            'complaint' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+        $result = $this->docterService->checkUpPatient($id,$data);
+        return $this->response->responseSuccess($result, 'Patient checked up successfully');
+    }
 }

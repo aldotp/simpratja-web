@@ -49,4 +49,10 @@ class MedicalRecordDetailRepository
         }
         return $query->get();
     }
+
+    public function query()
+    {
+        return MedicalRecordDetail::query();
+    }
+
 }
