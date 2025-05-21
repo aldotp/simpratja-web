@@ -12,7 +12,6 @@ class Visit extends Model
         'patient_id',
         'docter_id',
         'examination_date',
-        'insurance',
         'registration_number',
         'queue_number',
         'visit_status',

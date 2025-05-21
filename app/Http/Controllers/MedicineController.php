@@ -79,4 +79,11 @@ class MedicineController
         $medicines = $this->medicineService->getAll();
         return $this->response->responseSuccess($medicines, 'All medicines retrieved');
     }
+
+
+    public function dropdownMedicine(Request $request) {
+        $medicines = $this->medicineService->getAll();
+        return $this->response->responseSuccess($medicines, 'All medicines retrieved');
+    }
+
 }

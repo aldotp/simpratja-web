@@ -10,7 +10,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\MedicalRecordRepository;
 use Illuminate\Support\Facades\DB;
 
-class PatientService
+class StaffService
 {
     protected $patientRepository;
     protected $visitRepository;
@@ -30,72 +30,44 @@ class PatientService
     }
 
 
-    public function registerPatientWithVisit($data)
+    public function ValidateRegisterPatient($id)
     {
-        return DB::transaction(function () use ($data) {
-            $existingPatient = $this->patientRepository->queryWhere(["nik" => $data["nik"]])->first();
-            if ($existingPatient) {
-                return [null, 'Patient already exists'];
+        return DB::transaction(function () use ($id) {
+            $visit = $this->visitRepository->queryWhere(['id' =>$id])->first();
+            if (!$visit) {
+                return null;
             }
 
-            $docter = $this->userRepository->getAllUsersDetailByID($data['docter_id']);
+            $docter = $this->userRepository->getAllUsersDetailByID($visit['docter_id']);
             if (!$docter) {
-                return [null, 'docter not found'];
+                return null;
             }
 
-
-            $visitCount = $this->visitRepository->countVisitsByDocterAndDate($data['docter_id'], $data['examination_date']);
+            $visitCount = $this->visitRepository->getLatestQueueNumber($visit['docter_id'], $visit['examination_date']);
             if ($visitCount >= $docter->quota) {
-                return [null, 'quota is full'];
+                return null;
             }
 
-
-            $patient = $existingPatient ?: $this->patientRepository->store($data);
-            if (!$patient) {
-                return [null, 'failed to insert patient'];
-            }
+            $queueNumber = $visitCount + 1;
 
             $visitData = [
-                'patient_id' => $patient->id,
-                'docter_id' => $data['docter_id'],
-                'examination_date' => $data['examination_date'],
-                'registration_number' => $this->generateRegistrationNumber($data['examination_date'], $data['docter_id']),
-                'queue_number' => 0,
-                'visit_status' => 'register',
+                'registration_number' => $this->generateRegistrationNumber($visit['examination_date'], $visit['docter_id']),
+                'queue_number' => $queueNumber,
+                'visit_status' => 'queue',
             ];
 
-            $visit = $this->visitRepository->store($visitData);
-            if (!$visit) {
-                throw new \Exception('failed to insert visit');
+            $updateVisit = $this->visitRepository->update($visit->id,$visitData);
+            if (!$updateVisit) {
+               return null;
             }
 
-            $medicalRecord = $this->medicalRecordRepository->store([
-                'patient_id' => $visit->patient_id,
-                'medical_record_number' => $this->generateMedicalRecordNumber(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            if (!$medicalRecord) {
-                return new \Exception('failed to insert medical record');
-            }
 
             $response = [
-                'patient_id' => $patient->id,
-                'patient_name' => $patient->name,
-                'patient_nik' => $patient->nik,
-                'patient_gender' => $patient->gender,
-                'patient_phone_number' => $patient->phone_number,
-                'visit_id' => $visit->id,
-                'visit_docter_id' => $visit->docter_id,
-                'visit_examination_date' => $visit->examination_date,
-                'visit_registration_number' => $visit->registration_number,
-                'visit_queue_number' => $visit->queue_number,
+                'queue_number' => $queueNumber,
                 'visit_status' => $visit->visit_status,
-                'medical_record_number'=>$medicalRecord->medical_record_number
             ];
 
-            return [$response, null];
+            return $response;
         });
     }
 
@@ -114,17 +86,11 @@ class PatientService
                 }
             }
 
+
             $docter = $this->userRepository->getAllUsersDetailByID($data['docter_id']);
             if (!$docter) {
                 return [null, 'docter not found'];
             }
-
-            $visitCount = $this->visitRepository->countVisitsByDocterAndDate($data['docter_id'], $data['visit_date']);
-
-            if ($visitCount >= $docter->quota) {
-                return [null, null, 'Quota is full'];
-            }
-
 
             $visitData = [
                 'patient_id' => $data['patient_id'],

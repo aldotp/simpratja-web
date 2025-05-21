@@ -32,6 +32,7 @@ class VisitController
     public function getAllVisits(Request $request)
     {
         $filters = $request->all();
+
         $visits = $this->visitService->getAllVisits($filters);
 
         return $this->response->responseSuccess($visits, 'All visits retrieved successfully');
@@ -54,29 +55,5 @@ class VisitController
         return $this->response->responseSuccess($visits, 'Validate Success');
     }
 
-    public function registerExistingPatientVisit(Request $request)
-    {
-        $data = $request->all();
-        $validator = Validator::make($data, [
-            'patient_id' => 'required|exists:patients,id',
-            'visit_date' => 'required|date',
-            'docter_id' => 'required',
-            'insurance' => 'required|string',
-        ]);
 
-        if ($validator->fails()) {
-            return $this->response->responseError($validator->errors(), 422);
-        }
-
-        $visit = $this->visitService->registerExistingPatientVisit($data);
-
-        if (is_array($visit) && isset($visit[1]) && $visit[1] !== null) {
-            return $this->response->responseError($visit[1], 422);
-        }
-        if (is_array($visit) && isset($visit[2]) && $visit[2] !== null) {
-            return $this->response->responseError($visit[2], 422);
-        }
-
-        return $this->response->responseSuccess($visit, 'Visit registered successfully');
-    }
 }

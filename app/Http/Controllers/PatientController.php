@@ -24,7 +24,37 @@ class PatientController
         $this->patientService = $patientService;
     }
 
-    public function register(Request $request)
+    // public function register(Request $request)
+    // {
+    //     $data = $request->all();
+    //     $validator = Validator::make($data, [
+    //         'nik' => 'required',
+    //         'name' => 'required|string|max:50',
+    //         'birth_date' => 'required|date',
+    //         'gender' => 'required|integer|max:1',
+    //         'blood_type' => 'required|string|max:5',
+    //         'religion' => 'required|string|max:50',
+    //         'status' => 'required|integer|max:1',
+    //         'address' => 'required|string|max:50',
+    //         'phone_number' => 'required|string|max:20',
+    //         'docter_id' =>'required|integer|max:10',
+    //         'examination_date' => 'required|date',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return $this->response->responseError($validator->errors(), 422);
+    //     }
+
+    //     list($response, $error) = $this->patientService->registerPatientWithVisit($data);
+
+    //     if ($error) {
+    //         return redirect()->back()->with('error', $error);
+    //     }
+
+    //     return redirect()->back()->with('success', 'Pendaftaran pasien berhasil');
+    // }
+
+     public function register(Request $request)
     {
         $data = $request->all();
         $validator = Validator::make($data, [
@@ -39,7 +69,6 @@ class PatientController
             'phone_number' => 'required|string|max:20',
             'docter_id' =>'required|integer|max:10',
             'examination_date' => 'required|date',
-            'insurance' => 'required|string|max:50',
         ]);
 
         if ($validator->fails()) {
@@ -49,10 +78,35 @@ class PatientController
         list($response, $error) = $this->patientService->registerPatientWithVisit($data);
 
         if ($error) {
-            return redirect()->back()->with('error', $error);
+            return $this->response->responseError($error, 422);
         }
 
-        return redirect()->back()->with('success', 'Pendaftaran pasien berhasil');
+        return $this->response->responseSuccess($response, 'Pendaftaran pasien & visit berhasil');
+    }
+
+    public function registerExistingPatientVisit(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'patient_id' => 'required|exists:patients,id',
+            'visit_date' => 'required|date',
+            'docter_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+        $visit = $this->patientService->registerExistingPatientVisit($data);
+
+        if (is_array($visit) && isset($visit[1]) && $visit[1] !== null) {
+            return $this->response->responseError($visit[1], 422);
+        }
+        if (is_array($visit) && isset($visit[2]) && $visit[2] !== null) {
+            return $this->response->responseError($visit[2], 422);
+        }
+
+        return $this->response->responseSuccess($visit, 'Visit registered successfully');
     }
 
     public function showRegistration($id)

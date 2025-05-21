@@ -11,6 +11,11 @@ class VisitRepository
         return Visit::create($data);
     }
 
+    public function update($id, $data)
+    {
+        return Visit::find($id)->update($data);
+    }
+
     public function getVisit($id)
     {
         return Visit::find($id);
@@ -32,10 +37,14 @@ class VisitRepository
         $query = Visit::query()
             ->join('patients', 'visits.patient_id', '=', 'patients.id')
             ->join('user_details', 'visits.docter_id', '=', 'user_details.user_id')
-            ->select('visits.id','patients.id as patient_id','user_details.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.insurance', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at');
+            ->select('visits.id','patients.id as patient_id','user_details.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at');
 
         if (!empty($filters['date'])) {
             $query->where('visits.examination_date', $filters['date']);
+        }
+
+        if (!empty($filters['visit_status'])) {
+              $query->where('visits.visit_status', $filters['visit_status']);
         }
 
         if (!empty($filters['search'])) {
@@ -46,6 +55,8 @@ class VisitRepository
             });
         }
 
+        $query= $query->orderBy('visits.queue_number', 'asc');
+
         return $query->get();
     }
 
@@ -54,7 +65,7 @@ class VisitRepository
         $query = Visit::query()
             ->join('patients', 'visits.patient_id', '=', 'patients.id')
             ->join('user_details', 'visits.docter_id', '=', 'user_details.user_id')
-            ->select('visits.id','user_details.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.insurance', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at')
+            ->select('visits.id','user_details.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at')
             ->where('visits.id', $id);
 
             $data = $query->first();
@@ -72,6 +83,14 @@ class VisitRepository
         return Visit::where('docter_id', $docterId)
             ->where('examination_date', $examinationDate)
             ->count();
+    }
+
+
+    public function getLatestQueueNumber($docterId, $examinationDate)
+    {
+        return Visit::where('docter_id', $docterId)
+            ->where('examination_date', $examinationDate)
+            ->max('queue_number');
     }
 
     public function countAll()

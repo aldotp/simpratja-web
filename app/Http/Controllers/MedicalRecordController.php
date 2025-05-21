@@ -103,4 +103,27 @@ class MedicalRecordController
             'medical_record_detail' => $detail
         ], 'Medical record dan detail berhasil diupdate');
     }
+
+
+    public function getExistingPatient(Request $request)
+    {
+
+        $data = $request->all([
+            'birth_date' => $request->query('nik'),
+            'medical_record_number' => $request->query('registration_number'),
+        ]
+        );
+        $validator = Validator::make($data, [
+            'birth_date' => 'required|date',
+            'medical_record_number' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+        $patients = $this->medicalRecordService->getExistingPatient($data);
+
+        return $this->response->responseSuccess($patients, 'Data pasien berhasil diambil');
+    }
 }

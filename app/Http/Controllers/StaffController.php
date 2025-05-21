@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Services\PatientService;
 use App\Services\VisitService;
 use App\Services\FeedbackService;
+use App\Services\StaffService;
 use App\Response\Response;
+use Illuminate\Support\Facades\Validator;
 
 class StaffController
 {
@@ -13,17 +15,20 @@ class StaffController
     protected $visitService;
     protected $feedbackService;
     protected $response;
+    protected $staffService;
 
     public function __construct(
         PatientService $patientService,
         VisitService $visitService,
         FeedbackService $feedbackService,
-        Response $response
+        Response $response,
+        StaffService $staffService
     ) {
         $this->patientService = $patientService;
         $this->visitService = $visitService;
         $this->feedbackService = $feedbackService;
         $this->response = $response;
+        $this->staffService = $staffService;
     }
 
     public function getCounts()
@@ -37,5 +42,18 @@ class StaffController
             'visit_count' => $visitCount,
             'feedback_count' => $feedbackCount
         ], 'Counts retrieved successfully');
+    }
+
+
+    public function validateRegisterPatient($id){
+
+
+        $data = $this->staffService->ValidateRegisterPatient($id);
+        if (!$data) {
+            return $this->response->responseError("error when validate register patient", 404);
+        }
+
+
+        return $this->response->responseSuccess($data, 'validate patient success');
     }
 }
