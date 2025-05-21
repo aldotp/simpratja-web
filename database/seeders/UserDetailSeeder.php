@@ -16,7 +16,7 @@ class UserDetailSeeder extends Seeder
          {
         DB::table('user_details')->insert([
         [
-            'name' => 'Pasien Pertama',
+            'name' => 'Admin Pertama',
             'gender' => 1,
             'phone_number' => '089251621525',
             'quota' => 0,
@@ -25,20 +25,11 @@ class UserDetailSeeder extends Seeder
             'updated_at' => now(),
         ],
         [
-            'name' => 'Admin Pertama',
-            'gender' => 1,
-            'phone_number' => '089251621525',
-            'quota' => 0,
-            'user_id' => 2,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ],
-        [
             'name' => 'Dokter Pertama',
             'gender' => 1,
             'phone_number' => '089251621525',
             'quota' => 20,
-            'user_id' => 3,
+            'user_id' => 2,
             'created_at' => now(),
             'updated_at' => now(),
         ],
@@ -47,7 +38,7 @@ class UserDetailSeeder extends Seeder
             'gender' => 1,
             'phone_number' => '089251621525',
             'quota' => 0,
-            'user_id' => 4,
+            'user_id' => 3,
             'created_at' => now(),
             'updated_at' => now(),
         ],
@@ -56,7 +47,7 @@ class UserDetailSeeder extends Seeder
             'gender' => 1,
             'phone_number' => '089251621525',
             'quota' => 0,
-            'user_id' => 5,
+            'user_id' => 4,
             'created_at' => now(),
             'updated_at' => now(),
         ],

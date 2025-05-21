@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nik', 20)->unique();
             $table->string('password', 100);
-            $table->enum('role', ['admin', 'docter', 'staff', 'leader', 'patient']);
+            $table->enum('role', ['admin', 'docter', 'staff', 'leader']);
             $table->string('status');
             $table->rememberToken();
             $table->timestamps();
