@@ -56,13 +56,6 @@ class UserDetailRepository
         return $userDetail;
     }
 
-    public function countPatientsByDoctor($doctorId)
-    {
-        return DB::table('visits')
-            ->where('docter_id', $doctorId)
-            ->distinct('patient_id')
-            ->count('patient_id');
-    }
 
 
 }

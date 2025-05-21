@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Response\Response;
 use App\Services\DocterService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DocterController
@@ -102,10 +103,7 @@ class DocterController
 
     public function getPatientCountByDocterID(Request $request)
     {
-        $payload = $request->attributes->get('user_auth');
-        $userId = $payload['id'];
-
-
+        $userId = Auth::id();
         $patientCount = $this->docterService->getPatientCount($userId);
 
         return $this->response->responseSuccess([

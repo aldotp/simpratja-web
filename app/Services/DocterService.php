@@ -7,9 +7,8 @@ use App\Repositories\UserRepository;
 use App\Repositories\VisitRepository;
 use App\Repositories\MedicalRecordDetailRepository;
 use App\Repositories\MedicalRecordRepository;
+use App\Repositories\PatientRepository;
 use Illuminate\Support\Facades\DB;
-use App\Exceptions\CustomException;
-use App\Models\MedicalRecordDetail;
 
 class DocterService
 {
@@ -19,8 +18,16 @@ class DocterService
     protected $visitRepository;
     protected $medicalRecordDetailRepository;
     protected $medicalRecordRepository;
+    protected $patientRepository;
 
-    public function __construct(UserDetailRepository $userDetailRepository, UserService $userService, UserRepository $userRepository, VisitRepository $visitRepository, MedicalRecordDetailRepository $medicalRecordDetailRepository, MedicalRecordRepository $medicalRecordRepository)
+    public function __construct(
+        UserDetailRepository $userDetailRepository,
+        UserService $userService, UserRepository $userRepository,
+        VisitRepository $visitRepository,
+        MedicalRecordDetailRepository $medicalRecordDetailRepository,
+        MedicalRecordRepository $medicalRecordRepository,
+        PatientRepository $patientRepository,
+        )
     {
         $this->userDetailRepository = $userDetailRepository;
         $this->userService = $userService;
@@ -28,6 +35,7 @@ class DocterService
         $this->visitRepository = $visitRepository;
         $this->medicalRecordDetailRepository = $medicalRecordDetailRepository;
         $this->medicalRecordRepository = $medicalRecordRepository;
+        $this->patientRepository = $patientRepository;
     }
 
     public function getAll($filters = [])
@@ -155,13 +163,8 @@ class DocterService
 
     public function getPatientCount($userId)
     {
-        $doctor = $this->userRepository->getAllUsersDetailByID($userId);
 
-        if (!$doctor) {
-            return 0;
-        }
-
-        return $this->userDetailRepository->countPatientsByDoctor($doctor->id);
+        return $this->patientRepository->countAll();
     }
 
 

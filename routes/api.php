@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v2')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post("/login", [AuthController::class, 'loginv2']);
+        Route::post("/login", [AuthController::class, 'loginv3']);
         Route::group(['middleware' => ['authv2']], function() {
             Route::get("/profile", [AuthController::class, 'profilev2']);
             Route::delete("/logout", [AuthController::class, 'logout']);
@@ -115,7 +116,7 @@ Route::prefix('v1')->group(function () {
         Route::put('/reports/{id}', [ReportController::class, 'update']);
         Route::get('/reports/{id}', [ReportController::class, 'show']);
 
-        Route::get('/dashboard/counts', [DocterController::class, 'getPatientCountByDocterID']); // tambahkan ini
+        Route::get('/dashboard', [DocterController::class, 'getPatientCountByDocterID']); // tambahkan ini
     });
 
     // Endpoint Staff
