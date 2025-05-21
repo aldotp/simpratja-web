@@ -55,6 +55,10 @@ class VisitRepository
             });
         }
 
+        if (!empty($filters['docter_id'])) {
+            $query->where('visits.docter_id', $filters['docter_id']);
+        }
+
         $query= $query->orderBy('visits.queue_number', 'asc');
 
         return $query->get();
