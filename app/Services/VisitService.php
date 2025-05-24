@@ -6,6 +6,7 @@ use App\Repositories\VisitRepository;
 use App\Repositories\UserDetailRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\PatientRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class VisitService
@@ -55,6 +56,18 @@ class VisitService
     public function countAll()
     {
         return $this->visitRepository->countAll();
+    }
+
+
+    public function checkStatusVisit($request)
+    {
+        $visit = $this->visitRepository->queryWhere(['patient_id' => $request['patient_id'], 'visit_status' => 'done', 'examination_date' => $request['examination_date'] ])->first();
+
+        if (!$visit) {
+            return null;
+        }
+
+        return $visit;
     }
 
 }

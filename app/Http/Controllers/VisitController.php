@@ -55,5 +55,34 @@ class VisitController
         return $this->response->responseSuccess($visits, 'Validate Success');
     }
 
+    public function checkStatusVisit(Request $request)
+    {
+        $data = [
+            'patient_id' => $request->query('patient_id'),
+            'examination_date' => $request->query('examination_date'),
+        ];
+
+        $validator = Validator::make($data, [
+            'patient_id' => 'required',
+            'examination_date' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+        $visit = $this->visitService->checkStatusVisit($data);
+
+
+        $isDone = false;
+
+        if ($visit !== null) {
+            $isDone = $visit->visit_status === 'done';
+        }
+
+
+        return $this->response->responseSuccess(["is_done" => $isDone], 'Visit status checked successfully');
+    }
+
 
 }
