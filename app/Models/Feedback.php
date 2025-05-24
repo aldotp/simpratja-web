@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Feedback extends Model
 {
@@ -14,4 +15,12 @@ class Feedback extends Model
         'feedback_date',
         'rating',
     ];
+
+    /**
+     * Get the patient that owns the feedback
+     */
+    public function patient(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
 }

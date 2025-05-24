@@ -17,12 +17,12 @@ class AdminController
         $this->userService = $userService;
         $this->reportRepository = $reportRepository;
     }
-    public function index()
+    public function dashboard()
     {
 
         $report = $this->reportRepository->countAll();
         $docter = $this->userService->countDocter();
 
-        return view('admin.dashboard.index', compact('report', 'docter'));
+        return view('admin.dashboard', compact('report', 'docter'));
     }
 }

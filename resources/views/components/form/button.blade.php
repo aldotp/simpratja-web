@@ -7,7 +7,7 @@
 ])
 
 @php
-    $baseClasses = 'font-medium rounded-md transition duration-300';
+    $baseClasses = 'font-medium rounded-md transition duration-300 cursor-pointer';
 
     $variantClasses = [
         'primary' => 'bg-primary-600 hover:bg-primary-700 text-white',

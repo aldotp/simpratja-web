@@ -26,7 +26,7 @@ class AuthController
                 return redirect()->route('admin.dashboard');
             case 'staff':
                 return redirect()->route('staff.dashboard');
-            case 'doctor':
+            case 'docter':
                 return redirect()->route('doctor.dashboard');
             case 'leader':
                 return redirect()->route('leader.dashboard');
@@ -45,8 +45,7 @@ class AuthController
             $user = $this->authService->loginV3($request);
             return $this->redirectRoute($user->role);
         } catch (\Exception $e) {
-            toastr()->error($e->getMessage());
-            return redirect()->route('login');
+            return redirect()->route('login')->with('error', 'Invalid Credentials')->withErrors($e->getMessage());
         }
     }
 

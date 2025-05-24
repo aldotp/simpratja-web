@@ -93,7 +93,7 @@
                         <li
                             class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['reports'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['reports'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="{{route('admin.reports.index')}}">
+                                href="{{ route('admin.reports.index') }}">
                                 <div class="flex items-center">
                                     <i class="fa-solid fa-file-lines fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
@@ -104,32 +104,24 @@
                     @elseif($userRole == 'petugas' || $userRole == 'staff')
                         <!-- Petugas/Staff Menu -->
                         <!-- Dashboard -->
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['dashboard'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['dashboard']) ? 1 : 0 }} }">
+                        <li
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['dashboard'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['dashboard'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                                href="{{ route('staff.dashboard') }}">
                                 <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
+                                    <div class="grow flex items-center">
                                         <i class="fa-solid fa-house fill-current text-gray-400 dark:text-gray-500"></i>
                                         <span
                                             class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dashboard</span>
-                                    </div>
-                                    <!-- Icon -->
-                                    <div
-                                        class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if (in_array(Request::segment(2), ['dashboard'])) {{ 'rotate-180' }} @endif"
-                                            :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
-                                            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                                        </svg>
                                     </div>
                                 </div>
                             </a>
                         </li>
                         <!-- Pasien -->
                         <li
-                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['pasien'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['pasien'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['patients'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['patients'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="{{route('staff.patients.index')}}">
                                 <div class="flex items-center">
                                     <i class="fa-solid fa-user-group fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
@@ -137,52 +129,84 @@
                                 </div>
                             </a>
                         </li>
-                        <!-- Antrian -->
+                        <!-- Visits -->
                         <li
-                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['antrian'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['antrian'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['visits'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['visits'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
                                 href="#">
                                 <div class="flex items-center">
-                                    <i class="fa-solid fa-list-ol fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <i class="fa-solid fa-notes-medical fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
-                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Antrian</span>
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Kunjungan</span>
                                 </div>
                             </a>
                         </li>
-                    @elseif($userRole == 'dokter')
+                        <!-- History Visits -->
+                        <li
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['history-visit'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['history-visit'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="#">
+                                <div class="flex items-center">
+                                    <i
+                                        class="fa-solid fa-hospital-user fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <span
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Riwayat
+                                        Kunjungan</span>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- Medical Records -->
+                        <li
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['medical-records'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['medical-records'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="#">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-paperclip fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <span
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Catatan Rekam Medis</span>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- Feedbacks -->
+                        <li
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['feedbacks'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['feedbacks'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="#">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-paper-plane fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <span
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Feedback
+                                        Pasien</span>
+                                </div>
+                            </a>
+                        </li>
+                    @elseif($userRole == 'docter')
                         <!-- Dokter Menu -->
                         <!-- Dashboard -->
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['dashboard'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['dashboard']) ? 1 : 0 }} }">
+                        <li
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['dashboard'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['dashboard'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                                href="{{ route('doctor.dashboard') }}">
                                 <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
+                                    <div class="grow flex items-center">
                                         <i class="fa-solid fa-house fill-current text-gray-400 dark:text-gray-500"></i>
                                         <span
                                             class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dashboard</span>
                                     </div>
-                                    <!-- Icon -->
-                                    <div
-                                        class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if (in_array(Request::segment(2), ['dashboard'])) {{ 'rotate-180' }} @endif"
-                                            :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
-                                            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                                        </svg>
-                                    </div>
                                 </div>
                             </a>
                         </li>
-                        <!-- Pemeriksaan -->
+                        <!-- Visits -->
                         <li
-                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['pemeriksaan'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['pemeriksaan'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['visits'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['visits'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="{{ route('doctor.visits.index') }}">
                                 <div class="flex items-center">
                                     <i
-                                        class="fa-solid fa-stethoscope fill-current text-gray-400 dark:text-gray-500"></i>
+                                        class="fa-solid fa-hospital-user fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
-                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pemeriksaan</span>
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Data
+                                        Kunjungan</span>
                                 </div>
                             </a>
                         </li>
@@ -190,62 +214,54 @@
                         <li
                             class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['riwayat-pasien'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['riwayat-pasien'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                                href="{{ route('doctor.medicines.index') }}">
                                 <div class="flex items-center">
-                                    <i
-                                        class="fa-solid fa-clipboard-list fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <i class="fa-solid fa-pills fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
-                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Riwayat
-                                        Pasien</span>
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Data
+                                        Obat</span>
                                 </div>
                             </a>
                         </li>
-                    @elseif($userRole == 'pimpinan')
+                    @elseif($userRole == 'leader')
                         <!-- Pimpinan Menu -->
                         <!-- Dashboard -->
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['dashboard'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['dashboard']) ? 1 : 0 }} }">
+                        <li
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['dashboard'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['dashboard'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                                href="{{ route('leader.dashboard') }}">
                                 <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
+                                    <div class="grow flex items-center">
                                         <i class="fa-solid fa-house fill-current text-gray-400 dark:text-gray-500"></i>
                                         <span
                                             class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dashboard</span>
-                                    </div>
-                                    <!-- Icon -->
-                                    <div
-                                        class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if (in_array(Request::segment(2), ['dashboard'])) {{ 'rotate-180' }} @endif"
-                                            :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
-                                            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                                        </svg>
                                     </div>
                                 </div>
                             </a>
                         </li>
                         <!-- Laporan -->
                         <li
-                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['laporan'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['laporan'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['reports'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['reports'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="{{ route('leader.reports.index') }}">
                                 <div class="flex items-center">
-                                    <i
-                                        class="fa-solid fa-chart-line fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <i class="fa-solid fa-file fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
-                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Laporan</span>
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Data
+                                        Laporan</span>
                                 </div>
                             </a>
                         </li>
-                        <!-- Statistik -->
+                        <!-- Feedbacks -->
                         <li
-                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['statistik'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['statistik'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['feedbacks'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['feedbacks'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="{{ route("leader.feedbacks.index") }}">
                                 <div class="flex items-center">
-                                    <i class="fa-solid fa-chart-pie fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <i class="fa-solid fa-paper-plane fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
-                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Statistik</span>
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Feedback
+                                        Pasien</span>
                                 </div>
                             </a>
                         </li>

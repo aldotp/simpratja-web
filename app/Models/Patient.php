@@ -19,4 +19,28 @@ class Patient extends Model
         'address',
         'phone_number',
     ];
+
+    /**
+     * Get all visits for the patient
+     */
+    public function visits()
+    {
+        return $this->hasMany(Visit::class, 'patient_id');
+    }
+
+    /**
+     * Get the medical record associated with the patient
+     */
+    public function medicalRecord()
+    {
+        return $this->belongsTo(Medical_Record::class, 'id', 'patient_id');
+    }
+
+    /**
+     * Get all feedbacks from the patient
+     */
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class, 'patient_id');
+    }
 }

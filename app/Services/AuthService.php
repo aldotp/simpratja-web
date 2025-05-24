@@ -20,7 +20,7 @@ class AuthService {
         $user = $this->userRepository->findByNIK($request->nik);
 
         if (!$user || !password_verify($request->password, $user->password)) {
-            return 'Invalid credentials';
+             throw new \Exception('Invalid credentials');
         }
 
         auth('web')->login($user);

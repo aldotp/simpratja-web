@@ -21,6 +21,16 @@ class DoctorController
     }
 
     /**
+     * Display a dashboard role doctor.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function dashboard()
+    {
+        return view('doctor.dashboard');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\View\View

@@ -90,7 +90,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Endpoint Doctor
-    Route::prefix('docters')->middleware(['auth', 'role:docter'])->group(function () {
+    Route::prefix('docters')->middleware(['authv3', 'role:docter'])->group(function () {
         Route::get('/visits', [VisitController::class, 'getAllVisits']);
         Route::get('/visits/{id}', [VisitController::class, 'getVisitByID']);
         Route::get('/medical-records/{id}', [MedicalRecordController::class, 'getMedicalRecordDetailByPatientID']);

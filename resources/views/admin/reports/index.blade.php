@@ -49,8 +49,8 @@
                                     <i class="fas fa-edit mr-2"></i>
                                     {{ __('Edit') }}
                                 </x-form.button>
-                                <x-form.button class="!py-2 !px-2.5" variant="danger"
-                                    onclick="DialogManager.showModal('deleteModal')" data-id="{{ $report->id }}">
+                                <x-form.button class="!py-2 !px-2.5" variant="danger" data-modal-toggle="deleteModal"
+                                    data-modal-target="deleteModal" data-id="{{ $report->id }}">
                                     <i class="fas fa-trash mr-2"></i>
                                     {{ __('Delete') }}
                                 </x-form.button>
@@ -69,7 +69,7 @@
     <x-dialog.modal id="deleteModal" title="Hapus Laporan" size="md">
         Apakah anda yakin akan menghapus laporan ini?
         <x-slot name="footer">
-            <x-form.button onclick="DialogManager.closeModal('deleteModal')">Tidak, kembali</x-form.button>
+            <x-form.button data-modal-hidden="deleteModal">Tidak, kembali</x-form.button>
             <form action="{{ route('admin.reports.destroy', '') }}" method="POST" id="deleteForm">
                 @csrf
                 @method('DELETE')
@@ -77,33 +77,35 @@
             </form>
         </x-slot>
     </x-dialog.modal>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize DataTable
-            new simpleDatatables.DataTable('#table-reports', {
-                paging: true,
-                perPage: 5,
-                perPageSelect: [5, 10, 15, 20],
-                fixedHeight: false,
-                labels: {
-                    placeholder: 'Cari...',
-                    perPage: 'data per halaman',
-                    noRows: 'Data tidak ditemukan',
-                    info: 'Menampilkan {start} sampai {end} dari {rows} data'
-                }
-            });
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize DataTable
+                new simpleDatatables.DataTable('#table-reports', {
+                    paging: true,
+                    perPage: 5,
+                    perPageSelect: [5, 10, 15, 20],
+                    fixedHeight: false,
+                    labels: {
+                        placeholder: 'Cari...',
+                        perPage: 'data per halaman',
+                        noRows: 'Data tidak ditemukan',
+                        info: 'Menampilkan {start} sampai {end} dari {rows} data'
+                    }
+                });
 
-            // Setup delete modal
-            const deleteButtons = document.querySelectorAll('[data-id]');
-            const deleteForm = document.getElementById('deleteForm');
+                // Setup delete modal
+                const deleteButtons = document.querySelectorAll('[data-id]');
+                const deleteForm = document.getElementById('deleteForm');
 
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const reportId = this.getAttribute('data-id');
-                    const action = deleteForm.getAttribute('action');
-                    deleteForm.setAttribute('action', action.replace('', reportId));
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const reportId = this.getAttribute('data-id');
+                        const action = deleteForm.getAttribute('action');
+                        deleteForm.setAttribute('action', action.replace('', reportId));
+                    });
                 });
             });
-        });
-    </script>
+        </script>
+    @endpush
 </x-dashboard-layout>
