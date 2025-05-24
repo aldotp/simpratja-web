@@ -122,6 +122,7 @@ Route::prefix('v1')->group(function () {
     // Endpoint Staff
     Route::prefix('staff')->middleware(['auth', 'role:staff'])->group(function () {
         Route::get('/patients', [PatientController::class, 'index']); // lihat data pasien
+        Route::post('/patients/generate-medical-records/{id}', [MedicalRecordController::class, 'createMedicalRecordNumberOnly']);
         Route::get('/patients/{id}', [PatientController::class, 'showRegistration']);
         Route::put('/patients/{id}', [PatientController::class, 'update']); // update data pasien
         Route::delete('/patients/{id}', [PatientController::class, 'destroy']);

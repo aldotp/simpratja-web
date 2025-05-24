@@ -69,17 +69,6 @@ class PatientService
                 throw new \Exception('failed to insert visit');
             }
 
-            $medicalRecord = $this->medicalRecordRepository->store([
-                'patient_id' => $visit->patient_id,
-                'medical_record_number' => $this->generateMedicalRecordNumber(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            if (!$medicalRecord) {
-                return new \Exception('failed to insert medical record');
-            }
-
             $response = [
                 'patient_id' => $patient->id,
                 'patient_name' => $patient->name,
@@ -92,7 +81,6 @@ class PatientService
                 'visit_registration_number' => $visit->registration_number,
                 'visit_queue_number' => $visit->queue_number,
                 'visit_status' => $visit->visit_status,
-                'medical_record_number'=>$medicalRecord->medical_record_number
             ];
 
             return [$response, null];

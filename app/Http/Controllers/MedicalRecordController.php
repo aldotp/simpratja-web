@@ -66,6 +66,33 @@ class MedicalRecordController
         return $this->response->responseSuccess($result, 'Medical record dan detail berhasil dibuat');
     }
 
+    public function createMedicalRecordNumberOnly($id)
+    {
+        $data = [
+            'visit_id' => $id,
+        ];
+
+        $validator = Validator::make($data, [
+            'visit_id' => 'required|exists:visits,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+        try {
+            $result = $this->medicalRecordService->createMedicalRecordNumberOnly($data);
+
+            if (is_array($result) && isset($result[1]) && $result[1] !== null) {
+                return $this->response->responseError($result[1], 422);
+            }
+        } catch (\Exception $e) {
+            return $this->response->responseError('Gagal membuat medical record: ' . $e->getMessage(), 500);
+        }
+
+        return $this->response->responseSuccess($result, 'Medical record dan detail berhasil dibuat');
+    }
+
     public function update(Request $request, $id)
     {
         $data = $request->all();
