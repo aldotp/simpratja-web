@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $report->report_type }} - {{ $report->period }}</title>
     <style>
         /* Reset CSS */
         * {
@@ -100,9 +99,9 @@
 
 <body>
     <div class="header">
-        <h1>{{ $report->report_type }}</h1>
-        <p>Periode: {{ $report->period }}</p>
-        <p>Tanggal Dibuat: {{ Carbon\Carbon::parse($report->created_at)->translatedFormat('l, d F Y') }}</p>
+        <h1>{{ $reportType }}</h1>
+        <p>Periode: {{ $period }}</p>
+        <p>Tanggal Dibuat: {{ $createdAt }}</p>
     </div>
 
     <div class="content">
@@ -112,19 +111,19 @@
                 <table>
                     <tr>
                         <th>Jenis Laporan</th>
-                        <td>{{ $report->report_type }}</td>
+                        <td>{{ $reportType }}</td>
                     </tr>
                     <tr>
                         <th>Periode</th>
-                        <td>{{ $report->period }}</td>
+                        <td>{{ $period }}</td>
                     </tr>
                     <tr>
                         <th>Tanggal Dibuat</th>
-                        <td>{{ Carbon\Carbon::parse($report->created_at)->translatedFormat('l, d F Y') }}</td>
+                        <td>{{ $createdAt }}</td>
                     </tr>
                     <tr>
                         <th>Terakhir Diperbarui</th>
-                        <td>{{ Carbon\Carbon::parse($report->updated_at)->translatedFormat('l, d F Y') }}</td>
+                        <td>{{ $updatedAt }}</td>
                     </tr>
                 </table>
             </div>
@@ -133,7 +132,7 @@
         <div class="section">
             <div class="section-title">Isi Laporan</div>
             <div class="section-content">
-                {!! $report->report_content !!}
+                {{  $reportContent  }}
             </div>
         </div>
     </div>

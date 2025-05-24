@@ -145,6 +145,7 @@ Route::prefix('v1')->group(function () {
     // Endpoint Leaders
     Route::prefix('leader')->middleware(['auth', 'role:leader'])->group(function () {
         Route::get('/reports', [ReportController::class, 'index']);
+        Route::get('/export-report/{id}', [ReportController::class, 'exportReportPDF']);
         Route::get('/feedbacks', [FeedbackController::class, 'index']);
         Route::get('/feedbacks/{id}', [FeedbackController::class, 'show']);
         Route::get('/dashboard/count', [LeaderController::class, 'getCounts']);
