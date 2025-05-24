@@ -118,6 +118,41 @@ class MedicalRecordService
         });
     }
 
+    public function createMedicalRecordNumberOnly($data, )
+    {
+
+        return DB::transaction(function () use ($data) {
+
+            $visit = $this->visitRepository->getById($data['visit_id']);
+            if (!$visit) {
+                return [null, 'Visit not found'];
+            }
+
+            $existNumber = $this->medicalRecordRepository->query()->where('patient_id', $visit->patient_id)->select("medical_record_number");
+
+            if ($existNumber->exists()) {
+                return [null, 'Medical record number already exist'];
+            }
+
+
+            $record = $this->medicalRecordRepository->store([
+                'patient_id' => $visit->patient_id,
+                'medical_record_number' => $this->generateMedicalRecordNumber(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+
+            $response = [
+                'medical_record_id' => $record->id,
+                'medical_record_number' => $record->medical_record_number,
+                'patient_id' => $record->patient_id,
+            ];
+
+            return $response;
+        });
+    }
+
     public function update($id, $data)
     {
         return $this->medicalRecordRepository->update($id, $data);
