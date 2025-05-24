@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Response\Response;
 use App\Services\ReportService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController
 {
@@ -76,5 +78,32 @@ class ReportController
             return $this->response->responseError('Laporan tidak ditemukan', 404);
         }
         return $this->response->responseSuccess($report, 'Laporan berhasil diupdate');
+    }
+
+    public function exportReportPDF($id)
+    {
+
+        if (!$id){
+            return $this->response->responseError('',404);
+        }
+
+        $data = $this->reportService->getById($id);
+
+        if (!$data) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        $viewData = [
+            'period' => $data->period,
+            'reportType' => $data->report_type,
+            'reportContent' => $data->report_content,
+            'createdAt' => Carbon::parse($data->created_at)->translatedFormat('l, d F Y'),
+            'updatedAt' => Carbon::parse($data->updated_at)->translatedFormat('l, d F Y'),
+        ];
+
+
+        $pdf = Pdf::loadView('leader.reports.pdf', data: $viewData);
+
+        return $pdf->download('report.pdf');
     }
 }
