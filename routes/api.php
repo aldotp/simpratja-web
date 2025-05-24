@@ -86,6 +86,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/feedbacks/{id}', [FeedbackController::class, 'show']);
 
         Route::get('/dashboard', [AdminController::class, 'dashboard']);
+        Route::get('/check-visit-status', [VisitController::class, 'checkStatusVisit']);
     });
 
     // Endpoint Doctor
