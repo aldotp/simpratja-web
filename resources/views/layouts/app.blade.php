@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dialog.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
     @stack('styles')
 </head>

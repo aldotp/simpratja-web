@@ -43,8 +43,8 @@
                                     <i class="fas fa-edit mr-2"></i>
                                     {{ __('Edit') }}
                                 </x-form.button>
-                                <x-form.button class="!py-2 !px-2.5" variant="danger"
-                                    onclick="DialogManager.showModal('deleteModal')" data-id="{{ $doctor->id }}">
+                                <x-form.button class="!py-2 !px-2.5" variant="danger" data-modal-toggle="deleteModal"
+                                    data-modal-target="deleteModal" data-id="{{ $doctor->id }}">
                                     <i class="fas fa-trash mr-2"></i>
                                     {{ __('Delete') }}
                                 </x-form.button>
@@ -63,7 +63,7 @@
     <x-dialog.modal id="deleteModal" title="Hapus Dokter" size="md">
         Apakah anda yakin akan menghapus dokter ini?
         <x-slot name="footer">
-            <x-form.button onclick="DialogManager.closeModal('deleteModal')">Tidak, kembali</x-form.button>
+            <x-form.button data-modal-hide="deleteModal">Tidak, kembali</x-form.button>
             <form action="{{ route('admin.doctors.destroy', '') }}" method="POST" id="deleteForm">
                 @csrf
                 @method('DELETE')

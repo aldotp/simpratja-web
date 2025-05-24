@@ -36,7 +36,7 @@
                         <td class="px-6 py-4">{{ $user->detail->name }}</td>
                         <td class="px-6 py-4">{{ $user->nik }}</td>
                         <td class="px-6 py-4">
-                            <x-ui.badge :variant="match($user->role) {
+                            <x-ui.badge :variant="match ($user->role) {
                                 'admin' => 'primary',
                                 'staff' => 'warning',
                                 'leader' => 'info',
@@ -53,7 +53,7 @@
                                     {{ __('Edit') }}
                                 </x-form.button>
                                 <x-form.button class="!py-2 !px-2.5" variant="danger"
-                                    onclick="DialogManager.showModal('resetPasswordModal')"
+                                    data-modal-target="resetPasswordModal" data-modal-toggle="resetPasswordModal"
                                     data-id="{{ $user->nik }}">
                                     <i class="fas fa-lock mr-2"></i>
                                     {{ __('Reset') }}
@@ -73,7 +73,7 @@
     <x-dialog.modal id="resetPasswordModal" title="Reset Password" size="md">
         Apakah anda yakin akan me-reset password?
         <x-slot name="footer">
-            <x-form.button onclick="DialogManager.closeModal('resetPasswordModal')">Tidak, kembali</x-form.button>
+            <x-form.button data-modal-hide="resetPasswordModal">Tidak, kembali</x-form.button>
             <form action="{{ route('admin.reset-password') }}" method="POST">
                 @csrf
                 <input type="hidden" name="nik" id="reset_nik" value="{{ $user->nik }}">
@@ -81,20 +81,22 @@
             </form>
         </x-slot>
     </x-dialog.modal>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            new simpleDatatables.DataTable('#table-users', {
-                paging: true,
-                perPage: 5,
-                perPageSelect: [5, 10, 15, 20],
-                fixedHeight: false,
-                labels: {
-                    placeholder: 'Cari...',
-                    perPage: 'data per halaman',
-                    noRows: 'Data tidak ditemukan',
-                    info: 'Menampilkan {start} sampai {end} dari {rows} data'
-                }
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                new simpleDatatables.DataTable('#table-users', {
+                    paging: true,
+                    perPage: 5,
+                    perPageSelect: [5, 10, 15, 20],
+                    fixedHeight: false,
+                    labels: {
+                        placeholder: 'Cari...',
+                        perPage: 'data per halaman',
+                        noRows: 'Data tidak ditemukan',
+                        info: 'Menampilkan {start} sampai {end} dari {rows} data'
+                    }
+                });
             });
-        });
-    </script>
+        </script>
+    @endpush
 </x-dashboard-layout>

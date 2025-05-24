@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="bg-white shadow-sm sticky top-0 z-50">
+<header class="bg-white shadow-sm sticky top-0 z-10">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
         <div class="flex items-center">
             <a href="{{ route('home') }}" class="text-2xl font-bold text-primary-700">Simpratja</a>

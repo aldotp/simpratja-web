@@ -3,31 +3,21 @@
 namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
-use App\Services\DocterService;
+use App\Services\MedicineService;
 use Illuminate\Support\Facades\Validator;
 
-class DoctorController
+class MedicineController
 {
-    protected $docterService;
+    protected $medicineService;
 
     /**
      * Create a new controller instance.
      *
-     * @param DocterService $docterService
+     * @param MedicineService $medicineService
      */
-    public function __construct(DocterService $docterService)
+    public function __construct(MedicineService $medicineService)
     {
-        $this->docterService = $docterService;
-    }
-
-    /**
-     * Display a dashboard role doctor.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function dashboard()
-    {
-        return view('doctor.dashboard');
+        $this->medicineService = $medicineService;
     }
 
     /**
@@ -37,8 +27,8 @@ class DoctorController
      */
     public function index()
     {
-        $doctors = $this->docterService->getAll([]);
-        return view('admin.doctors.index', compact('doctors'));
+        $medicines = $this->medicineService->getAll();
+        return view('doctor.medicines.index', compact('medicines'));
     }
 
     /**
@@ -48,7 +38,7 @@ class DoctorController
      */
     public function create()
     {
-        return view('admin.doctors.create');
+        return view('doctor.medicines.create');
     }
 
     /**
@@ -60,11 +50,11 @@ class DoctorController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
-            'nik' => 'required|string|max:20|unique:users,nik',
-            'gender' => 'required|integer',
-            'phone_number' => 'required|string|max:20',
-            'quota' => 'required|integer',
+            'name' => 'required|string|max:100',
+            'stock' => 'required|integer',
+            'unit' => 'required|string|max:100',
+            'price' => 'required|numeric',
+            'expiry_date' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -74,9 +64,9 @@ class DoctorController
         }
 
         try {
-            $this->docterService->createDocter($request->all());
-            return redirect()->route('admin.doctors.index')
-                ->with('success', 'Dokter berhasil ditambahkan');
+            $this->medicineService->store($request->all());
+            return redirect()->route('doctor.medicines.index')
+                ->with('success', 'Obat berhasil ditambahkan');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
@@ -92,12 +82,12 @@ class DoctorController
      */
     public function show(string $id)
     {
-        $doctor = $this->docterService->getById($id);
-        if (!$doctor) {
-            return redirect()->route('admin.doctors.index')
-                ->with('error', 'Dokter tidak ditemukan');
+        $medicine = $this->medicineService->show($id);
+        if (!$medicine) {
+            return redirect()->route('doctor.medicines.index')
+                ->with('error', 'Obat tidak ditemukan');
         }
-        return view('admin.doctors.show', compact('doctor'));
+        return view('doctor.medicines.show', compact('medicine'));
     }
 
     /**
@@ -108,12 +98,12 @@ class DoctorController
      */
     public function edit(string $id)
     {
-        $doctor = $this->docterService->getById($id);
-        if (!$doctor) {
-            return redirect()->route('admin.doctors.index')
-                ->with('error', 'Dokter tidak ditemukan');
+        $medicine = $this->medicineService->show($id);
+        if (!$medicine) {
+            return redirect()->route('doctor.medicines.index')
+                ->with('error', 'Obat tidak ditemukan');
         }
-        return view('admin.doctors.edit', compact('doctor'));
+        return view('doctor.medicines.edit', compact('medicine'));
     }
 
     /**
@@ -126,11 +116,11 @@ class DoctorController
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
-            'nik' => 'required|string|max:20|unique:users,nik,' . $id,
-            'gender' => 'required|integer',
-            'phone_number' => 'required|string|max:20',
-            'quota' => 'required|integer',
+            'name' => 'required|string|max:100',
+            'stock' => 'required|integer',
+            'unit' => 'required|string|max:100',
+            'price' => 'required|numeric',
+            'expiry_date' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -140,13 +130,13 @@ class DoctorController
         }
 
         try {
-            $doctor = $this->docterService->update($id, $request->all());
-            if (!$doctor) {
-                return redirect()->route('admin.doctors.index')
-                    ->with('error', 'Dokter tidak ditemukan');
+            $medicine = $this->medicineService->update($id, $request->all());
+            if (!$medicine) {
+                return redirect()->route('doctor.medicines.index')
+                    ->with('error', 'Obat tidak ditemukan');
             }
-            return redirect()->route('admin.doctors.index')
-                ->with('success', 'Dokter berhasil diperbarui');
+            return redirect()->route('doctor.medicines.index')
+                ->with('success', 'Obat berhasil diperbarui');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
@@ -163,15 +153,15 @@ class DoctorController
     public function destroy(string $id)
     {
         try {
-            $doctor = $this->docterService->delete($id);
-            if (!$doctor) {
-                return redirect()->route('admin.doctors.index')
-                    ->with('error', 'Dokter tidak ditemukan');
+            $medicine = $this->medicineService->destroy($id);
+            if (!$medicine) {
+                return redirect()->route('doctor.medicines.index')
+                    ->with('error', 'Obat tidak ditemukan');
             }
-            return redirect()->route('admin.doctors.index')
-                ->with('success', 'Dokter berhasil dihapus');
+            return redirect()->route('doctor.medicines.index')
+                ->with('success', 'Obat berhasil dihapus');
         } catch (\Exception $e) {
-            return redirect()->route('admin.doctors.index')
+            return redirect()->route('doctor.medicines.index')
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
