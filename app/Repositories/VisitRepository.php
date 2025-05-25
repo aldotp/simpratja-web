@@ -64,12 +64,14 @@ class VisitRepository
         return $query->get();
     }
 
-    public function getVisitByID($id)
+       public function getVisitByID($id)
     {
         $query = Visit::query()
-            ->join('patients', 'visits.patient_id', '=', 'patients.id')
-            ->join('user_details', 'visits.docter_id', '=', 'user_details.user_id')
-            ->select('visits.id','user_details.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at')
+            ->leftjoin('patients', 'visits.patient_id', '=', 'patients.id')
+            ->leftjoin('user_details', 'visits.docter_id', '=', 'user_details.user_id')
+            ->leftjoin('medical_records_details', 'visits.id', '=', 'medical_records_details.visit_id')
+            ->join('medicines', 'medicines.id', '=', 'medical_records_details.medicine_id')
+            ->select('visits.id','user_details.name as doctor_name','patients.name as patient_name', 'patients.nik as patient_nik', 'patients.phone_number as patient_phone_number','visits.examination_date', 'visits.registration_number', 'visits.queue_number', 'visits.visit_status', 'visits.created_at', 'visits.updated_at', 'medical_records_details.complaint', 'medical_records_details.diagnosis', 'medicines.name as medicine_name' )
             ->where('visits.id', $id);
 
             $data = $query->first();
