@@ -80,6 +80,17 @@ class ReportController
         return $this->response->responseSuccess($report, 'Laporan berhasil diupdate');
     }
 
+
+    public function destroy($id)
+    {
+        $report = $this->reportService->delete($id);
+        if (!$report) {
+            return $this->response->responseError('Laporan tidak ditemukan', 404);
+        }
+
+        return $this->response->responseSuccess($report,'Laporan berhasil dihapus');
+    }
+
     public function exportReportPDF($id)
     {
 
