@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('examination_date');
             $table->string('registration_number', 20);
             $table->integer('queue_number')->length(10);
-            $table->enum('visit_status', ['register', 'queue', 'done',]);
+            $table->enum('visit_status', ['register', 'queue', 'check', 'done',]);
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients')->cascadeOnDelete();

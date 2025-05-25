@@ -84,5 +84,14 @@ class VisitController
         return $this->response->responseSuccess(["is_done" => $isDone], 'Visit status checked successfully');
     }
 
+    public function callPatient($id) {
+
+        if (is_null($id) || !is_numeric($id)) {
+            return $this->response->responseError('Patient ID is required', 400);
+        }
+
+        $result = $this->visitService->callPatient($id);
+        return $this->response->responseSuccess($result, 'Call patient success');
+    }
 
 }

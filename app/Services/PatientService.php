@@ -144,7 +144,15 @@ class PatientService
 
     public function getAll()
     {
-        return $this->patientRepository->getAll();
+        $data =  $this->patientRepository->query()
+            ->leftjoin("medical_records", "medical_records.patient_id", "=", "patients.id")
+            ->select(
+                "patients.*",
+                \DB::raw('COALESCE(medical_records.medical_record_number, "") as medical_record_number')
+            )
+            ->get();
+
+        return $data;
     }
 
     public function countAll()
