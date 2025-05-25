@@ -70,4 +70,29 @@ class VisitService
         return $visit;
     }
 
+     public function callPatient($id)
+    {
+
+        return DB::transaction(function () use ($id) {
+
+            $visit = $this->visitRepository->getById($id);
+            if (!$visit) {
+                return [null, 'Visit not found'];
+            }
+
+
+            $updateData =  $this->visitRepository->update($visit->id, ['visit_status' => 'check']);
+
+
+            if ($updateData) {
+                return null;
+            }
+
+            $response = [
+                'visit_status'=> $updateData->visit_status
+            ];
+
+            return $response;
+        });
+    }
 }

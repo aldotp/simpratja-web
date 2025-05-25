@@ -38,6 +38,13 @@ class StaffService
                 return null;
             }
 
+            if ($visit->visit_status !== 'register') {
+                return[
+                    'queue_number' => $visit->queue_number,
+                    'visit_status' => $visit->visit_status
+                 ];
+            }
+
             $docter = $this->userRepository->getAllUsersDetailByID($visit['docter_id']);
             if (!$docter) {
                 return null;
