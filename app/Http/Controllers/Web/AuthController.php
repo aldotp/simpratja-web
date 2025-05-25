@@ -16,10 +16,21 @@ class AuthController
         $this->authService = $authService;
     }
 
+    /**
+     * Display the login view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index() {
         return view('login');
     }
 
+    /**
+     * Redirect to the appropriate dashboard based on the user's role.
+     *
+     * @param string $role The user's role.
+     * @return RedirectResponse The redirect response.
+     */
     private function redirectRoute($role) {
         switch($role) {
             case 'admin':
@@ -30,11 +41,15 @@ class AuthController
                 return redirect()->route('doctor.dashboard');
             case 'leader':
                 return redirect()->route('leader.dashboard');
-            default:
-                return redirect()->route('login');
         }
     }
 
+    /**
+     * Handle user login.
+     *
+     * @param Request $request The HTTP request.
+     * @return RedirectResponse The redirect response.
+     */
     public function login(Request $request): RedirectResponse
     {
         $request->validate([
@@ -49,6 +64,11 @@ class AuthController
         }
     }
 
+    /**
+     * Handle user logout.
+     *
+     * @return RedirectResponse The redirect response.
+     */
     public function logout(): RedirectResponse
     {
         Auth::logout();

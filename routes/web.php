@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\PatientController;
-use App\Http\Controllers\VisitController;
+use App\Http\Controllers\Web\VisitController;
 use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\DoctorController;
 use App\Http\Controllers\Web\ReportController;
@@ -48,8 +48,8 @@ Route::prefix('doctor')->name('doctor.')->middleware(['authv3', 'role:docter'])-
     Route::resource('/medicines', MedicineController::class)->names('medicines');
 
     // Visit routes
-    Route::get('/visits', [MedicalRecordController::class, 'index'])->name('visits.index');
-    Route::get('/visits/{id}/details', [MedicalRecordController::class, 'getVisitDetails'])->name('visits.details');
+    Route::get('/visits', [VisitController::class, 'index'])->name('visits.index');
+    Route::get('/visits/{id}/details', [VisitController::class, 'getVisitDetails'])->name('visits.details');
     // Medical Record routes
     Route::post('/medical-records', [MedicalRecordController::class, 'store'])->name('medical-records.store');
 });
@@ -71,6 +71,20 @@ Route::prefix('staff')->name('staff.')->middleware(['authv3', 'role:staff'])->gr
     Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
 
     // Patient routes
-    Route::resource('/patients', PatientController::class)->except('show')->names('patients');
-    Route::post('/patient/{id}/generate-mrn', [PatientController::class, 'generateMRN'])->name('patient.generate-mrn');
+    Route::get('/patients', [PatientController::class, 'index'])->name('patients.index');
+    Route::get('/patients/{id}/edit', [PatientController::class, 'edit'])->name('patients.edit');
+    Route::post('/patient/{id}/generate-mrn', [PatientController::class, 'generateMRN'])->name('patients.generate-mrn');
+    Route::put('/patients/{id}', [PatientController::class, 'update'])->name('patients.update');
+    Route::delete('/patients/{id}', [PatientController::class, 'destroy'])->name('patients.destroy');
+
+    // Visit routes
+    Route::resource('/visits', VisitController::class)->names('visits')->only('index');
+    Route::get('/history-visits', [VisitController::class, 'history'])->name('history-visits');
+    Route::get('/visits/{id}/details', [VisitController::class, 'getVisitDetails'])->name('visits.details');
+
+    // Medical Record routes
+    Route::resource('/medical-records', MedicalRecordController::class)->names('medical-records');
+
+    // Feedback routes
+    Route::resource('/feedbacks', FeedbackController::class)->names('feedbacks');
 });

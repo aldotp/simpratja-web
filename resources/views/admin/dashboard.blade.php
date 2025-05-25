@@ -75,38 +75,30 @@
                     <!-- Quick Actions Section -->
                     <div class="mt-8 pt-6 border-t border-gray-100 animate-slide-up animate-delay-300">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-                        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                            <x-form.button
-                                class="action-button flex flex-col items-center justify-center bg-white !hover:bg-primary-200 border border-gray-200 rounded-lg p-4 transition-all">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <a href="{{ route('admin.users.index') }}"
+                                class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
                                 <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-calendar-check text-primary-600"></i>
+                                    <i class="fas fa-users text-primary-600"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-700">Schedule Appointment</span>
-                            </x-form.button>
+                                <span class="text-sm font-medium text-gray-700">Data Users</span>
+                            </a>
 
-                            <x-form.button
-                                class="action-button flex flex-col items-center justify-center bg-white !hover:bg-primary-200 border border-gray-200 rounded-lg p-4 transition-all">
+                            <a href="{{ route('admin.doctors.index') }}"
+                                class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
                                 <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-prescription-bottle-alt text-primary-600"></i>
+                                    <i class="fas fa-user-doctor text-primary-600"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-700">Refill Prescription</span>
-                            </x-form.button>
+                                <span class="text-sm font-medium text-gray-700">Data Dokter</span>
+                            </a>
 
-                            <x-form.button
-                                class="action-button flex flex-col items-center justify-center bg-white !hover:bg-primary-200 border border-gray-200 rounded-lg p-4 transition-all">
+                            <a href="{{ route('admin.reports.index') }}"
+                                class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
                                 <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-comment-medical text-primary-600"></i>
+                                    <i class="fas fa-file text-primary-600"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-700">Message Doctor</span>
-                            </x-form.button>
-
-                            <x-form.button
-                                class="action-button flex flex-col items-center justify-center bg-white !hover:bg-primary-200 border border-gray-200 rounded-lg p-4 transition-all">
-                                <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-file-medical-alt text-primary-600"></i>
-                                </div>
-                                <span class="text-sm font-medium text-gray-700">View Test Results</span>
-                            </x-form.button>
+                                <span class="text-sm font-medium text-gray-700">Data Laporan</span>
+                            </a>
                         </div>
                     </div>
                 </div>

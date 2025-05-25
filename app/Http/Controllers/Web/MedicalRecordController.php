@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\MedicalRecordService;
 use App\Services\VisitService;
 use App\Services\MedicineService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,16 +33,21 @@ class MedicalRecordController
         $this->medicineService = $medicineService;
     }
 
-    /**
-     * Display a listing of the visits.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index()
     {
-        $visits = $this->visitService->getAllVisits(['visit_status' => 1]);
-        $medicines = $this->medicineService->getAll();
-        return view('doctor.visits.index', compact('visits', 'medicines'));
+        $medicalRecords = $this->medicalRecordService->getAllMedicalRecords();
+        return view('staff.medical-records.index', compact('medicalRecords'));
+    }
+
+    public function show($id)
+    {
+        $medicalRecords = $this->medicalRecordService->getMedicalRecordDetailByPatientID($id);
+
+        if ($medicalRecords->isEmpty()) {
+            return abort(404);
+        }
+
+        return view('staff.medical-records.detail', compact('medicalRecords'));
     }
 
     /**
@@ -59,9 +65,9 @@ class MedicalRecordController
         }
 
         return response()->json([
-            'doctor_name' => $visit->docter->name ?? 'Tidak ada dokter',
-            'patient_name' => $visit->patient->name ?? 'Tidak ada pasien',
-            'examination_date' => $visit->examination_date,
+            'doctor_name' => $visit->doctor_name ?? 'Tidak ada dokter',
+            'patient_name' => $visit->patient_name ?? 'Tidak ada pasien',
+            'examination_date' => Carbon::parse($visit->examination_date)->translatedFormat('l, d F Y'),
         ]);
     }
 

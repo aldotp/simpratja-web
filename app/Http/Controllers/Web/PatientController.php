@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Repositories\PatientRepository;
 use App\Repositories\VisitRepository;
+use App\Services\MedicalRecordService;
 use App\Services\PatientService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,12 +14,14 @@ class PatientController
     protected $patientRepository;
     protected $visitRepository;
     protected $patientService;
+    protected $medicalRecordService;
 
-    public function __construct(PatientRepository $patientRepository, VisitRepository $visitRepository, PatientService $patientService)
+    public function __construct(PatientRepository $patientRepository, VisitRepository $visitRepository, PatientService $patientService, MedicalRecordService $medicalRecordService)
     {
         $this->patientRepository = $patientRepository;
         $this->visitRepository = $visitRepository;
         $this->patientService = $patientService;
+        $this->medicalRecordService = $medicalRecordService;
     }
 
     public function portal()
@@ -101,7 +104,7 @@ class PatientController
      */
     public function index() {
         $patients = $this->patientService->getAll();
-        return view('staff.patient.index', compact('patients'));
+        return view('staff.patients.index', compact('patients'));
     }
 
     /**
@@ -117,7 +120,7 @@ class PatientController
             return redirect()->route('staff.patient.index')->with('error', 'Pasien tidak ditemukan');
         }
 
-        return view('staff.patient.edit', compact('patient'));
+        return view('staff.patients.edit', compact('patient'));
     }
 
     /**
@@ -129,7 +132,7 @@ class PatientController
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request, [
+        $validator = Validator::make($request->all(), [
             'nik' => 'required',
             'name' => 'required|string|max:50',
             'birth_date' => 'required|date',
@@ -142,16 +145,16 @@ class PatientController
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($request->all())->withInput();
         }
 
-        $patient = $this->patientService->update($id, $validator);
+        $patient = $this->patientService->update($id, $request->all());
 
         if (!$patient) {
             return redirect()->back()->with('error', 'Gagal mengupdate data pasien');
         }
 
-        return redirect()->route('staff.patient.show', $id)->with('success', 'Data pasien berhasil diupdate');
+        return redirect()->route('staff.patients.index', $id)->with('success', 'Data pasien berhasil diupdate');
     }
 
     /**
@@ -167,22 +170,29 @@ class PatientController
             return redirect()->back()->with('error', 'Gagal menghapus data pasien');
         }
 
-        return redirect()->route('staff.patient.index')->with('success', 'Data pasien berhasil dihapus');
+        return redirect()->route('staff.patients.index')->with('success', 'Data pasien berhasil dihapus');
     }
 
-    /**
-     * Generate Medical Record Number
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function generateMRN(Request $request) {
-        try {
-            $recordNumber = $this->patientService->generateRegistrationNumber($request->visit_date, $request->doctor_id);
-            return redirect()->back()->with('success', 'Medical Record Number: ' . $recordNumber);
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Failed Create Medical Number');
+    public function generateMRN($id)
+    {
+        $data = [
+            'visit_id' => $id,
+        ];
+
+        $validator = Validator::make($data, [
+            'visit_id' => 'required|exists:visits,id',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
         }
 
+        try {
+            $result = $this->medicalRecordService->createMedicalRecordNumberOnly($data);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal membuat medical record: ' . $e->getMessage());
+        }
+
+        return redirect()->route('staff.patients.index')->with('success', 'Medical record dan detail berhasil dibuat');
     }
 }
