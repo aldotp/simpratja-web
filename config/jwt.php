@@ -25,6 +25,9 @@ return [
     |
     */
 
+    'access_secret' => env('JWT_SECRET_ACCESS_TOKEN'),
+    'refresh_secret' => env('JWT_SECRET_REFRESH_TOKEN'),
+
     'secret' => env('JWT_SECRET'),
 
     /*

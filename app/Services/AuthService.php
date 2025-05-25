@@ -87,8 +87,12 @@ class AuthService {
             'exp' => time() + (30 * 24 * 60 * 60)
         ];
 
-        $accessToken = JWT::encode($accessTokenPayload, env('JWT_SECRET_ACCESS_TOKEN'), 'HS256');
-        $refreshToken = JWT::encode($refreshTokenPayload, env('JWT_SECRET_REFRESH_TOKEN'), 'HS256');
+
+        $accessSecret = config('jwt.access_secret');
+        $refreshSecret = config('jwt.refresh_secret');
+
+        $accessToken = JWT::encode($accessTokenPayload, $accessSecret, 'HS256');
+        $refreshToken = JWT::encode($refreshTokenPayload, $refreshSecret, 'HS256');
 
         return [
             'access_token' => $accessToken,
@@ -150,10 +154,13 @@ class AuthService {
             'exp' => time() + (30 * 24 * 60 * 60)
         ];
 
-        $accessToken = JWT::encode($accessTokenPayload, env('JWT_SECRET_ACCESS_TOKEN'), 'HS256');
-        $refreshToken = JWT::encode($refreshTokenPayload, env('JWT_SECRET_REFRESH_TOKEN'), 'HS256');
+        $accessSecret = config('jwt.access_secret');
+        $refreshSecret = config('jwt.refresh_secret');
 
+        $accessToken = JWT::encode($accessTokenPayload, $accessSecret, 'HS256');
+        $refreshToken = JWT::encode($refreshTokenPayload, $refreshSecret, 'HS256');
 
+      
         return [
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,

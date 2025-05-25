@@ -39,7 +39,7 @@
                         <td class="px-6 py-4">
                             <div class="flex flex-row gap-4">
                                 <span
-                                    :class="$visit->>visit_status == 'register' ? 'bg-yellow-600 text-white' :
+                                    :class="$visit->visit_status == 'register' ? 'bg-yellow-600 text-white' :
                                         'bg-green-600 text-white'"
                                     class="inline-flex items-center px-4 py-2 rounded-md font-medium text-sm shadow-sm hover:bg-opacity-90 transition duration-150 ease-in-out">
                                     {{ $visit->visit_status == 'register' ? 'Belum Registrasi' : 'Sudah Registrasi' }}
