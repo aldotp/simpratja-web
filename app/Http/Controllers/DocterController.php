@@ -94,7 +94,7 @@ class DocterController
 
     public function delete($id)
     {
-        $docter = $this->docterService->delete($id);
+        $docter = $this->docterService->deleteUser($id);
         if (!$docter) {
             return $this->response->responseError('Doctor not found', 404);
         }
