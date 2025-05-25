@@ -34,7 +34,7 @@ class DoctorController
     {
         $userId = Auth::id();
         $patientCount = $this->docterService->getPatientCount($userId);
-        $visitCount = $this->visitRepository->countVisitsByDocterAndDate($userId, now());
+        $visitCount = $this->visitRepository->countVisitsByDocterAndDate($userId, now()->format('Y-m-d'));
         return view('doctor.dashboard', compact('patientCount', 'visitCount'));
     }
 

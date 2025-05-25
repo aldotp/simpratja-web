@@ -51,11 +51,25 @@
                                 <i class="fas fa-eye"></i>
                             </x-form.button>
                             <x-form.button variant="danger" class="!py-1 !px-2"
-                                onclick="confirmDelete('{{ $medicine->id }}')">
+                                data-modal-target="deleteModal-{{ $medicine->id }}"
+                                data-modal-toggle="deleteModal-{{ $medicine->id }}">
                                 <i class="fas fa-trash"></i>
                             </x-form.button>
                         </td>
                     </tr>
+                    {{-- Modal Delete Confirm --}}
+                    <x-dialog.modal id="deleteModal-{{ $medicine->id }}" title="Hapus Obat" size="md">
+                        Apakah anda yakin akan menghapus obat ini?
+                        <x-slot name="footer">
+                            <x-form.button data-modal-hide="deleteModal">Tidak, kembali</x-form.button>
+                            <form action="{{ route('doctor.medicines.destroy', $medicine->id) }}" method="POST"
+                                id="deleteForm">
+                                @csrf
+                                @method('DELETE')
+                                <x-form.button variant="danger" type="submit">Ya, hapus!</x-form.button>
+                            </form>
+                        </x-slot>
+                    </x-dialog.modal>
                 @empty
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td colspan="7" class="px-6 py-4 text-center">Tidak ada data obat</td>
@@ -65,21 +79,8 @@
         </x-ui.card>
     </div>
 
-    <form action="{{ route('doctor.medicines.destroy', '') }}" method="POST" id="deleteForm">
-        @csrf
-        @method('DELETE')
-    </form>
-
     @push('scripts')
         <script>
-            function confirmDelete(id) {
-                if (confirm('Apakah anda yakin ingin menghapus obat ini?')) {
-                    var form = document.getElementById('deleteForm');
-                    form.action = form.action + id;
-                    form.submit();
-                }
-            }
-
             document.addEventListener('DOMContentLoaded', function() {
                 // Initialize DataTable
                 new simpleDatatables.DataTable('#table-medicines', {

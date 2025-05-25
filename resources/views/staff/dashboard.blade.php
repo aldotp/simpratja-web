@@ -76,7 +76,7 @@
                                         <h4 class="text-2xl font-bold text-gray-900 mt-1">{{ $feedbackCount }}</h4>
                                     </div>
                                     <div class="bg-primary-100 p-3 rounded-full">
-                                        <i class="fas fa-comments text-primary-600 text-xl"></i>
+                                        <i class="fas fa-paper-plane text-primary-600 text-xl"></i>
                                     </div>
                                 </div>
                             </div>

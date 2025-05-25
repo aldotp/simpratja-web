@@ -203,8 +203,8 @@ class DocterService
             if (!$detail) {
                 return null;
             }
-
-          $updateData =  $this->visitRepository->update($visit->id, ['visit_status' => 'done']);
+          $updateData =  $this->visitRepository->update($id, ['visit_status' => 'done']);
+          
           if ($updateData) {
               return null;
           }

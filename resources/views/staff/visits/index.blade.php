@@ -22,6 +22,7 @@
                     <tr>
                         <th scope="col" class="px-6 py-3">No</th>
                         <th scope="col" class="px-6 py-3">No. REG</th>
+                        <th scope="col" class="px-6 py-3">Antrian</th>
                         <th scope="col" class="px-6 py-3">Tgl. Periksa</th>
                         <th scope="col" class="px-6 py-3">Nama Pasien</th>
                         <th scope="col" class="px-6 py-3">No. HP</th>
@@ -33,6 +34,7 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">{{ $loop->iteration }}</td>
                         <td class="px-6 py-4">{{ $visit->registration_number }}</td>
+                        <td class="px-6 py-4">{{ $visit->queue_number }}</td>
                         <td class="px-6 py-4">
                             {{ \Carbon\Carbon::parse($visit->examination_date)->translatedFormat('l, d F Y') }}</td>
                         <td class="px-6 py-4">{{ $visit->patient_name }}</td>
@@ -43,14 +45,35 @@
                                 <x-form.button variant="info" class="!py-1 !px-2">
                                     <i class="fas fa-phone mr-1"></i> Panggil
                                 </x-form.button>
-                                <x-form.button variant="success" class="!py-1 !px-2 registrasiBtn"
-                                    data-id="{{ $visit->id }}" data-modal-target="confirmationModal"
-                                    data-modal-toggle="confirmationModal">
-                                    <i class="fas fa-clipboard-check mr-1"></i> Konfirmasi
-                                </x-form.button>
+                                @if (!$visit->queue_number)
+                                    <x-form.button variant="success" class="!py-1 !px-2 registrasiBtn"
+                                        data-id="{{ $visit->id }}"
+                                        data-modal-target="confirmationModal-{{ $visit->id }}"
+                                        data-modal-toggle="confirmationModal-{{ $visit->id }}">
+                                        <i class="fas fa-clipboard-check mr-1"></i> Konfirmasi
+                                    </x-form.button>
+                                @endif
                             </div>
                         </td>
                     </tr>
+                    <!-- Modal Konfirmasi Nomor Antrian -->
+                    <x-dialog.modal id="confirmationModal-{{ $visit->id }}" title="Konfirmasi Nomor Antrian"
+                        size="md" :showCloseButton="true" :static="true">
+                        <p class="text-gray-700 dark:text-gray-400 mb-4">Apakah Anda yakin memberikan nomor antrian?
+                        </p>
+                        <div class="flex justify-center space-x-2">
+                            <x-form.button type="button" class="grow" variant="secondary"
+                                data-modal-hide="confirmationModal">
+                                Batal
+                            </x-form.button>
+                            <form action="{{ route('staff.visits.queue-number', $visit->id) }}" method="post">
+                                @csrf
+                                <x-form.button type="submit" class="grow" variant="primary" id="confirmQueueButton">
+                                    Konfirmasi
+                                </x-form.button>
+                            </form>
+                        </div>
+                    </x-dialog.modal>
                 @empty
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td colspan="7" class="px-6 py-4 text-center">Tidak ada data kunjungan</td>
@@ -59,21 +82,6 @@
             </x-ui.table>
         </x-ui.card>
     </div>
-
-    <!-- Modal Konfirmasi Nomor Antrian -->
-    <x-dialog.modal id="confirmationModal" title="Konfirmasi Nomor Antrian" size="md" :showCloseButton="true"
-        :static="true">
-        <p class="text-center text-gray-700 dark:text-gray-400 mb-4">Apakah Anda yakin ingin mendapatkan nomor antrian?
-        </p>
-        <div class="flex justify-center space-x-2">
-            <x-form.button type="button" variant="secondary" data-modal-hide="confirmationModal">
-                Batal
-            </x-form.button>
-            <x-form.button type="button" variant="primary" id="confirmQueueButton">
-                Konfirmasi
-            </x-form.button>
-        </div>
-    </x-dialog.modal>
 
     @push('scripts')
         <script>

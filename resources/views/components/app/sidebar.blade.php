@@ -215,8 +215,8 @@
                         </li>
                         <!-- Riwayat Pasien -->
                         <li
-                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['riwayat-pasien'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['riwayat-pasien'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['medicines'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['medicines'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
                                 href="{{ route('doctor.medicines.index') }}">
                                 <div class="flex items-center">
                                     <i class="fa-solid fa-pills fill-current text-gray-400 dark:text-gray-500"></i>

@@ -43,14 +43,27 @@
                                     <i class="fas fa-edit mr-2"></i>
                                     {{ __('Edit') }}
                                 </x-form.button>
-                                <x-form.button class="!py-2 !px-2.5" variant="danger" data-modal-toggle="deleteModal"
-                                    data-modal-target="deleteModal" data-id="{{ $doctor->id }}">
+                                <x-form.button class="!py-2 !px-2.5" variant="danger"
+                                    data-modal-toggle="deleteModal-{{ $doctor->id }}"
+                                    data-modal-target="deleteModal-{{ $doctor->id }}" data-id="{{ $doctor->id }}">
                                     <i class="fas fa-trash mr-2"></i>
                                     {{ __('Delete') }}
                                 </x-form.button>
                             </div>
                         </td>
                     </tr>
+                    <x-dialog.modal id="deleteModal-{{ $doctor->id }}" title="Hapus Dokter" size="md">
+                        Apakah anda yakin akan menghapus dokter ini?
+                        <x-slot name="footer">
+                            <x-form.button data-modal-hide="deleteModal">Tidak, kembali</x-form.button>
+                            <form action="{{ route('admin.doctors.destroy', $doctor->id) }}" method="POST"
+                                id="deleteForm">
+                                @csrf
+                                @method('DELETE')
+                                <x-form.button variant="danger" type="submit">Ya, hapus!</x-form.button>
+                            </form>
+                        </x-slot>
+                    </x-dialog.modal>
                 @empty
                     <tr>
                         <td colspan="5" class="text-center">Tidak ada data</td>
@@ -60,17 +73,6 @@
             </x-ui.table>
         </x-ui.card>
     </div>
-    <x-dialog.modal id="deleteModal" title="Hapus Dokter" size="md">
-        Apakah anda yakin akan menghapus dokter ini?
-        <x-slot name="footer">
-            <x-form.button data-modal-hide="deleteModal">Tidak, kembali</x-form.button>
-            <form action="{{ route('admin.doctors.destroy', '') }}" method="POST" id="deleteForm">
-                @csrf
-                @method('DELETE')
-                <x-form.button variant="danger" type="submit">Ya, hapus!</x-form.button>
-            </form>
-        </x-slot>
-    </x-dialog.modal>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize DataTable
@@ -85,18 +87,6 @@
                     noRows: 'Data tidak ditemukan',
                     info: 'Menampilkan {start} sampai {end} dari {rows} data'
                 }
-            });
-
-            // Setup delete modal
-            const deleteButtons = document.querySelectorAll('[data-id]');
-            const deleteForm = document.getElementById('deleteForm');
-
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const doctorId = this.getAttribute('data-id');
-                    const action = deleteForm.getAttribute('action');
-                    deleteForm.setAttribute('action', action.replace('', doctorId));
-                });
             });
         });
     </script>
