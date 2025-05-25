@@ -205,8 +205,6 @@ class DocterService
             }
 
           $updateData =  $this->visitRepository->update($visit->id, ['visit_status' => 'done']);
-
-
           if ($updateData) {
               return null;
           }
@@ -222,5 +220,10 @@ class DocterService
 
             return $response;
         });
+    }
+
+    public function deleteUser($id)
+    {
+        return $this->userRepository->deleteUser($id);
     }
 }
