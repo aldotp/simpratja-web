@@ -51,6 +51,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/reports', [ReportController::class, 'store']);
         Route::put('/reports/{id}', [ReportController::class, 'update']);
         Route::get('/reports/{id}', [ReportController::class, 'show']);
+        Route::delete('/reports/{id}', [ReportController::class, 'destroy']);
     });
 
     Route::prefix('auth')->group(function () {
@@ -114,6 +115,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/reports', [ReportController::class, 'store']);
         Route::put('/reports/{id}', [ReportController::class, 'update']);
         Route::get('/reports/{id}', [ReportController::class, 'show']);
+        Route::delete('/reports/{id}', [ReportController::class, 'destroy']);
 
         Route::get('/dashboard', [DocterController::class, 'getPatientCountByDocterID']);
     });
