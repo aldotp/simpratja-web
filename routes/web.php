@@ -51,10 +51,8 @@ Route::prefix('doctor')->name('doctor.')->middleware(['authv3', 'role:docter'])-
     Route::get('/visits', [VisitController::class, 'index'])->name('visits.index');
     Route::get('/visits/{id}/details', [VisitController::class, 'getVisitDetails'])->name('visits.details');
     // Medical Record routes
-    Route::post('/medical-records', [MedicalRecordController::class, 'store'])->name('medical-records.store');
+    Route::post('/check-up-patients/{id}', [VisitController::class, 'checkUpPatient'])->name('medical-records.store');
 });
-
-// Dashboard Staff Routes
 
 // Dashboard Leader Routes
 Route::prefix('leader')->name('leader.')->middleware(['authv3', 'role:leader'])->group(function() {
@@ -67,18 +65,17 @@ Route::prefix('leader')->name('leader.')->middleware(['authv3', 'role:leader'])-
     Route::get('/feedbacks/{id}', [FeedbackController::class, 'show'])->name('feedbacks.show');
 });
 
+// Dashboard Staff Routes
 Route::prefix('staff')->name('staff.')->middleware(['authv3', 'role:staff'])->group(function() {
     Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
 
     // Patient routes
-    Route::get('/patients', [PatientController::class, 'index'])->name('patients.index');
-    Route::get('/patients/{id}/edit', [PatientController::class, 'edit'])->name('patients.edit');
+    Route::resource('/patients', PatientController::class)->only(['index', 'edit', 'update', 'destroy'])->names('patients');
     Route::post('/patient/{id}/generate-mrn', [PatientController::class, 'generateMRN'])->name('patients.generate-mrn');
-    Route::put('/patients/{id}', [PatientController::class, 'update'])->name('patients.update');
-    Route::delete('/patients/{id}', [PatientController::class, 'destroy'])->name('patients.destroy');
 
     // Visit routes
     Route::resource('/visits', VisitController::class)->names('visits')->only('index');
+    Route::post('/visits/{id}/generate-queue', [VisitController::class, 'validateRegisterPatient'])->name('visits.queue-number');
     Route::get('/history-visits', [VisitController::class, 'history'])->name('history-visits');
     Route::get('/visits/{id}/details', [VisitController::class, 'getVisitDetails'])->name('visits.details');
 

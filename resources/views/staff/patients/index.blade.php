@@ -14,9 +14,6 @@
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
                     {{ __('Data Pasien') }}
                 </h2>
-                <div class="flex space-x-2">
-                    <x-form.input type="search" id="searchInput" placeholder="Cari pasien..." class="w-64" />
-                </div>
             </div>
             <x-ui.table id="table-patients" hoverable="true" striped="true">
                 <x-slot name="thead">
@@ -62,13 +59,33 @@
                                     <i class="fas fa-edit"></i>
                                 </x-form.button>
                                 <x-form.button class="!py-2 !px-2.5" variant="danger"
-                                    data-modal-target="deletePatientModal" data-modal-toggle="deletePatientModal"
+                                    data-modal-target="deletePatientModal-{{ $patient->id }}"
+                                    data-modal-toggle="deletePatientModal-{{ $patient->id }}"
                                     data-id="{{ $patient->id }}" data-name="{{ $patient->name }}">
                                     <i class="fas fa-trash"></i>
                                 </x-form.button>
                             </div>
                         </td>
                     </tr>
+
+                    <!-- Modal Delete Confirm -->
+                    <x-dialog.modal id="deletePatientModal-{{ $patient->id }}" title="Hapus Data Pasien"
+                        size="md">
+                        <p class="text-gray-600">Apakah anda yakin akan menghapus data pasien <span
+                                id="patientNameToDelete" class="font-semibold"></span>?</p>
+                        <p class="text-red-500 mt-2">Note: Tindakan ini tidak dapat dibatalkan dan akan menghapus semua
+                            data
+                            terkait pasien ini.</p>
+                        <x-slot name="footer">
+                            <x-form.button data-modal-hide="deletePatientModal">Batal</x-form.button>
+                            <form id="deletePatientForm" action="{{ route('staff.patients.destroy', $patient->id) }}"
+                                method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <x-form.button variant="danger" type="submit">Ya, Hapus!</x-form.button>
+                            </form>
+                        </x-slot>
+                    </x-dialog.modal>
                     <!-- Modal Generate MRN -->
                     <x-dialog.modal id="generateMRNModal-{{ $patient->id }}" title="Generate Nomor Rekam Medis"
                         size="md">
@@ -94,22 +111,6 @@
             </x-ui.table>
         </x-ui.card>
     </div>
-
-    <!-- Modal Delete Confirm -->
-    <x-dialog.modal id="deletePatientModal" title="Hapus Data Pasien" size="md">
-        <p class="text-gray-600">Apakah anda yakin akan menghapus data pasien <span id="patientNameToDelete"
-                class="font-semibold"></span>?</p>
-        <p class="text-red-500 mt-2">Note: Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data
-            terkait pasien ini.</p>
-        <x-slot name="footer">
-            <x-form.button data-modal-hide="deletePatientModal">Batal</x-form.button>
-            <form id="deletePatientForm" action="" method="POST">
-                @csrf
-                @method('DELETE')
-                <x-form.button variant="danger" type="submit">Ya, Hapus!</x-form.button>
-            </form>
-        </x-slot>
-    </x-dialog.modal>
 
     @push('scripts')
         <script>
@@ -137,7 +138,7 @@
                         const patientName = button.getAttribute('data-name');
 
                         document.getElementById('patientNameToDelete').textContent = patientName;
-                        document.getElementById('deletePatientForm').action = `/staff/patient/${patientId}`;
+                        document.getElementById('deletePatientForm').action = `/staff/patients/${patientId}`;
                     });
                 }
 

@@ -38,16 +38,24 @@
                         <td class="px-6 py-4">{{ $visit->doctor_name ?? 'Belum ditentukan' }}</td>
                         <td class="px-6 py-4">
                             <div class="flex flex-row gap-4">
-                                <span
-                                    :class="$visit->visit_status == 'register' ? 'bg-yellow-600 text-white' :
-                                        'bg-green-600 text-white'"
-                                    class="inline-flex items-center px-4 py-2 rounded-md font-medium text-sm shadow-sm hover:bg-opacity-90 transition duration-150 ease-in-out">
-                                    {{ $visit->visit_status == 'register' ? 'Belum Registrasi' : 'Sudah Registrasi' }}
+                                <span x-data="{ status: '{{ $visit->visit_status }}' }"
+                                    :class="{
+                                        'bg-yellow-500 text-white': status === 'register',
+                                        'bg-green-600 text-white': status !== 'register'
+                                    }"
+                                    class="inline-flex gap-2 items-center px-4 py-2 rounded-md font-medium shadow-sm hover:bg-opacity-90 transition duration-150 ease-in-out text-xs">
+                                    @if ($visit->visit_status === 'register')
+                                        <i class="fas fa-clipboard-check mr-1"></i>
+                                    @else
+                                        <i class="fas fa-check mr-1"></i>
+                                    @endif
+                                    <span
+                                        x-text="status === 'register' ? 'Belum Registrasi' : 'Sudah Registrasi'"></span>
                                 </span>
-                                <x-form.button variant="primary" class="!py-1 !px-2 checkupBtn"
+                                <x-form.button variant="info" class="!py-1 !px-2 checkupBtn"
                                     data-id="{{ $visit->id }}" data-modal-target="checkupModal"
                                     data-modal-toggle="checkupModal">
-                                    <i class="fas fa-stethoscope mr-1"></i> Check Up
+                                    <i class="fas fa-eye mr-1"></i> Detail
                                 </x-form.button>
                             </div>
                         </td>
@@ -78,7 +86,7 @@
                 <x-form.textarea label="Diagnosis" id="diagnosis" readonly rows="3" />
             </div>
             <div>
-                <x-form.input label="Resep" id="prescription" type="text" readonly />
+                <x-form.input label="Resep" id="medicine" type="text" readonly />
             </div>
         </div>
     </x-dialog.modal>
@@ -115,13 +123,14 @@
                         fetch(`/staff/visits/${visitId}/details`)
                             .then(response => response.json())
                             .then(data => {
+                                console.log(data);
                                 document.getElementById('doctor_name').value = data.doctor_name;
                                 document.getElementById('patient_name').value = data.patient_name;
                                 document.getElementById('examination_date').value = data
                                     .examination_date;
                                 document.getElementById('complaint').value = data.complaint || '-';
                                 document.getElementById('diagnosis').value = data.diagnosis || '-';
-                                document.getElementById('prescription').value = data.prescription ||
+                                document.getElementById('medicine').value = data.medicine ||
                                     '-';
                             })
                             .catch(error => console.error('Error:', error));

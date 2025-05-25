@@ -22,6 +22,7 @@
                     <tr>
                         <th scope="col" class="px-6 py-3">No</th>
                         <th scope="col" class="px-6 py-3">No. REG</th>
+                        <th scope="col" class="px-6 py-3">Antrian</th>
                         <th scope="col" class="px-6 py-3">Tgl. Periksa</th>
                         <th scope="col" class="px-6 py-3">Nama Pasien</th>
                         <th scope="col" class="px-6 py-3">No. HP</th>
@@ -32,22 +33,73 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">{{ $loop->iteration }}</td>
                         <td class="px-6 py-4">{{ $visit->registration_number }}</td>
-                        <td class="px-6 py-4">{{ date('Y-m-d', strtotime($visit->examination_date)) }}</td>
-                        <td class="px-6 py-4">{{ $visit->patient->name }}</td>
-                        <td class="px-6 py-4">{{ $visit->patient->phone_number }}</td>
+                        <td class="px-6 py-4">{{ $visit->queue_number }}</td>
+                        <td class="px-6 py-4">
+                            {{ \Carbon\Carbon::parse($visit->examination_date)->translatedFormat('l, d F Y') }}</td>
+                        <td class="px-6 py-4">{{ $visit->patient_name }}</td>
+                        <td class="px-6 py-4">{{ $visit->patient_phone_number }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center space-x-2">
                                 <x-form.button variant="info" class="!py-1 !px-2">
                                     <i class="fas fa-phone mr-1"></i> Panggil
                                 </x-form.button>
-                                <x-form.button variant="primary" class="!py-1 !px-2 panggilBtn"
-                                    data-id="{{ $visit->id }}" data-modal-target="medicalRecordModal"
-                                    data-modal-toggle="medicalRecordModal">
+                                <x-form.button variant="primary" class="!py-1 !px-2 periksaBtn"
+                                    data-id="{{ $visit->id }}"
+                                    data-modal-target="medicalRecordModal-{{ $visit->id }}"
+                                    data-modal-toggle="medicalRecordModal-{{ $visit->id }}">
                                     <i class="fas fa-stethoscope mr-1"></i> Periksa
                                 </x-form.button>
                             </div>
                         </td>
                     </tr>
+                    <!-- Modal Detail Rekam Medis -->
+                    <x-dialog.modal id="medicalRecordModal-{{ $visit->id }}" title="Detail Rekam Medis"
+                        size="xl" :showCloseButton="true" :static="true">
+                        <form id="medicalRecordForm" action="{{ route('doctor.medical-records.store', $visit->id) }}"
+                            method="POST">
+                            @csrf
+                            <input type="hidden" name="visit_id" id="visit_id">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <x-form.input id="dokter" name="dokter" label="Dokter" :disabled="true" />
+                                </div>
+                                <div>
+                                    <x-form.input id="pasien" name="pasien" label="Pasien" :disabled="true" />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <x-form.datepicker id="examination_date" name="examination_date"
+                                        label="Tanggal Periksa" :required="true" />
+                                </div>
+                                <div>
+                                    <x-form.input id="keluhan" name="complaint" label="Keluhan" :required="true" />
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <x-form.textarea id="diagnosis" name="diagnosis" label="Diagnosis" rows="3"
+                                    :required="true" />
+                            </div>
+                            <div class="mb-4">
+                                <x-form.select id="medicine_id" name="medicine_id" label="Resep" :required="true"
+                                    placeholder="Pilih Obat">
+                                    @foreach ($medicines as $medicine)
+                                        <option value="{{ $medicine->id }}">{{ $medicine->name }} (Stok:
+                                            {{ $medicine->stock }})
+                                        </option>
+                                    @endforeach
+                                </x-form.select>
+                            </div>
+                            <div class="flex justify-end space-x-2">
+                                <x-form.button type="button" variant="secondary" data-modal-hide="medicalRecordModal">
+                                    Batal
+                                </x-form.button>
+                                <x-form.button type="submit" variant="primary">
+                                    Simpan
+                                </x-form.button>
+                            </div>
+                        </form>
+                    </x-dialog.modal>
                 @empty
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td colspan="6" class="px-6 py-4 text-center">Tidak ada data kunjungan</td>
@@ -56,52 +108,6 @@
             </x-ui.table>
         </x-ui.card>
     </div>
-
-    <!-- Modal Detail Rekam Medis -->
-    <x-dialog.modal id="medicalRecordModal" title="Detail Rekam Medis" size="xl" :showCloseButton="true"
-        :static="true">
-        <form id="medicalRecordForm" action="{{ route('doctor.medical-records.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="visit_id" id="visit_id">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <x-form.input id="dokter" name="dokter" label="Dokter" :disabled="true" />
-                </div>
-                <div>
-                    <x-form.input id="pasien" name="pasien" label="Pasien" :disabled="true" />
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <x-form.datepicker id="examination_date" name="examination_date" label="Tanggal Periksa"
-                        :required="true" />
-                </div>
-                <div>
-                    <x-form.input id="keluhan" name="complaint" label="Keluhan" :required="true" />
-                </div>
-            </div>
-            <div class="mb-4">
-                <x-form.textarea id="diagnosis" name="diagnosis" label="Diagnosis" rows="3" :required="true" />
-            </div>
-            <div class="mb-4">
-                <x-form.select id="medicine_id" name="medicine_id" label="Resep" :required="true">
-                    <option value="">Pilih Obat</option>
-                    @foreach ($medicines as $medicine)
-                        <option value="{{ $medicine->id }}">{{ $medicine->name }} (Stok: {{ $medicine->stock }})
-                        </option>
-                    @endforeach
-                </x-form.select>
-            </div>
-            <div class="flex justify-end space-x-2">
-                <x-form.button type="button" variant="secondary" data-modal-hide="medicalRecordModal">
-                    Batal
-                </x-form.button>
-                <x-form.button type="submit" variant="primary">
-                    Simpan
-                </x-form.button>
-            </div>
-        </form>
-    </x-dialog.modal>
 
     @push('scripts')
         <script>
@@ -120,9 +126,9 @@
                     }
                 });
 
-                const panggilBtns = document.querySelectorAll('.panggilBtn');
+                const periksaBtns = document.querySelectorAll('.periksaBtn');
 
-                panggilBtns.forEach(btn => {
+                periksaBtns.forEach(btn => {
                     btn.addEventListener('click', function() {
                         const visitId = this.getAttribute('data-id');
                         document.getElementById('visit_id').value = visitId;
