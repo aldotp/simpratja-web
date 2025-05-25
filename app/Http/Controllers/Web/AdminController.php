@@ -17,6 +17,12 @@ class AdminController
         $this->userService = $userService;
         $this->reportRepository = $reportRepository;
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function dashboard()
     {
 

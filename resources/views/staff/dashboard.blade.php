@@ -87,37 +87,37 @@
                     <div class="mt-8 pt-6 border-t border-gray-100 animate-slide-up animate-delay-300">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
                         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                            <x-form.button
-                                class="action-button flex flex-col items-center justify-center bg-white !hover:bg-primary-200 border border-gray-200 rounded-lg p-4 transition-all">
+                            <a href="{{ route('staff.patients.index') }}"
+                                class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
                                 <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-user-plus text-primary-600"></i>
+                                    <i class="fas fa-hospital-user text-primary-600"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-700">Register Patient</span>
-                            </x-form.button>
+                                <span class="text-sm font-medium text-gray-700">Data Pasien</span>
+                            </a>
 
-                            <x-form.button
-                                class="action-button flex flex-col items-center justify-center bg-white !hover:bg-primary-200 border border-gray-200 rounded-lg p-4 transition-all">
+                            <a href="{{ route('staff.visits.index') }}"
+                                class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
                                 <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-calendar-plus text-primary-600"></i>
+                                    <i class="fas fa-calendar-check text-primary-600"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-700">Schedule Visit</span>
-                            </x-form.button>
+                                <span class="text-sm font-medium text-gray-700">Data Kunjungan</span>
+                            </a>
 
-                            <x-form.button
-                                class="action-button flex flex-col items-center justify-center bg-white !hover:bg-primary-200 border border-gray-200 rounded-lg p-4 transition-all">
+                            <a href="{{ route('staff.medical-records.index') }}"
+                                class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
                                 <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-clipboard-list text-primary-600"></i>
+                                    <i class="fas fa-notes-medical text-primary-600"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-700">Manage Queue</span>
-                            </x-form.button>
+                                <span class="text-sm font-medium text-gray-700">Rekam Medis</span>
+                            </a>
 
-                            <x-form.button
-                                class="action-button flex flex-col items-center justify-center bg-white !hover:bg-primary-200 border border-gray-200 rounded-lg p-4 transition-all">
+                            <a href="{{ route('staff.feedbacks.index') }}"
+                                class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
                                 <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-chart-bar text-primary-600"></i>
+                                    <i class="fas fa-paper-plane text-primary-600"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-700">View Reports</span>
-                            </x-form.button>
+                                <span class="text-sm font-medium text-gray-700">Feedback Pasien</span>
+                            </a>
                         </div>
                     </div>
                 </div>

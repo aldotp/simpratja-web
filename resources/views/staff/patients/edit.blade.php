@@ -50,7 +50,10 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <x-form.datepicker id="birth_date" name="birth_date" label="Tanggal Lahir"
-                                        :value="old('birth_date', $patient->birth_date)" required />
+                                        :value="old(
+                                            'birth_date',
+                                            $patient->birth_date
+                                        )" required />
                                 </div>
                                 <div>
                                     <x-form.select id="gender" name="gender" label="Jenis Kelamin" required>

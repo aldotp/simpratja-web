@@ -20,11 +20,7 @@ class VerifyLaravelAuth
         $user = auth('web')->user();
 
         if (!$user) {
-            return response()->json([
-                'message' => 'Unauthorized',
-                'code' => 401,
-                'status' => 'failed'
-            ], 401);
+            return abort(401, 'Unauthorized');
         }
 
         $request->attributes->add([

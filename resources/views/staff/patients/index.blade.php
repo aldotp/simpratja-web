@@ -51,7 +51,8 @@
                             <div class="flex items-center space-x-2">
                                 @if (!$patient->medicalRecord)
                                     <x-form.button class="!py-2 !px-2.5" variant="success"
-                                        data-modal-target="generateMRNModal" data-modal-toggle="generateMRNModal"
+                                        data-modal-target="generateMRNModal-{{ $patient->id }}"
+                                        data-modal-toggle="generateMRNModal-{{ $patient->id }}"
                                         data-id="{{ $patient->id }}" data-name="{{ $patient->name }}">
                                         <i class="fas fa-file-medical"></i>
                                     </x-form.button>
@@ -68,6 +69,22 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- Modal Generate MRN -->
+                    <x-dialog.modal id="generateMRNModal-{{ $patient->id }}" title="Generate Nomor Rekam Medis"
+                        size="md">
+                        <p class="text-gray-600">Anda akan membuat nomor rekam medis untuk pasien <span
+                                id="patientNameForMRN" class="font-semibold"></span>.</p>
+                        <p class="text-blue-500 mt-2">Nomor rekam medis akan dibuat secara otomatis oleh sistem.</p>
+                        <x-slot name="footer">
+                            <x-form.button data-modal-hide="generateMRNModal">Batal</x-form.button>
+                            <form id="generateMRNForm"
+                                action="{{ route('staff.patients.generate-mrn', $patient->id) }}" method="POST">
+                                @csrf
+                                <x-form.button variant="success" type="submit">Generate MRN</x-form.button>
+                            </form>
+                        </x-slot>
+                    </x-dialog.modal>
+
                 @empty
                     <tr>
                         <td colspan="8" class="text-center py-4">Tidak ada data pasien</td>
@@ -90,20 +107,6 @@
                 @csrf
                 @method('DELETE')
                 <x-form.button variant="danger" type="submit">Ya, Hapus!</x-form.button>
-            </form>
-        </x-slot>
-    </x-dialog.modal>
-
-    <!-- Modal Generate MRN -->
-    <x-dialog.modal id="generateMRNModal" title="Generate Nomor Rekam Medis" size="md">
-        <p class="text-gray-600">Anda akan membuat nomor rekam medis untuk pasien <span id="patientNameForMRN"
-                class="font-semibold"></span>.</p>
-        <p class="text-blue-500 mt-2">Nomor rekam medis akan dibuat secara otomatis oleh sistem.</p>
-        <x-slot name="footer">
-            <x-form.button data-modal-hide="generateMRNModal">Batal</x-form.button>
-            <form id="generateMRNForm" action="" method="POST">
-                @csrf
-                <x-form.button variant="success" type="submit">Generate MRN</x-form.button>
             </form>
         </x-slot>
     </x-dialog.modal>
@@ -147,8 +150,7 @@
                         const patientName = button.getAttribute('data-name');
 
                         document.getElementById('patientNameForMRN').textContent = patientName;
-                        document.getElementById('generateMRNForm').action =
-                            `api/v1/patients/generate-medical-records/${patientId}`;
+
                     });
                 }
             });

@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Repositories\VisitRepository;
 use Illuminate\Http\Request;
 use App\Services\DocterService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DoctorController
 {
     protected $docterService;
+    protected $visitRepository;
 
     /**
      * Create a new controller instance.
      *
      * @param DocterService $docterService
+     * @param VisitRepository $visitRepository
      */
-    public function __construct(DocterService $docterService)
+    public function __construct(DocterService $docterService, VisitRepository $visitRepository)
     {
         $this->docterService = $docterService;
+        $this->visitRepository = $visitRepository;
     }
 
     /**
@@ -27,7 +32,10 @@ class DoctorController
      */
     public function dashboard()
     {
-        return view('doctor.dashboard');
+        $userId = Auth::id();
+        $patientCount = $this->docterService->getPatientCount($userId);
+        $visitCount = $this->visitRepository->countVisitsByDocterAndDate($userId, now());
+        return view('doctor.dashboard', compact('patientCount', 'visitCount'));
     }
 
     /**
@@ -82,22 +90,6 @@ class DoctorController
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
                 ->withInput();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  string  $id
-     * @return \Illuminate\View\View
-     */
-    public function show(string $id)
-    {
-        $doctor = $this->docterService->getById($id);
-        if (!$doctor) {
-            return redirect()->route('admin.doctors.index')
-                ->with('error', 'Dokter tidak ditemukan');
-        }
-        return view('admin.doctors.show', compact('doctor'));
     }
 
     /**

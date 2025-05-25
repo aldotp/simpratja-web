@@ -101,7 +101,7 @@
                                 </div>
                             </a>
                         </li>
-                    @elseif($userRole == 'petugas' || $userRole == 'staff')
+                    @elseif($userRole == 'staff')
                         <!-- Petugas/Staff Menu -->
                         <!-- Dashboard -->
                         <li
@@ -121,7 +121,7 @@
                         <li
                             class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['patients'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['patients'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="{{route('staff.patients.index')}}">
+                                href="{{ route('staff.patients.index') }}">
                                 <div class="flex items-center">
                                     <i class="fa-solid fa-user-group fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
@@ -133,9 +133,10 @@
                         <li
                             class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['visits'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['visits'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                                href="{{ route('staff.visits.index') }}">
                                 <div class="flex items-center">
-                                    <i class="fa-solid fa-notes-medical fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <i
+                                        class="fa-solid fa-notes-medical fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
                                         class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Kunjungan</span>
                                 </div>
@@ -143,9 +144,9 @@
                         </li>
                         <!-- History Visits -->
                         <li
-                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['history-visit'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['history-visit'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#">
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['history-visits'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['history-visits'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="{{ route('staff.history-visits') }}">
                                 <div class="flex items-center">
                                     <i
                                         class="fa-solid fa-hospital-user fill-current text-gray-400 dark:text-gray-500"></i>
@@ -163,7 +164,8 @@
                                 <div class="flex items-center">
                                     <i class="fa-solid fa-paperclip fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
-                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Catatan Rekam Medis</span>
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Catatan
+                                        Rekam Medis</span>
                                 </div>
                             </a>
                         </li>
@@ -173,7 +175,8 @@
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['feedbacks'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
                                 href="#">
                                 <div class="flex items-center">
-                                    <i class="fa-solid fa-paper-plane fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <i
+                                        class="fa-solid fa-paper-plane fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
                                         class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Feedback
                                         Pasien</span>
@@ -256,9 +259,10 @@
                         <li
                             class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(2), ['feedbacks'])) {{ 'from-primary-600/[0.12] dark:from-primary-600/[0.24] to-primary-600/[0.04]' }} @endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), ['feedbacks'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="{{ route("leader.feedbacks.index") }}">
+                                href="{{ route('leader.feedbacks.index') }}">
                                 <div class="flex items-center">
-                                    <i class="fa-solid fa-paper-plane fill-current text-gray-400 dark:text-gray-500"></i>
+                                    <i
+                                        class="fa-solid fa-paper-plane fill-current text-gray-400 dark:text-gray-500"></i>
                                     <span
                                         class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Feedback
                                         Pasien</span>
