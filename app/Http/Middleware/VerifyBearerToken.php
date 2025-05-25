@@ -30,7 +30,8 @@ class VerifyBearerToken
         $token = str_replace('Bearer ', '', $authHeader);
 
         try {
-            $decoded = JWT::decode($token, new Key(env('JWT_SECRET_ACCESS_TOKEN'), 'HS256'));
+            $accessSecret = config('jwt.access_secret');
+            $decoded = JWT::decode($token, new Key($accessSecret, 'HS256'));
             $payload = (array) $decoded;
 
             $request->attributes->add(['user_auth' => $payload]);

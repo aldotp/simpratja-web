@@ -44,7 +44,7 @@ class VisitRepository
         }
 
         if (!empty($filters['visit_status'])) {
-              $query->where('visits.visit_status', $filters['visit_status']);
+            $query->whereIn('visits.visit_status', $filters['visit_status']);
         }
 
         if (!empty($filters['search'])) {
