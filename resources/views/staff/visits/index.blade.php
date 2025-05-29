@@ -42,7 +42,10 @@
                         <td class="px-6 py-4">{{ $visit->doctor_name ?? 'Belum ditentukan' }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center space-x-2">
-                                <x-form.button variant="info" class="!py-1 !px-2">
+                                <x-form.button variant="info" class="!py-1 !px-2"
+                                    data-modal-target="callPatientModal-{{ $visit->id }}"
+                                    data-modal-toggle="callPatientModal-{{ $visit->id }}"
+                                    data-id="{{ $visit->id }}">
                                     <i class="fas fa-phone mr-1"></i> Panggil
                                 </x-form.button>
                                 @if (!$visit->queue_number)
@@ -70,6 +73,26 @@
                                 @csrf
                                 <x-form.button type="submit" class="grow" variant="primary" id="confirmQueueButton">
                                     Konfirmasi
+                                </x-form.button>
+                            </form>
+                        </div>
+                    </x-dialog.modal>
+
+                    <!-- Modal Panggil Pasien -->
+                    <x-dialog.modal id="callPatientModal-{{ $visit->id }}" title="Panggil Pasien" size="md"
+                        :showCloseButton="true" :static="true">
+                        <p class="text-gray-700 dark:text-gray-400 mb-4">Anda akan memanggil pasien <span
+                                class="font-semibold">{{ $visit->patient_name }}</span>.</p>
+                        <p class="text-blue-500 mb-4">Sistem akan mengubah status kunjungan pasien menjadi "check".</p>
+                        <div class="flex justify-center space-x-2">
+                            <x-form.button type="button" class="grow" variant="secondary"
+                                data-modal-hide="callPatientModal-{{ $visit->id }}">
+                                Batal
+                            </x-form.button>
+                            <form action="{{ route('staff.visits.call-patient', $visit->id) }}" method="post">
+                                @csrf
+                                <x-form.button type="submit" class="grow" variant="info">
+                                    <i class="fas fa-phone mr-1"></i> Panggil Pasien
                                 </x-form.button>
                             </form>
                         </div>

@@ -1,5 +1,6 @@
 import Alpine from "alpinejs";
 import "./bootstrap";
+import { Modal } from "flowbite";
 
 window.Alpine = Alpine;
 

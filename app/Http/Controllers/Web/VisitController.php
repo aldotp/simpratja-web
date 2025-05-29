@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Response\Response;
 use App\Services\DocterService;
 use App\Services\MedicineService;
 use App\Services\StaffService;
@@ -18,8 +19,10 @@ class VisitController
     protected $medicineService;
     protected $staffService;
     protected $docterService;
-    public function __construct(VisitService $visitService, MedicineService $medicineService, StaffService $staffService, DocterService $docterService)
+    protected $response;
+    public function __construct(Response $response, VisitService $visitService, MedicineService $medicineService, StaffService $staffService, DocterService $docterService)
     {
+        $this->response = $response;
         $this->visitService = $visitService;
         $this->medicineService = $medicineService;
         $this->staffService = $staffService;
@@ -128,5 +131,15 @@ class VisitController
 
         $this->docterService->checkUpPatient($id,$data);
         return redirect()->route('doctor.visits.index')->with('success', 'Check up patient success');
+    }
+
+    public function callPatient($id) {
+
+        if (is_null($id) || !is_numeric($id)) {
+            return $this->response->responseError('Patient ID is required', 400);
+        }
+
+        $result = $this->visitService->callPatient($id);
+        return $this->response->responseSuccess($result, 'Call patient success');
     }
 }

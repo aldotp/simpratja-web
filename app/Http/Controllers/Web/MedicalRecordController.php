@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Response\Response;
 use Illuminate\Http\Request;
 use App\Services\MedicalRecordService;
 use App\Services\VisitService;
@@ -15,6 +16,7 @@ class MedicalRecordController
     protected $medicalRecordService;
     protected $visitService;
     protected $medicineService;
+    protected $response;
 
     /**
      * Create a new controller instance.
@@ -22,15 +24,18 @@ class MedicalRecordController
      * @param MedicalRecordService $medicalRecordService
      * @param VisitService $visitService
      * @param MedicineService $medicineService
+     * @param Response $response
      */
     public function __construct(
         MedicalRecordService $medicalRecordService,
         VisitService $visitService,
-        MedicineService $medicineService
+        MedicineService $medicineService,
+        Response $response
     ) {
         $this->medicalRecordService = $medicalRecordService;
         $this->visitService = $visitService;
         $this->medicineService = $medicineService;
+        $this->response = $response;
     }
 
     public function index()
@@ -48,6 +53,33 @@ class MedicalRecordController
         }
 
         return view('staff.medical-records.detail', compact('medicalRecords'));
+    }
+
+    /**
+     * Get medical record details for AJAX request.
+     *
+     * @param int $id Medical Record ID
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDetails($id)
+    {
+        $medicalRecords = $this->medicalRecordService->getMedicalRecordDetailByPatientID($id);
+
+        if ($medicalRecords->isEmpty()) {
+            return $this->response->responseError('Medical records not found', 404);
+        }
+
+        // Format examination_date to 'l, d F Y' format
+        $formattedRecords = $medicalRecords->map(function($record) {
+            if (isset($record->examination_date)) {
+                $record->examination_date = \Carbon\Carbon::parse($record->examination_date)->translatedFormat('l, d F Y');
+            }
+            return $record;
+        });
+
+        return $this->response->responseSuccess([
+            'details'=> $formattedRecords,
+        ], 'Medical records retrieved successfully');
     }
 
     /**

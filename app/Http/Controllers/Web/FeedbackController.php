@@ -46,4 +46,24 @@ class FeedbackController
         $feedbacks = $this->feedbackService->getAll();
         return $this->viewByRole($role, compact('feedbacks'));
     }
+
+    /**
+     * Display the specified feedback.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
+    public function show($id)
+    {
+        $role = Auth::user()->role;
+        $feedback = $this->feedbackService->getById($id);
+
+        $view = match ($role) {
+            'leader' => 'leader.feedbacks.show',
+            'staff' => 'staff.feedbacks.show',
+            default => 'feedbacks.show',
+        };
+
+        return view($view, compact('feedback'));
+    }
 }
