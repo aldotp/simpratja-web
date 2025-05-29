@@ -101,7 +101,6 @@
                             </form>
                         </x-slot>
                     </x-dialog.modal>
-
                 @empty
                     <tr>
                         <td colspan="8" class="text-center py-4">Tidak ada data pasien</td>

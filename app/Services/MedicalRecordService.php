@@ -46,6 +46,25 @@ class MedicalRecordService
         return $this->medicalRecordRepository->getById($id);
     }
 
+    /**
+     * Get medical record by ID
+     *
+     * @param int $id Medical Record ID
+     * @return object|null
+     */
+    public function getMedicalRecordById($id)
+    {
+        return $this->medicalRecordRepository->query()
+            ->join('patients', 'patients.id', '=', 'medical_records.patient_id')
+            ->where('medical_records.id', $id)
+            ->select(
+                'medical_records.*',
+                'patients.name as patient_name',
+                'patients.nik as patient_nik'
+            )
+            ->first();
+    }
+
     public function getMedicalRecordDetailByPatientID($patientId)
     {
         return $this->medicalRecordRepository->getMedicalRecordDetailByPatientID($patientId);
@@ -183,5 +202,31 @@ class MedicalRecordService
         ->first();
 
         return $data;
+    }
+
+    /**
+     * Get medical record details by medical record ID
+     *
+     * @param int $id Medical Record ID
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMedicalRecordDetailsById($id)
+    {
+        return $this->medicalRecordDetailRepository->query()
+            ->join('medical_records', 'medical_records.id', '=', 'medical_records_details.medical_record_id')
+            ->join('patients', 'patients.id', '=', 'medical_records_details.patient_id')
+            ->leftJoin('users', 'users.id', '=', 'medical_records_details.docter_id')
+            ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
+            ->leftJoin('medicines', 'medicines.id', '=', 'medical_records_details.medicine_id')
+            ->where('medical_records_details.medical_record_id', $id)
+            ->select(
+                'medical_records_details.*',
+                'medical_records.medical_record_number',
+                'patients.name as patient_name',
+                'patients.nik as patient_nik',
+                'user_details.name as doctor_name',
+                'medicines.name as medicine_name'
+            )
+            ->get();
     }
 }

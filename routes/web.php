@@ -50,6 +50,7 @@ Route::prefix('doctor')->name('doctor.')->middleware(['authv3', 'role:docter'])-
     // Visit routes
     Route::get('/visits', [VisitController::class, 'index'])->name('visits.index');
     Route::get('/visits/{id}/details', [VisitController::class, 'getVisitDetails'])->name('visits.details');
+    Route::post('/visits/call/{id}', [VisitController::class, 'callPatient'])->name('visits.call-patient');
     // Medical Record routes
     Route::post('/check-up-patients/{id}', [VisitController::class, 'checkUpPatient'])->name('medical-records.store');
 });
@@ -78,10 +79,12 @@ Route::prefix('staff')->name('staff.')->middleware(['authv3', 'role:staff'])->gr
     Route::post('/visits/{id}/generate-queue', [VisitController::class, 'validateRegisterPatient'])->name('visits.queue-number');
     Route::get('/history-visits', [VisitController::class, 'history'])->name('history-visits');
     Route::get('/visits/{id}/details', [VisitController::class, 'getVisitDetails'])->name('visits.details');
+    Route::post('/visits/call/{id}', [VisitController::class, 'callPatient'])->name('visits.call-patient');
 
     // Medical Record routes
     Route::resource('/medical-records', MedicalRecordController::class)->names('medical-records');
+    Route::get('/medical-records/{id}/details', [MedicalRecordController::class, 'getDetails'])->name('medical-records.details');
 
     // Feedback routes
-    Route::resource('/feedbacks', FeedbackController::class)->names('feedbacks');
+    Route::resource('/feedbacks', FeedbackController::class)->only(['index', 'show'])->names('feedbacks');
 });

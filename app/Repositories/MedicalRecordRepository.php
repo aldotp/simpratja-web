@@ -53,6 +53,7 @@ class MedicalRecordRepository
                 'mr.medical_record_number',
                 'p.name as patient_name',
                 'p.address as patient_address',
+                'mrd.complaint',
                 'mrd.examination_date',
                 'mrd.diagnosis',
                 'm.name as medicines'
