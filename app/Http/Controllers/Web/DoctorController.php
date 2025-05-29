@@ -155,7 +155,7 @@ class DoctorController
     public function destroy(string $id)
     {
         try {
-            $doctor = $this->docterService->delete($id);
+            $doctor = $this->docterService->deleteUser($id);
             if (!$doctor) {
                 return redirect()->route('admin.doctors.index')
                     ->with('error', 'Dokter tidak ditemukan');
