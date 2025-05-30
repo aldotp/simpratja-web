@@ -31,6 +31,11 @@ class VisitService
 
     public function getAllVisits($filters = [])
     {
+        // Ensure filters is an array
+        if (!is_array($filters)) {
+            $filters = [];
+        }
+
         return $this->visitRepository->getAll($filters);
     }
 

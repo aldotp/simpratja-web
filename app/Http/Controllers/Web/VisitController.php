@@ -76,10 +76,22 @@ class VisitController
     /**
      * Display a listing of the visits.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\View\View
      */
-    public function history() {
-        $visits = $this->visitService->getAllVisits();
+    public function history(Request $request) {
+        $filters = [];
+
+        // Apply date range filter if provided
+        if ($request->has('visit_date_start') && $request->filled('visit_date_start')) {
+            $filters['start_date'] = $request->visit_date_start;
+        }
+
+        if ($request->has('visit_date_end') && $request->filled('visit_date_end')) {
+            $filters['end_date'] = $request->visit_date_end;
+        }
+
+        $visits = $this->visitService->getAllVisits($filters);
         return view('staff.history.index', compact('visits'));
     }
 
@@ -134,12 +146,17 @@ class VisitController
     }
 
     public function callPatient($id) {
+        $role = Auth::user()->role;
 
         if (is_null($id) || !is_numeric($id)) {
-            return $this->response->responseError('Patient ID is required', 400);
+            return redirect()->back()->with('error', 'Pasien tidak ditemukan');
         }
 
-        $result = $this->visitService->callPatient($id);
-        return $this->response->responseSuccess($result, 'Call patient success');
+        $this->visitService->callPatient($id);
+
+        if ($role === 'docter') {
+            return redirect()->route('doctor.visits.index')->with('success', 'Panggil pasien berhasil');
+        }
+        return redirect()->route('staff.visits.index')->with('success', 'Panggil pasien berhasil');
     }
 }

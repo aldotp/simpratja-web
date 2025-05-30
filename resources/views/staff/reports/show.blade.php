@@ -2,10 +2,10 @@
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
 
         <x-ui.breadcrumb rounded="true" :items="[
-            ['label' => 'Admin'],
+            ['label' => 'Staff'],
             [
                 'label' => 'Laporan',
-                'url' => '/admin/reports',
+                'url' => '/staff/reports',
             ],
             [
                 'label' => 'Detail',
@@ -15,7 +15,7 @@
             <div class="flex justify-between">
                 <div class="flex flex-row gap-4 items-center mb-6">
                     <x-form.button class="!p-3" variant="secondary"
-                        onclick="window.location.href='{{ route('admin.reports.index') }}'">
+                        onclick="window.location.href='{{ route('staff.reports.index') }}'">
                         <i class="fa-solid fa-angle-left"></i>
                     </x-form.button>
                     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
@@ -24,7 +24,7 @@
                 </div>
                 <div>
                     <x-form.button variant="primary"
-                        onclick="window.location.href='{{ route('admin.reports.edit', $report->id) }}'">
+                        onclick="window.location.href='{{ route('staff.reports.edit', $report->id) }}'">
                         <i class="fas fa-edit mr-2"></i>
                         {{ __('Edit') }}
                     </x-form.button>
@@ -67,7 +67,7 @@
             </div>
 
             <div class="mt-4">
-                <x-form.button variant="danger" data-modal-target="deleteModal" data-modal-toggle="deleteModal">
+                <x-form.button variant="danger" onclick="DialogManager.showModal('deleteModal')">
                     <i class="fas fa-trash mr-2"></i>
                     Hapus
                 </x-form.button>
@@ -78,8 +78,8 @@
     <x-dialog.modal id="deleteModal" title="Hapus Laporan" size="md">
         Apakah anda yakin akan menghapus laporan ini?
         <x-slot name="footer">
-            <x-form.button onclick="DialogManager.closeModal('deleteModal')">Tidak, kembali</x-form.button>
-            <form action="{{ route('admin.reports.destroy', $report->id) }}" method="POST">
+            <x-form.button data-modal-hidden="">Tidak, kembali</x-form.button>
+            <form action="{{ route('staff.reports.destroy', $report->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <x-form.button variant="danger" type="submit">Ya, hapus!</x-form.button>

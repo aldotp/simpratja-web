@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class UserController
@@ -98,5 +99,17 @@ class UserController
         }
 
         return redirect()->back()->with('success', 'Password reset successfully');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $id = Auth::user()->id;
+        $result = $this->userService->updateUser($id, $request->all());
+
+        if (isset($result['success']) && !$result['success']) {
+            return redirect()->route('profile')->with('error', $result['message']);
+        }
+
+        return redirect()->route('profile')->with('success', 'Profile updated successfully');
     }
 }

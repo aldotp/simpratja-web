@@ -43,6 +43,15 @@ class VisitRepository
             $query->where('visits.examination_date', $filters['date']);
         }
 
+        // Filter by date range if provided
+        if (!empty($filters['start_date'])) {
+            $query->where('visits.examination_date', '>=', $filters['start_date']);
+        }
+
+        if (!empty($filters['end_date'])) {
+            $query->where('visits.examination_date', '<=', $filters['end_date']);
+        }
+
         if (!empty($filters['visit_status'])) {
             $query->whereIn('visits.visit_status', $filters['visit_status']);
         }
@@ -59,7 +68,7 @@ class VisitRepository
             $query->where('visits.docter_id', $filters['docter_id']);
         }
 
-        $query= $query->orderBy('visits.queue_number', 'asc');
+        $query= $query->orderBy('visits.examination_date', 'desc');
 
         return $query->get();
     }
