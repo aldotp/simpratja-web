@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\ReportService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ReportController
@@ -16,6 +18,19 @@ class ReportController
         $this->reportService = $reportService;
     }
 
+    private function viewByRole($role, $data = [])
+    {
+        // Get the view name based on the role
+        $view = match ($role) {
+            'leader' => 'leader.reports.index',
+            'staff' => 'staff.reports.index',
+            default => 'reports.index',
+        };
+
+        // Return the view with the data (just like the view() function)
+        return view($view, $data);
+    }
+
     /**
      * Display a listing of the reports.
      *
@@ -23,8 +38,9 @@ class ReportController
      */
     public function index()
     {
+        $role = Auth::user()->role;
         $reports = $this->reportService->getAll();
-        return view('admin.reports.index', compact('reports'));
+        return $this->viewByRole($role, compact('reports'));
     }
 
     /**
@@ -34,7 +50,7 @@ class ReportController
      */
     public function create()
     {
-        return view('admin.reports.create');
+        return view('staff.reports.create');
     }
 
     /**
@@ -63,7 +79,7 @@ class ReportController
             'report_content' => $request->content,
         ]);
 
-        return redirect()->route('admin.reports.index')
+        return redirect()->route('staff.reports.index')
             ->with('success', 'Laporan berhasil dibuat');
     }
 
@@ -78,11 +94,11 @@ class ReportController
         $report = $this->reportService->getById($id);
 
         if (!$report) {
-            return redirect()->route('admin.reports.index')
+            return redirect()->route('staff.reports.index')
                 ->with('error', 'Laporan tidak ditemukan');
         }
 
-        return view('admin.reports.show', compact('report'));
+        return view('staff.reports.show', compact('report'));
     }
 
     /**
@@ -96,11 +112,11 @@ class ReportController
         $report = $this->reportService->getById($id);
 
         if (!$report) {
-            return redirect()->route('admin.reports.index')
+            return redirect()->route('staff.reports.index')
                 ->with('error', 'Laporan tidak ditemukan');
         }
 
-        return view('admin.reports.edit', compact('report'));
+        return view('staff.reports.edit', compact('report'));
     }
 
     /**
@@ -131,11 +147,11 @@ class ReportController
         ]);
 
         if (!$report) {
-            return redirect()->route('admin.reports.index')
+            return redirect()->route('staff.reports.index')
                 ->with('error', 'Laporan tidak ditemukan');
         }
 
-        return redirect()->route('admin.reports.index')
+        return redirect()->route('staff.reports.index')
             ->with('success', 'Laporan berhasil diperbarui');
     }
 
@@ -150,15 +166,47 @@ class ReportController
         $report = $this->reportService->getById($id);
 
         if (!$report) {
-            return redirect()->route('admin.reports.index')
+            return redirect()->route('staff.reports.index')
                 ->with('error', 'Laporan tidak ditemukan');
         }
 
-        // Assuming there's a delete method in the service
-        // If not, you'll need to add it to both service and repository
         $this->reportService->delete($id);
 
-        return redirect()->route('admin.reports.index')
+        return redirect()->route('staff.reports.index')
             ->with('success', 'Laporan berhasil dihapus');
+    }
+
+    public function exportReportPDF($id)
+    {
+        // Validasi ID laporan
+        if (!$id){
+            return redirect()->back()->with('error', 'Laporan tidak ditemukan');
+        }
+
+        // Ambil data laporan berdasarkan ID
+        $data = $this->reportService->getById($id);
+
+        // Jika data tidak ditemukan, kembalikan response error
+        if (!$data) {
+            return redirect()->back()->with('error', 'Data laporan tidak ditemukan');
+        }
+
+        // Siapkan data untuk view PDF
+        $viewData = [
+            'period' => $data->period,
+            'reportType' => $data->report_type,
+            'reportContent' => $data->report_content,
+            'createdAt' => Carbon::parse($data->created_at)->translatedFormat('l, d F Y'),
+            'updatedAt' => Carbon::parse($data->updated_at)->translatedFormat('l, d F Y'),
+        ];
+
+        // Generate PDF dari view
+        $pdf = Pdf::loadView('leader.reports.pdf', data: $viewData);
+
+        // Buat nama file yang lebih deskriptif berdasarkan jenis laporan dan periode
+        $filename = 'Laporan_' . str_replace(' ', '_', $data->report_type) . '_' . $data->period . '.pdf';
+
+        // Download PDF dengan nama file yang sesuai
+        return $pdf->download($filename);
     }
 }

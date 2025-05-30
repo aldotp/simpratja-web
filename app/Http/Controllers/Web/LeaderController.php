@@ -26,33 +26,4 @@ class LeaderController
 
         return view('leader.dashboard', compact('feedbackCount', 'reportCount'));
     }
-
-    /**
-     * Display a listing of the reports.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function report()
-    {
-        $reports = $this->reportService->getAll();
-        return view('leader.reports.index', compact('reports'));
-    }
-
-    /**
-     * Display the specified report.
-     *
-     * @param  string  $id
-     * @return \Illuminate\View\View
-     */
-    public function detailReport($id)
-    {
-        $report = $this->reportService->getById($id);
-
-        if (!$report) {
-            return redirect()->route('leader.reports.index')
-                ->with('error', 'Laporan tidak ditemukan');
-        }
-
-        return view('leader.reports.show', compact('report'));
-    }
 }

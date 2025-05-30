@@ -46,7 +46,9 @@
                                     <x-form.input name="first_name" id="first_name" label="Nama Lengkap"
                                         placeholder="Masukkan Nama Lengkap" required />
                                     <x-form.datepicker name="birth" id="birth" label="Tanggal Lahir"
-                                        placeholder="Pilih tanggal lahir" />
+                                        placeholder="Pilih tanggal lahir" x-init="$nextTick(() => {
+                                            new Datepicker($el, { format: 'dd-mm-yyyy' });
+                                        })" />
                                     <x-form.select name="gender" id="gender" label="Jenis Kelamin"
                                         placeholder="Pilih jenis kelamin">
                                         <option value="0">Perempuan</option>
@@ -80,7 +82,9 @@
                                 <!-- Informasi Medis -->
                                 <div class="space-y-4">
                                     <x-form.datepicker name="tgl-periksa" id="tgl-periksa" label="Tanggal Periksa"
-                                        placeholder="Pilih tanggal periksa" />
+                                        placeholder="Pilih tanggal periksa" x-init="$nextTick(() => {
+                                            new Datepicker($el, { format: 'dd-mm-yyyy' });
+                                        })" />
                                     <x-form.select name="dokter" id="dokter" label="Dokter"
                                         placeholder="Pilih dokter">
                                         <option value="x">Contoh 1</option>
@@ -122,7 +126,9 @@
                                         placeholder="Masukkan Rekam Medis" required />
 
                                     <x-form.datepicker name="tgl-lahir" id="tgl-lahir" label="Tanggal Lahir" required
-                                        placeholder="Pilih tanggal lahir" />
+                                        placeholder="Pilih tanggal lahir" x-init="$nextTick(() => {
+                                            new Datepicker($el, { format: 'dd-mm-yyyy' });
+                                        })" />
                                 </div>
                             </div>
 
@@ -155,7 +161,7 @@
                                 <x-form.datepicker name="tgl-periksa" datepicker-min-date="{{ now() }}"
                                     id="tgl-periksa-existing" label="Tanggal Periksa"
                                     placeholder="Pilih tanggal periksa" x-init="$nextTick(() => {
-                                        new Datepicker($el, { format: 'dd/mm/yyyy' });
+                                        new Datepicker($el, { format: 'dd-mm-yyyy' });
                                     })" />
                                 <x-form.select name="dokter" id="dokter" label="Dokter"
                                     placeholder="Pilih dokter">

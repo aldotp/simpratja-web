@@ -33,13 +33,20 @@ Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Profile Routes
+Route::middleware(['authv3'])->group(function() {
+    Route::get('/profile', function() {
+        return view('profile');
+    })->name('profile');
+    Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+});
+
 // Dashboard Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['authv3', 'role:admin'])->group(function() {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('/users', UserController::class)->names('users');
     Route::post("/reset-password", [UserController::class, 'resetPassword'])->name('reset-password');
     Route::resource('/doctors', DoctorController::class)->names('doctors');
-    Route::resource('/reports', ReportController::class)->names('reports');
 });
 
 // Dashboard Doctor Routes
@@ -58,9 +65,11 @@ Route::prefix('doctor')->name('doctor.')->middleware(['authv3', 'role:docter'])-
 // Dashboard Leader Routes
 Route::prefix('leader')->name('leader.')->middleware(['authv3', 'role:leader'])->group(function() {
     Route::get('/dashboard', [LeaderController::class, 'dashboard'])->name('dashboard');
+
     // Reports
-    Route::get('/reports', [LeaderController::class, 'report'])->name('reports.index');
-    Route::get('/reports/{id}', [LeaderController::class, 'detailReport'])->name('reports.show');
+    Route::resource('/reports', ReportController::class)->only(['index', 'show'])->names('reports');
+    Route::get('/export-report/{id}', [ReportController::class, 'exportReportPDF'])->name('reports.pdf');
+
     // Feedback routes
     Route::get('/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
     Route::get('/feedbacks/{id}', [FeedbackController::class, 'show'])->name('feedbacks.show');
@@ -69,6 +78,10 @@ Route::prefix('leader')->name('leader.')->middleware(['authv3', 'role:leader'])-
 // Dashboard Staff Routes
 Route::prefix('staff')->name('staff.')->middleware(['authv3', 'role:staff'])->group(function() {
     Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
+
+    // Reports routes
+    Route::resource('/reports', ReportController::class)->names('reports');
+    Route::get('/export-report/{id}', [ReportController::class, 'exportReportPDF'])->name('reports.pdf');
 
     // Patient routes
     Route::resource('/patients', PatientController::class)->only(['index', 'edit', 'update', 'destroy'])->names('patients');
