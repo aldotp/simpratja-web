@@ -13,13 +13,13 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8" x-data="{ activeTab: 'new-patient' }">
                     <div class="flex border-b border-gray-200">
                         <button
-                            x-on:click="activeTab = 'new-patient'; document.getElementById('section-detail-patient').classList.add('hidden')"
+                            x-on:click="activeTab = 'new-patient'; if(window.patientFound) document.getElementById('section-detail-patient').classList.add('hidden')"
                             :class="activeTab === 'new-patient' ?
                                 'flex-1 py-4 px-6 text-center font-medium text-primary-600 border-b-2 border-primary-500 bg-primary-50' :
                                 'flex-1 py-4 px-6 text-center font-medium text-gray-500 hover:text-primary-600'">Pasien
                             Baru</button>
                         <button
-                            x-on:click="activeTab = 'existing-patient'; document.getElementById('section-detail-patient').classList.add('hidden')"
+                            x-on:click="activeTab = 'existing-patient'; if(window.patientFound) document.getElementById('section-detail-patient').classList.remove('hidden')"
                             :class="activeTab === 'existing-patient' ?
                                 'flex-1 py-4 px-6 text-center font-medium text-primary-600 border-b-2 border-primary-500 bg-primary-50' :
                                 'flex-1 py-4 px-6 text-center font-medium text-gray-500 hover:text-primary-600'">Pasien
@@ -43,18 +43,17 @@
                                     <x-form.input name="nik" id="nik" label="NIK"
                                         placeholder="Masukkan NIK" required />
 
-                                    <x-form.input name="first_name" id="first_name" label="Nama Lengkap"
+                                    <x-form.input name="name" id="name" label="Nama Lengkap"
                                         placeholder="Masukkan Nama Lengkap" required />
-                                    <x-form.datepicker name="birth" id="birth" label="Tanggal Lahir"
-                                        placeholder="Pilih tanggal lahir" x-init="$nextTick(() => {
-                                            new Datepicker($el, { format: 'dd-mm-yyyy' });
-                                        })" />
+                                    <x-form.datepicker name="birth_date" id="birth_date" label="Tanggal Lahir"
+                                    maxDate="{{ now()->format('Y-m-d') }}"
+                                        placeholder="Pilih tanggal lahir" />
                                     <x-form.select name="gender" id="gender" label="Jenis Kelamin"
                                         placeholder="Pilih jenis kelamin">
                                         <option value="0">Perempuan</option>
                                         <option value="1">Laki Laki</option>
                                     </x-form.select>
-                                    <x-form.select name="blood-type" id="blood-type" label="Gol. Darah"
+                                    <x-form.select name="blood_type" id="blood_type" label="Gol. Darah"
                                         placeholder="Pilih Golongan Darah">
                                         <option value="1">A</option>
                                         <option value="2">B</option>
@@ -63,12 +62,12 @@
                                     </x-form.select>
                                     <x-form.input name="religion" id="religion" label="Agama"
                                         placeholder="Masukkan Agama" />
-                                    <x-form.select name="marital-status" id="marital-status" label="Status"
+                                    <x-form.select name="status" id="status" label="Status"
                                         placeholder="Pilih Status">
-                                        <option value="false">Belum Menikah</option>
-                                        <option value="true">Sudah Menikah</option>
+                                        <option value="0">Belum Menikah</option>
+                                        <option value="1">Sudah Menikah</option>
                                     </x-form.select>
-                                    <x-form.input type="tel" name="phone" id="phone" label="No. HP"
+                                    <x-form.input type="tel" name="phone_number" id="phone_number" label="No. HP"
                                         placeholder="Masukkan Nomor HP" required />
                                     <x-form.textarea name="address" id="address" label="Alamat"
                                         placeholder="Masukkan Alamat Lengkap" rows="3" required
@@ -81,14 +80,14 @@
                                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Medical Check Up</h3>
                                 <!-- Informasi Medis -->
                                 <div class="space-y-4">
-                                    <x-form.datepicker name="tgl-periksa" id="tgl-periksa" label="Tanggal Periksa"
-                                        placeholder="Pilih tanggal periksa" x-init="$nextTick(() => {
-                                            new Datepicker($el, { format: 'dd-mm-yyyy' });
-                                        })" />
-                                    <x-form.select name="dokter" id="dokter" label="Dokter"
+                                    <x-form.datepicker minDate="{{ now()->format('Y-m-d') }}" name="examination_date"
+                                        id="examination_date" label="Tanggal Periksa"
+                                        placeholder="Pilih tanggal periksa" />
+                                    <x-form.select name="docter_id" id="docter_id" label="Dokter"
                                         placeholder="Pilih dokter">
-                                        <option value="x">Contoh 1</option>
-                                        <option value="y">Contoh 2</option>
+                                        @foreach ($doctors as $doctor)
+                                            <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                        @endforeach
                                     </x-form.select>
                                 </div>
                             </div>
@@ -121,14 +120,13 @@
                         <form id="existing-patient-form" @submit.prevent="getDetailExistingPatient()">
 
                             <div class="space-y-4">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <x-form.input name="no_rm" id="no_rm" label="Rekam Medis"
-                                        placeholder="Masukkan Rekam Medis" required />
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <x-form.input name="medical_record_number" id="medical_record_number"
+                                        label="Rekam Medis" placeholder="Masukkan Rekam Medis" required />
 
-                                    <x-form.datepicker name="tgl-lahir" id="tgl-lahir" label="Tanggal Lahir" required
-                                        placeholder="Pilih tanggal lahir" x-init="$nextTick(() => {
-                                            new Datepicker($el, { format: 'dd-mm-yyyy' });
-                                        })" />
+                                    <x-form.datepicker name="birth_date" id="birth_date_existing"
+                                    maxDate="{{ now()->format('Y-m-d') }}"
+                                        label="Tanggal Lahir" required placeholder="Pilih tanggal lahir" />
                                 </div>
                             </div>
 
@@ -154,63 +152,72 @@
                             <p id="patient-nik" class="text-gray-600"></p>
                         </div>
                         <!-- Informasi Medis -->
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Medical Check Up</h3>
-                            <!-- Informasi Medis -->
-                            <div class="space-y-4">
-                                <x-form.datepicker name="tgl-periksa" datepicker-min-date="{{ now() }}"
-                                    id="tgl-periksa-existing" label="Tanggal Periksa"
-                                    placeholder="Pilih tanggal periksa" x-init="$nextTick(() => {
-                                        new Datepicker($el, { format: 'dd-mm-yyyy' });
-                                    })" />
-                                <x-form.select name="dokter" id="dokter" label="Dokter"
-                                    placeholder="Pilih dokter">
-                                    <option value="x">Contoh 1</option>
-                                    <option value="y">Contoh 2</option>
-                                </x-form.select>
+                        <form action="{{ route('patient.register.existing') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="patient_id" id="patient_id">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 mb-4">Medical Check Up</h3>
+                                <!-- Informasi Medis -->
+                                <div class="space-y-4">
+                                    <x-form.datepicker minDate="{{ now()->format('Y-m-d') }}" name="visit_date"
+                                        id="visit_date" label="Tanggal Periksa"
+                                        placeholder="Pilih tanggal periksa" />
+                                    <x-form.select name="docter_id" id="docter_id" label="Dokter"
+                                        placeholder="Pilih dokter">
+                                        @foreach ($doctors as $doctor)
+                                            <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                        @endforeach
+                                    </x-form.select>
+                                </div>
                             </div>
-                        </div>
+                            <div class="pt-6">
+                                <button type="submit"
+                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-md font-medium transition duration-300">
+                                    Daftar Kunjungan
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </x-ui.card>
             </div>
         </div>
     </main>
-    <script>
-        async function getDetailExistingPatient() {
-            const no_rm = document.getElementById('no_rm').value;
-            const tgl_lahir = document.getElementById('tgl-lahir').value;
+    @push('scripts')
+        <script type="module">
+            import {
+                getPatientExisting
+            } from '{{ Vite::asset('resources/js/utils.js') }}';
 
-            const response = await fetch('/api/v1/get-patient', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        no_rm: no_rm,
-                        tgl_lahir: tgl_lahir,
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status == 'success') {
+            // Global variable to track if patient was found
+            window.patientFound = false;
+
+            // Make the function available globally
+            window.getDetailExistingPatient = async function() {
+                const medical_record_number = document.getElementById('medical_record_number').value;
+                const birth_date = document.getElementById('birth_date_existing').value;
+
+                try {
+                    const data = await getPatientExisting(medical_record_number, birth_date);
+
+                    if (data.status === 'success' && data.data) {
+                        // Set global flag that patient was found
+                        window.patientFound = true;
+
                         document.getElementById('section-detail-patient').classList.remove('hidden');
-                        document.getElementById('btn-search-patient').classList.add('hidden');
+                        document.getElementById('existing-patient-form').classList.add('hidden');
 
                         // Update the detail section with patient data
-                        document.getElementById('patient-name').innerText = data.patient.name;
-                        document.getElementById('patient-nik').innerText = data.patient.nik;
-                        document.getElementById('patient-gender').innerText = data.patient.gender;
-                        document.getElementById('patient-phone').innerText = data.patient.phone_number;
-                        document.getElementById('patient-address').innerText = data.patient.address;
-                        document.getElementById('tgl-periksa').value = '';
-                        document.getElementById('dokter').value = '';
-                    } else {
-                        alert(data.message);
+                        document.getElementById('patient-name').innerText = data.data.name;
+                        document.getElementById('patient-nik').innerText = data.data.nik;
+
+                        // Store patient ID for registration
+                        document.getElementById('patient_id').value = data.data.id;
                     }
-                })
-                .catch((error) => {
+                } catch (error) {
+                    window.flasher.error('Terjadi kesalahan saat memproses data');
                     console.error('Error:', error);
-                })
-        }
-    </script>
+                }
+            }
+        </script>
+    @endpush
 </x-home-layout>

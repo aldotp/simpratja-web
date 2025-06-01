@@ -26,7 +26,7 @@
                         <th scope="col" class="px-6 py-3">No</th>
                         <th scope="col" class="px-6 py-3">Nama</th>
                         <th scope="col" class="px-6 py-3">Unit</th>
-                        <th scope="col" class="px-6 py-3">Harga</th>
+                        <th scope="col" class="px-6 py-3">Harga (Rp)</th>
                         <th scope="col" class="px-6 py-3">Stok</th>
                         <th scope="col" class="px-6 py-3">Tanggal Kadaluarsa</th>
                         <th scope="col" class="px-6 py-3">Aksi</th>
@@ -37,7 +37,7 @@
                         <td class="px-6 py-4">{{ $loop->iteration }}</td>
                         <td class="px-6 py-4">{{ $medicine->name }}</td>
                         <td class="px-6 py-4">{{ $medicine->unit }}</td>
-                        <td class="px-6 py-4">Rp {{ number_format($medicine->price, 0, ',', '.') }}</td>
+                        <td class="px-6 py-4">Rp {{ number_format($medicine->price, 2, ',', '.') }}</td>
                         <td class="px-6 py-4">{{ $medicine->stock }}</td>
                         <td class="px-6 py-4">
                             {{ \Carbon\Carbon::parse($medicine->expiry_date)->translatedFormat('l, d F Y') }}</td>

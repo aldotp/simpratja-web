@@ -20,7 +20,9 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 Route::get('/portal', [PatientController::class, 'portal'])->name('portal');
+Route::get('/portal/check-medical-number', [PatientController::class, 'getExistingPatient'])->name('portal.check-medical-number');
 Route::post('/register', [PatientController::class, 'register'])->name('patient.register');
+Route::post('/register-existing', [PatientController::class, 'registerExistingPatientVisit'])->name('patient.register.existing');
 Route::get('/about', function () {
     return view('about');
 })->name('about');
@@ -97,7 +99,4 @@ Route::prefix('staff')->name('staff.')->middleware(['authv3', 'role:staff'])->gr
     // Medical Record routes
     Route::resource('/medical-records', MedicalRecordController::class)->names('medical-records');
     Route::get('/medical-records/{id}/details', [MedicalRecordController::class, 'getDetails'])->name('medical-records.details');
-
-    // Feedback routes
-    Route::resource('/feedbacks', FeedbackController::class)->only(['index', 'show'])->names('feedbacks');
 });

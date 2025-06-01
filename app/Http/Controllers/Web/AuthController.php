@@ -60,7 +60,7 @@ class AuthController
             $user = $this->authService->loginV3($request);
             return $this->redirectRoute($user->role);
         } catch (\Exception $e) {
-            return redirect()->route('login')->with('error', 'Invalid Credentials')->withErrors($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

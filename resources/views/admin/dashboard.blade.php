@@ -43,7 +43,7 @@
                     <!-- Statistics Section -->
                     <div class="mt-8 pt-6 border-t border-gray-100 animate-slide-up animate-delay-300">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Overview Statistics</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-4">
                             <!-- Doctor Count Card -->
                             <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                                 <div class="flex items-center justify-between">
@@ -56,26 +56,13 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Report Count Card -->
-                            <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-600">Total Reports</p>
-                                        <h4 class="text-2xl font-bold text-gray-900 mt-1">{{ $report }}</h4>
-                                    </div>
-                                    <div class="bg-primary-100 p-3 rounded-full">
-                                        <i class="fas fa-notes-medical text-primary-600 text-xl"></i>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
                     <!-- Quick Actions Section -->
                     <div class="mt-8 pt-6 border-t border-gray-100 animate-slide-up animate-delay-300">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <a href="{{ route('admin.users.index') }}"
                                 class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
                                 <div class="bg-primary-100 rounded-full p-2 mb-2">
@@ -90,14 +77,6 @@
                                     <i class="fas fa-user-doctor text-primary-600"></i>
                                 </div>
                                 <span class="text-sm font-medium text-gray-700">Data Dokter</span>
-                            </a>
-
-                            <a href="{{ route('admin.reports.index') }}"
-                                class="action-button flex flex-col items-center justify-center bg-white hover:bg-primary-50 border border-gray-200 rounded-lg p-4 transition-all">
-                                <div class="bg-primary-100 rounded-full p-2 mb-2">
-                                    <i class="fas fa-file text-primary-600"></i>
-                                </div>
-                                <span class="text-sm font-medium text-gray-700">Data Laporan</span>
                             </a>
                         </div>
                     </div>

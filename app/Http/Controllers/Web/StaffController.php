@@ -38,5 +38,5 @@ class StaffController
         return view('staff.dashboard', compact('patientCount', 'visitCount', 'feedbackCount'));
     }
 
-    
+
 }
