@@ -66,3 +66,50 @@
         </div>
     </section>
 </x-home-layout>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session()->has('toast'))
+                const toast = document.getElementById('toast-app');
+                if (toast) {
+                    // Set toast properties from session
+                    const toastData = @json(session('toast'));
+
+                    // Set toast type class
+                    const typeClasses = {
+                        'default': 'text-gray-500 bg-white dark:text-gray-400 dark:bg-gray-800',
+                        'success': 'text-green-500 bg-green-100 dark:bg-green-800 dark:text-green-200',
+                        'error': 'text-red-500 bg-red-100 dark:bg-red-800 dark:text-red-200',
+                        'warning': 'text-yellow-500 bg-yellow-100 dark:bg-yellow-800 dark:text-yellow-200',
+                        'info': 'text-blue-500 bg-blue-100 dark:bg-blue-800 dark:text-blue-200'
+                    };
+
+                    // Remove all type classes first
+                    Object.values(typeClasses).forEach(cls => {
+                        cls.split(' ').forEach(c => toast.classList.remove(c));
+                    });
+
+                    // Add the appropriate type class
+                    const typeClass = typeClasses[toastData.type] || typeClasses['default'];
+                    typeClass.split(' ').forEach(c => toast.classList.add(c));
+
+                    // Set message and title
+                    const messageEl = toast.querySelector('.text-sm.font-normal');
+                    if (messageEl) messageEl.textContent = toastData.message;
+
+                    const titleEl = toast.querySelector('.text-sm.font-semibold');
+                    if (titleEl && toastData.title) titleEl.textContent = toastData.title;
+
+                    // Show the toast
+                    toast.classList.remove('hidden');
+
+                    // Auto-hide after 5 seconds
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 5000);
+                }
+            @endif
+        });
+    </script>
+@endpush

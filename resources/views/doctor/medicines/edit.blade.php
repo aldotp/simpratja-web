@@ -32,8 +32,8 @@
                 <x-form.input name="unit" id="unit" label="Satuan"
                     placeholder="Masukkan Satuan (contoh: Tablet, Botol)" required :value="old('unit', $medicine->unit)" />
 
-                <x-form.input name="price" id="price" label="Harga" type="number" step="0.01"
-                    placeholder="Masukkan Harga" required :value="old('price', $medicine->price)" />
+                <x-form.input name="price" id="price" label="Harga (Rp)" type="number" step="1"
+                    placeholder="Masukkan Harga" required :value="old('price', $medicine->price)" prefix="Rp" suffix=",00" />
 
                 <x-form.input name="stock" id="stock" label="Stok" type="number"
                     placeholder="Masukkan Jumlah Stok" required :value="old('stock', $medicine->stock)" />

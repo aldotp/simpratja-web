@@ -25,10 +25,8 @@ class AdminController
      */
     public function dashboard()
     {
-
-        $report = $this->reportRepository->countAll();
         $docter = $this->userService->countDocter();
 
-        return view('admin.dashboard', compact('report', 'docter'));
+        return view('admin.dashboard', compact('docter'));
     }
 }

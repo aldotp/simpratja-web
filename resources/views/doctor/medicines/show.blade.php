@@ -35,9 +35,9 @@
                     </div>
 
                     <div>
-                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Harga</h3>
+                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Harga (Rp)</h3>
                         <p class="mt-1 text-sm text-gray-900 dark:text-white">Rp
-                            {{ number_format($medicine->price, 0, ',', '.') }}</p>
+                            {{ number_format($medicine->price, 2, ',', '.') }}</p>
                     </div>
 
                     <div>
@@ -48,13 +48,13 @@
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Kadaluarsa</h3>
                         <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                            {{ date('d-m-Y', strtotime($medicine->expiry_date)) }}</p>
+                            {{ \Carbon\Carbon::parse($medicine->expiry_date)->translatedFormat('l, d F Y') }}</p>
                     </div>
 
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Dibuat</h3>
                         <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                            {{ date('d-m-Y H:i', strtotime($medicine->created_at)) }}</p>
+                            {{ \Carbon\Carbon::parse($medicine->created_at)->translatedFormat('l, d F Y') }}</p>
                     </div>
                 </div>
 

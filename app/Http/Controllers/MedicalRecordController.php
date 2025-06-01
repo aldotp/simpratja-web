@@ -135,12 +135,7 @@ class MedicalRecordController
     public function getExistingPatient(Request $request)
     {
 
-        $data = $request->all([
-            'birth_date' => $request->query('nik'),
-            'medical_record_number' => $request->query('registration_number'),
-        ]
-        );
-        $validator = Validator::make($data, [
+        $validator = Validator::make($request->all(), [
             'birth_date' => 'required|date',
             'medical_record_number' => 'required',
         ]);
@@ -149,7 +144,11 @@ class MedicalRecordController
             return $this->response->responseError($validator->errors(), 422);
         }
 
-        $patients = $this->medicalRecordService->getExistingPatient($data);
+        $patients = $this->medicalRecordService->getExistingPatient($request->all());
+
+        if (!$patients) {
+            return $this->response->responseError('Pasien tidak ditemukan', 404);
+        }
 
         return $this->response->responseSuccess($patients, 'Data pasien berhasil diambil');
     }

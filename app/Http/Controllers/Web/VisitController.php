@@ -51,23 +51,32 @@ class VisitController
     /**
      * Display a listing of the visits.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $role = Auth::user()->role;
+        $filters = [];
+
+        // Apply date range filter if provided
+        if ($request->has('visit_date_start') && $request->filled('visit_date_start')) {
+            $filters['start_date'] = $request->visit_date_start;
+        } else {
+            $filters['date'] = now()->format('Y-m-d');
+        }
+
+        if ($request->has('visit_date_end') && $request->filled('visit_date_end')) {
+            $filters['end_date'] = $request->visit_date_end;
+        }
+
         if ($role === 'docter') {
             $doctorId = Auth::id();
-            $visits = $this->visitService->getAllVisits([
-                'date' => now()->format('Y-m-d'),
-                'doctor_id' => $doctorId,
-                'visit_status' => ['queue', 'check'],
-            ]);
-        } else {
-            $visits = $this->visitService->getAllVisits([
-                'date' => now()->format('Y-m-d'),
-            ]);
+            $filters['doctor_id'] = $doctorId;
+            $filters['visit_status'] = ['queue', 'check'];
         }
+
+        $visits = $this->visitService->getAllVisits($filters);
         $medicines = $this->medicineService->getAll();
 
         return $this->viewByRole($role, compact('visits', 'medicines'));

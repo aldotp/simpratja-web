@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Web;
 
 use App\Repositories\PatientRepository;
 use App\Repositories\VisitRepository;
+use App\Response\Response;
+use App\Services\DocterService;
 use App\Services\MedicalRecordService;
 use App\Services\PatientService;
 use Illuminate\Http\Request;
@@ -15,18 +17,24 @@ class PatientController
     protected $visitRepository;
     protected $patientService;
     protected $medicalRecordService;
+    protected $doctorService;
+    protected $response;
 
-    public function __construct(PatientRepository $patientRepository, VisitRepository $visitRepository, PatientService $patientService, MedicalRecordService $medicalRecordService)
+    public function __construct(PatientRepository $patientRepository, VisitRepository $visitRepository, PatientService $patientService, MedicalRecordService $medicalRecordService, DocterService $doctorService, Response $response)
     {
         $this->patientRepository = $patientRepository;
         $this->visitRepository = $visitRepository;
         $this->patientService = $patientService;
         $this->medicalRecordService = $medicalRecordService;
+        $this->doctorService = $doctorService;
+        $this->response = $response;
     }
 
     public function portal()
     {
-        return view('portal');
+        // Ambil daftar dokter untuk dropdown
+        $doctors = $this->doctorService->getAll();
+        return view('portal', compact('doctors'));
     }
 
     /**
@@ -50,7 +58,6 @@ class PatientController
             'phone_number' => 'required|string|max:20',
             'docter_id' =>'required|integer|max:10',
             'examination_date' => 'required|date',
-            'insurance' => 'required|string|max:50',
         ]);
 
         if ($validator->fails()) {
@@ -60,10 +67,31 @@ class PatientController
         list($response, $error) = $this->patientService->registerPatientWithVisit($data);
 
         if ($error) {
-            return redirect()->back()->withErrors($error)->withInput();
+            return redirect()->back()->with('error', 'Gagal menambahkan data')->withErrors($error)->withInput();
         }
 
         return redirect()->route('portal')->with('success', 'Pasien berhasil didaftarkan');
+    }
+
+    public function getExistingPatient(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'birth_date' => 'required|date',
+            'medical_record_number' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+        $patients = $this->medicalRecordService->getExistingPatient($request->all());
+
+        if (!$patients) {
+            return $this->response->responseError('Pasien tidak ditemukan', 404);
+        }
+
+        return $this->response->responseSuccess($patients, 'Data pasien berhasil diambil');
     }
 
     /**
