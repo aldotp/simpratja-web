@@ -204,11 +204,11 @@ class PatientController
     public function generateMRN($id)
     {
         $data = [
-            'visit_id' => $id,
+            'patient_id' => $id,
         ];
 
         $validator = Validator::make($data, [
-            'visit_id' => 'required|exists:visits,id',
+            'patient_id' => 'required|exists:patients,id',
         ]);
 
         if ($validator->fails()) {

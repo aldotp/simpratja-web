@@ -7,6 +7,7 @@ use App\Repositories\MedicalRecordDetailRepository;
 use App\Repositories\UserDetailRepository;
 use App\Repositories\VisitRepository;
 use App\Repositories\MedicineRepository;
+use App\Repositories\PatientRepository;
 use Illuminate\Support\Facades\DB;
 
 class MedicalRecordService
@@ -16,19 +17,22 @@ class MedicalRecordService
     protected $userDetailRepository;
     protected $visitRepository;
     protected $medicineRepository;
+    protected $patientRepository;
 
     public function __construct(
         MedicalRecordRepository $medicalRecordRepository,
         MedicalRecordDetailRepository $medicalRecordDetailRepository,
         UserDetailRepository $userDetailRepository,
         VisitRepository $visitRepository,
-        MedicineRepository $medicineRepository // tambahkan ini
+        MedicineRepository $medicineRepository, // tambahkan ini
+        PatientRepository $patientRepository
     ) {
         $this->medicalRecordRepository = $medicalRecordRepository;
         $this->medicalRecordDetailRepository = $medicalRecordDetailRepository;
         $this->userDetailRepository = $userDetailRepository;
         $this->visitRepository = $visitRepository;
         $this->medicineRepository = $medicineRepository; // tambahkan ini
+        $this->patientRepository = $patientRepository;
     }
 
     public function getAll()
@@ -142,20 +146,19 @@ class MedicalRecordService
 
         return DB::transaction(function () use ($data) {
 
-            $visit = $this->visitRepository->getById($data['visit_id']);
-            if (!$visit) {
-                return [null, 'Visit not found'];
+            $patient = $this->patientRepository->getByID($data['patient_id']);
+            if (!$patient) {
+                return [null, 'Patient not found'];
             }
 
-            $existNumber = $this->medicalRecordRepository->query()->where('patient_id', $visit->patient_id)->select("medical_record_number");
-
+            $existNumber = $this->medicalRecordRepository->query()->where('patient_id', $patient->patient_id)->select("medical_record_number");
             if ($existNumber->exists()) {
                 return [null, 'Medical record number already exist'];
             }
 
 
             $record = $this->medicalRecordRepository->store([
-                'patient_id' => $visit->patient_id,
+                'patient_id' => $patient->id,
                 'medical_record_number' => $this->generateMedicalRecordNumber(),
                 'created_at' => now(),
                 'updated_at' => now(),
