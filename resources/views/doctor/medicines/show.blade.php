@@ -64,7 +64,7 @@
                         <i class="fas fa-edit mr-2"></i>
                         Edit Obat
                     </x-form.button>
-                    <x-form.button variant="danger" onclick="DialogManager.showModal('deleteModal')">
+                    <x-form.button variant="danger" data-modal-target="deleteModal" data-modal-toggle="deleteModal">
                         <i class="fas fa-trash mr-2"></i>
                         Hapus Obat
                     </x-form.button>
@@ -76,7 +76,7 @@
     <x-dialog.modal id="deleteModal" title="Hapus Obat" size="md">
         Apakah anda yakin akan menghapus obat ini?
         <x-slot name="footer">
-            <x-form.button onclick="DialogManager.closeModal('deleteModal')">Tidak, kembali</x-form.button>
+            <x-form.button data-modal-hidden="deleteModal">Tidak, kembali</x-form.button>
             <form action="{{ route('doctor.medicines.destroy', $medicine->id) }}" method="POST">
                 @csrf
                 @method('DELETE')

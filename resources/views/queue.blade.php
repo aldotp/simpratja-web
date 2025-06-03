@@ -1,185 +1,231 @@
 <x-home-layout>
     <!-- Queue Display Section -->
-    <section class="min-h-[80vh] flex items-center justify-center py-12 bg-gray-50">
+    <section class="py-12 md:py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto">
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    <div class="p-8 md:p-12">
-                        <div class="text-center mb-8">
-                            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Current Queue Number</h1>
-                            <p class="text-gray-500 mt-2">Last updated: <span id="last-updated">May 17, 2023 11:09
-                                    AM</span></p>
+                <div class="text-center mb-10">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Check Your Queue Status</h1>
+                    <p class="text-gray-600">Enter your National Identification Number (NIK) and Registration Number to
+                        check your current position in the queue.</p>
+                </div>
+
+                <x-ui.card>
+                    <form id="queue-status-form" class="space-y-6" x-data="{ nik: '', registration_number: '' }"
+                        @submit.prevent="getQueueStatus()">
+                        <x-form.input type="text" id="nik" name="nik" label="NIK" x-model="nik"
+                            placeholder="Masukkan NIK" required="true" />
+
+                        <x-form.input type="text" id="registration_number" name="registration_number"
+                            x-model="registration_number" label="Nomor Registrasi"
+                            placeholder="Masukkan nomor registrasi" required="true" />
+
+                        <x-form.button class="w-full" type="submit">
+                            <i class="fas fa-search mr-2"></i> Check Queue Status
+                        </x-form.button>
+                    </form>
+                </x-ui.card>
+
+                <!-- Loading Indicator (Initially Hidden) -->
+                <div id="loading-indicator" class="hidden flex justify-center items-center py-8">
+                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+                    <span class="ml-4 text-gray-600">Retrieving your queue status...</span>
+                </div>
+
+                <!-- Queue Status Results (Initially Hidden) -->
+                <div id="queue-status-results" class="hidden mt-8">
+                    <x-ui.card>
+                        <div class="text-center mb-6">
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">Informasi Antrian Anda</h2>
+                            <p class="text-gray-500 text-sm">Tanggal: <span id="examination-date"></span></p>
                         </div>
 
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="relative mb-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <!-- Nomor Antrian Anda -->
+                            <div class="text-center">
+                                <p class="text-sm text-gray-500 mb-2">Nomor Antrian Anda</p>
                                 <div
-                                    class="w-48 h-48 md:w-64 md:h-64 bg-primary-50 rounded-full flex items-center justify-center queue-pulse">
-                                    <div
-                                        class="w-40 h-40 md:w-56 md:h-56 bg-white rounded-full flex items-center justify-center">
-                                        <span id="queue-number"
-                                            class="queue-number text-6xl md:text-8xl font-bold text-primary-600">42</span>
-                                    </div>
+                                    class="bg-primary-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto">
+                                    <span id="queue-number" class="text-3xl font-bold text-primary-700"></span>
                                 </div>
                             </div>
 
-                            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                                <x-form.button id="refresh-button">
-                                    <i class="fas fa-sync-alt mr-2"></i> Refresh
-                                </x-form.button>
-                                <x-form.button variant="outline" id="download-receipt-button">
-                                    <i class="fas fa-download mr-2"></i>Download Queue Receipt
-                                </x-form.button>
+                            <!-- Status Antrian -->
+                            <div class="text-center">
+                                <p class="text-sm text-gray-500 mb-2">Status</p>
+                                <div class="bg-gray-100 rounded-lg p-3 flex items-center justify-center mx-auto">
+                                    <span id="visit-status" class="text-lg font-medium text-gray-800"></span>
+                                </div>
+                            </div>
+
+                            <!-- Dokter -->
+                            <div class="text-center">
+                                <p class="text-sm text-gray-500 mb-2">Dokter</p>
+                                <div class="bg-gray-100 rounded-lg p-3 flex items-center justify-center mx-auto">
+                                    <span id="doctor-name" class="text-lg font-medium text-gray-800"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Auto-refresh notice -->
-                <div class="text-center mt-6 text-gray-500 text-sm">
-                    <p>Queue number updates automatically every 30 seconds</p>
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Nama Pasien</h3>
+                                <p id="patient-name" class="text-gray-800 font-medium"></p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">NIK</h3>
+                                <p id="patient-nik" class="text-gray-800 font-medium"></p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Nomor Registrasi</h3>
+                                <p id="registration-number" class="text-gray-800 font-medium"></p>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p id="status-message" class="text-sm text-blue-700">
+                                        Jika nomor antrian anda belum tersedia, silahkan tunggu sekitar 5-10 menit untuk
+                                        mendapatkan nomor antrian.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div>
+                            <x-form.button id="download-button" type="button" variant="primary" class="w-full"
+                                onclick="downloadReceiptQueue()">
+                                <i class="fas fa-download mr-2"></i> Download Receipt
+                            </x-form.button>
+                        </div>
+                    </x-ui.card>
                 </div>
             </div>
         </div>
     </section>
-    <script>
-        // Queue Number Update
-        const queueNumber = document.getElementById('queue-number');
-        const lastUpdated = document.getElementById('last-updated');
-        const refreshButton = document.getElementById('refresh-button');
 
-        // Function to update the queue number
-        function updateQueueNumber() {
-            // Show loading state
-            refreshButton.disabled = true;
-            refreshButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Refreshing...';
+    @push('scripts')
+        <script type="module">
+            import {
+                getQueueNumber
+            } from '{{ Vite::asset('resources/js/utils.js') }}';
 
-            // Simulate API call delay
-            setTimeout(() => {
-                // Generate a random number between 1 and 99 for demo purposes
-                // In a real application, this would be fetched from a server
-                const newNumber = Math.floor(Math.random() * 99) + 1;
+            // Form Elements
+            const nikInput = document.getElementById('nik');
+            const registrationInput = document.getElementById('registration_number');
 
-                // Update the queue number with animation
-                queueNumber.style.transform = 'scale(0.8)';
-                queueNumber.style.opacity = '0.5';
+            // Display Elements
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const queueStatusResults = document.getElementById('queue-status-results');
+            const downloadButton = document.getElementById('download-button');
 
-                setTimeout(() => {
-                    queueNumber.textContent = newNumber.toString().padStart(2, '0');
-                    queueNumber.style.transform = 'scale(1)';
-                    queueNumber.style.opacity = '1';
-                }, 300);
+            // Result Elements
+            const examinationDate = document.getElementById('examination-date');
+            const queueNumber = document.getElementById('queue-number');
+            const visitStatus = document.getElementById('visit-status');
+            const doctorName = document.getElementById('doctor-name');
+            const patientName = document.getElementById('patient-name');
+            const patientNik = document.getElementById('patient-nik');
+            const registrationNumber = document.getElementById('registration-number');
 
-                // Update last updated time
-                const now = new Date();
-                const formattedDate = now.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                    hour: 'numeric',
-                    minute: '2-digit'
-                });
-                lastUpdated.textContent = formattedDate;
+            // Form Validation
+            nikInput.addEventListener('input', function() {
+                // Only allow digits
+                this.value = this.value.replace(/[^\d]/g, '');
 
-                // Reset button state
-                refreshButton.disabled = false;
-                refreshButton.innerHTML = '<i class="fas fa-sync-alt mr-2"></i> Refresh';
-            }, 1000);
-        }
-
-        // Manual refresh button
-        refreshButton.addEventListener('click', updateQueueNumber);
-
-        // Auto-refresh every 30 seconds
-        setInterval(updateQueueNumber, 30000);
-
-        // Initial transition for the queue number
-        queueNumber.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-
-        // Download Queue Receipt Functionality
-        const downloadReceiptButton = document.getElementById('download-receipt-button');
-
-        downloadReceiptButton.addEventListener('click', () => {
-            // Show loading state
-            downloadReceiptButton.disabled = true;
-            downloadReceiptButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
-
-            setTimeout(() => {
-                generateQueueReceipt();
-
-                // Reset button state
-                downloadReceiptButton.disabled = false;
-                downloadReceiptButton.innerHTML =
-                    '<i class="fas fa-download mr-2"></i> Download Queue Receipt';
-            }, 1000);
-        });
-
-        function generateQueueReceipt() {
-            // Get current queue number and timestamp
-            const currentQueueNumber = queueNumber.textContent;
-            const currentTimestamp = lastUpdated.textContent;
-            const now = new Date();
-            const formattedDate = now.toLocaleDateString('id-ID', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            const formattedTime = now.toLocaleTimeString('id-ID', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: false
+                // Limit to 16 digits
+                if (this.value.length > 16) {
+                    this.value = this.value.slice(0, 16);
+                }
             });
 
-            // Generate registration number format: REG/1/YYYY-MM-DD/1
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const regNumber = `REG/1/${year}-${month}-${day}/1`;
+            // Form Submission
+            window.getQueueStatus = async function() {
+                const nik = nikInput.value.trim();
+                const regNumber = registrationInput.value.trim();
 
-            // Sample patient data (in a real app, this would come from a database)
-            const patientName = 'Slamet';
-            const rmNumber = '01234567';
-            const address = 'Jl. Bantarsari';
+                // Show loading indicator
+                loadingIndicator.classList.remove('hidden');
+                queueStatusResults.classList.add('hidden');
 
-            // Create form data to send to the server
-            const formData = new FormData();
-            formData.append('queueNumber', currentQueueNumber);
-            formData.append('regNumber', regNumber);
-            formData.append('patientName', patientName);
-            formData.append('rmNumber', rmNumber);
-            formData.append('address', address);
-            formData.append('registerDate', formattedDate);
-            formData.append('examDate', formattedDate);
+                try {
+                    // Make API request
+                    const data = await getQueueNumber(nik, regNumber);
 
-            // Send request to generate PDF
-            fetch('/generate-receipt-pdf', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                    // Hide loading indicator
+                    loadingIndicator.classList.add('hidden');
+
+                    if (data.status === 'success') {
+                        // Update UI with data
+                        updateQueueStatus(data.data);
+
+                        // Show results
+                        queueStatusResults.classList.remove('hidden');
                     }
-                    return response.blob();
-                })
-                .then(blob => {
-                    // Create a download link and trigger the download
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = `Antrian-${currentQueueNumber}-${year}${month}${day}.pdf`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                })
-                .catch(error => {
-                    console.error('Error generating PDF:', error);
-                    alert('Terjadi kesalahan saat mencetak antrian. Silakan coba lagi.');
-                })
-                .finally(() => {
-                    // Reset button state
-                    downloadReceiptButton.disabled = false;
-                    downloadReceiptButton.innerHTML = '<i class="fas fa-download mr-2"></i> Download Queue Receipt';
+                } catch (error) {
+                    // Hide loading indicator
+                    loadingIndicator.classList.add('hidden');
+                }
+            }
+
+            // Download Receipt Button
+            window.downloadReceiptQueue = function() {
+                const nik = nikInput.value.trim();
+                const regNumber = registrationInput.value.trim();
+                // Redirect to export receipt endpoint
+                window.location.href =
+                    `/export-receipt?nik=${encodeURIComponent(nik)}&registration_number=${encodeURIComponent(regNumber)}`;
+            }
+
+            /**
+             * Update the queue status UI with data from API
+             * @param {Object} data - The data from API
+             */
+            function updateQueueStatus(data) {
+                // Format date for display
+                const date = new Date(data.visit_examination_date);
+                const formattedDate = date.toLocaleDateString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                 });
-        }
-    </script>
+
+                // Update UI elements
+                examinationDate.textContent = formattedDate;
+                queueNumber.textContent = data.visit_queue_number || '-';
+
+                // Translate status for display
+                let statusText = 'Menunggu';
+                if (data.visit_status === 'queue') statusText = 'Dalam Antrian';
+                if (data.visit_status === 'called') statusText = 'Dipanggil';
+                if (data.visit_status === 'done') statusText = 'Selesai';
+                if (data.visit_status === 'register') statusText = 'Terdaftar';
+
+                visitStatus.textContent = statusText;
+
+                // Hide download button by default
+                downloadButton.classList.add('hidden');
+
+                // Show download button only if status is NOT 'register'
+                if (data.visit_status !== 'register') {
+                    downloadButton.classList.remove('hidden');
+                }
+
+                doctorName.textContent = data.docter_name || '-';
+                patientName.textContent = data.patient_name || '-';
+                patientNik.textContent = data.patient_nik || '-';
+                registrationNumber.textContent = data.visit_registration_number || '-';
+            }
+        </script>
+    @endpush
 </x-home-layout>

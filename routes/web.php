@@ -19,16 +19,24 @@ use App\Http\Controllers\ReceiptExportController;
 Route::get('/', function () {
     return view('index');
 })->name('home');
+
+// Patient Routes
 Route::get('/portal', [PatientController::class, 'portal'])->name('portal');
 Route::get('/portal/check-medical-number', [PatientController::class, 'getExistingPatient'])->name('portal.check-medical-number');
 Route::post('/register', [PatientController::class, 'register'])->name('patient.register');
 Route::post('/register-existing', [PatientController::class, 'registerExistingPatientVisit'])->name('patient.register.existing');
+
+// About Routes
 Route::get('/about', function () {
     return view('about');
 })->name('about');
+
+// Queue Routes
 Route::get('/queue', function () {
     return view('queue');
 })->name('queue');
+Route::get('/check-registration-number', [PatientController::class, 'showRegistrationByRegistrationIDandNIK'])->name('check-registration-number');
+Route::get('/export-receipt', [PatientController::class, 'exportQueueToPDF'])->name('export-receipt');
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'index'])->name('login');

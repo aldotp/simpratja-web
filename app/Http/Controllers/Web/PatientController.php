@@ -8,6 +8,8 @@ use App\Response\Response;
 use App\Services\DocterService;
 use App\Services\MedicalRecordService;
 use App\Services\PatientService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -73,6 +75,12 @@ class PatientController
         return redirect()->route('portal')->with('success', 'Pasien berhasil didaftarkan');
     }
 
+    /**
+     * Get existing patient by birth date and medical record number.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function getExistingPatient(Request $request)
     {
 
@@ -92,6 +100,81 @@ class PatientController
         }
 
         return $this->response->responseSuccess($patients, 'Data pasien berhasil diambil');
+    }
+
+    /**
+     * Show registration details by registration ID and NIK.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function showRegistrationByRegistrationIDandNIK(Request $request)
+    {
+        $data = [
+            'nik' => $request->query('nik'),
+            'registration_number' => $request->query('registration_number'),
+        ];
+
+        $validator = Validator::make($data, [
+            'nik' => 'required',
+            'registration_number'=> 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+        $patient = $this->patientService->getRegisByRegistrationIDandNIK($data);
+
+        if (!$patient) {
+            return $this->response->responseError('Data pasien tidak ditemukan', 404);
+        }
+
+        return $this->response->responseSuccess($patient, 'Data pendaftaran ditemukan');
+    }
+
+    /**
+     * Export registration queue to PDF.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportQueueToPDF(Request $request)
+    {
+        $data = [
+            'nik' => $request->query('nik'),
+            'registration_number' => $request->query('registration_number'),
+        ];
+
+        $validator = Validator::make($data, [
+            'nik' => 'required',
+            'registration_number'=> 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->response->responseError($validator->errors(), 422);
+        }
+
+
+        $data = $this->patientService->getRegisByRegistrationIDandNIK($data);
+
+        if (!$data) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        $viewData = [
+            'regNumber'    => $data['visit_registration_number'] ?? '',
+            'patientName'  => $data['patient_name'] ?? '',
+            'docterName'     => $data['docter_name'] ?? '',
+            'address'      => $data['patient_address'] ?? '',
+            'registerDate' => Carbon::parse($data['visit_examination_date'])->translatedFormat('l, d F Y') ?? '',
+            'examDate'     => Carbon::parse($data['visit_examination_date'])->translatedFormat('l, d F Y') ?? '',
+            'queueNumber'  => $data['visit_queue_number'] ?? '',
+        ];
+
+        $pdf = Pdf::loadView('receipt', $viewData);
+
+        return $pdf->download('receipt.pdf');
     }
 
     /**
