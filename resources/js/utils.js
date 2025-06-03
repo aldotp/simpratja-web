@@ -18,3 +18,18 @@ export async function getPatientExisting(medicalRecordNumber, birthDate) {
     }
     return data;
 }
+
+export async function getQueueNumber(nik, regNumber) {
+    const response = await fetch(
+        `/check-registration-number?nik=${encodeURIComponent(
+            nik
+        )}&registration_number=${encodeURIComponent(regNumber)}`
+    );
+    const data = await response.json();
+    if (data.status === "success") {
+        flasher.success(data.message);
+    } else {
+        flasher.error(data.message);
+    }
+    return data;
+}

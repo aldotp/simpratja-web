@@ -20,27 +20,6 @@
                 </x-form.button>
             </div>
 
-            <form action="{{ route('admin.doctors.index') }}" method="GET" class="mb-6">
-                <div class="flex flex-col md:flex-row justify-end gap-2">
-                    <div>
-                        <x-ui.daterangepicker id="doctor-date-filter" name="doctor_date" startLabel="Tanggal Mulai"
-                            endLabel="Tanggal Akhir" startPlaceholder="Pilih tanggal mulai"
-                            endPlaceholder="Pilih tanggal akhir" maxDate="{{ now()->format('Y-m-d') }}"
-                            :startValue="request('doctor_date_start', '')" :endValue="request('doctor_date_end', '')" />
-                    </div>
-                    <div class="flex items-end">
-                        <x-form.button type="submit" class="w-full md:w-auto">
-                            <i class="fas fa-filter mr-2"></i> Filter
-                        </x-form.button>
-                        @if (request('doctor_date_start') || request('doctor_date_end'))
-                            <a href="{{ route('admin.doctors.index') }}"
-                                class="ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                                <i class="fas fa-times"></i> Reset
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            </form>
             <x-ui.table id="table-doctors">
                 <x-slot name="thead">
                     <tr>
@@ -112,18 +91,6 @@
                         info: 'Menampilkan {start} sampai {end} dari {rows} data'
                     }
                 });
-
-                // Check if date filters are applied and highlight them
-                const startDateInput = document.getElementById('doctor-date-filter-start');
-                const endDateInput = document.getElementById('doctor-date-filter-end');
-
-                if (startDateInput && startDateInput.value) {
-                    startDateInput.classList.add('border-primary-500');
-                }
-
-                if (endDateInput && endDateInput.value) {
-                    endDateInput.classList.add('border-primary-500');
-                }
             });
         </script>
     @endpush
