@@ -204,7 +204,7 @@ class DocterService
                 return null;
             }
           $updateData =  $this->visitRepository->update($id, ['visit_status' => 'done']);
-          
+
           if ($updateData) {
               return null;
           }
