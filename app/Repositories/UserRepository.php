@@ -88,26 +88,56 @@ class UserRepository
         return $query->first();
     }
 
-    public function getAllDocterDetail($filters = [])
+    public function getAllDocterDetail(array $filters = [])
     {
+        $date = $filters['date'] ?? date('Y-m-d');
+        $search = $filters['search'] ?? null;
+        $role = $filters['role'] ?? 'doctor'; // default: hanya role doctor
 
         $query = DB::table('users')
-        ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-        ->select("users.id", "users.nik", "users.role", "user_details.name", "user_details.phone_number", "user_details.gender", "user_details.quota", "users.created_at", "users.updated_at");
+            ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
+            ->leftJoin('visits', function ($join) use ($date) {
+                $join->on('visits.docter_id', '=', 'users.id')
+                    ->whereDate('visits.examination_date', '=', $date)
+                    ->where('visits.queue_number', '!=', 0);
+            })
+            ->select(
+                'users.id',
+                'users.nik',
+                'users.role',
+                'user_details.name',
+                'user_details.phone_number',
+                'user_details.gender',
+                'user_details.quota',
+                'users.created_at',
+                'users.updated_at',
+                DB::raw('COUNT(visits.id) as visit_count')
+            )
+            ->where('users.role', $role)
+            ->groupBy(
+                'users.id',
+                'users.nik',
+                'users.role',
+                'user_details.name',
+                'user_details.phone_number',
+                'user_details.gender',
+                'user_details.quota',
+                'users.created_at',
+                'users.updated_at'
+            )
+            ->havingRaw('visit_count < user_details.quota');
 
-        if (!empty($filters['role'])) {
-            $query->where("users.role", $filters['role']);
-        }
-
-        if (!empty($filters['search'])) {
-            $query->where(function ($q) use ($filters) {
-                $q->where('name', 'like', '%'. $filters['search']. '%')
-                  ->orWhere('phone_number', 'like', '%'. $filters['search']. '%');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('user_details.name', 'like', '%' . $search . '%')
+                ->orWhere('user_details.phone_number', 'like', '%' . $search . '%');
             });
         }
 
         return $query->get();
     }
+
+
 
     public function getAllDocterDetailByID($id)
     {
