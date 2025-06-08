@@ -35,24 +35,24 @@ class PatientService
         return DB::transaction(function () use ($data) {
             $existingPatient = $this->patientRepository->queryWhere(["nik" => $data["nik"]])->first();
             if ($existingPatient) {
-                return [null, 'Patient already exists'];
+                throw new \Exception('Patient already exists');
             }
 
             $docter = $this->userRepository->getAllUsersDetailByID($data['docter_id']);
             if (!$docter) {
-                return [null, 'docter not found'];
+                throw new \Exception('Doctor not found');
             }
 
 
             $visitCount = $this->visitRepository->countVisitsByDocterAndDate($data['docter_id'], $data['examination_date']);
             if ($visitCount >= $docter->quota) {
-                return [null, 'quota is full'];
+                throw new \Exception('Quota is full');
             }
 
 
             $patient = $existingPatient ?: $this->patientRepository->store($data);
             if (!$patient) {
-                return [null, 'failed to insert patient'];
+                throw new \Exception('Failed to insert patient');
             }
 
             $visitData = [
@@ -66,7 +66,7 @@ class PatientService
 
             $visit = $this->visitRepository->store($visitData);
             if (!$visit) {
-                throw new \Exception('failed to insert visit');
+                throw new \Exception('Failed to insert visit');
             }
 
             $response = [
@@ -83,7 +83,7 @@ class PatientService
                 'visit_status' => $visit->visit_status,
             ];
 
-            return [$response, null];
+            return $response;
         });
     }
 
@@ -98,19 +98,19 @@ class PatientService
                     ->where('examination_date', $data['visit_date'])
                     ->first();
                 if ($existingVisit) {
-                    return [null, 'Patient already has a visit for this date'];
+                    throw new \Exception('Patient already has a visit on this date');
                 }
             }
 
             $docter = $this->userRepository->getAllUsersDetailByID($data['docter_id']);
             if (!$docter) {
-                return [null, 'docter not found'];
+                throw new \Exception('Doctor not found');
             }
 
             $visitCount = $this->visitRepository->countVisitsByDocterAndDate($data['docter_id'], $data['visit_date']);
 
             if ($visitCount >= $docter->quota) {
-                return [null, null, 'Quota is full'];
+                throw new \Exception('Quota is full');
             }
 
 
@@ -144,13 +144,7 @@ class PatientService
 
     public function getAll()
     {
-        $data =  $this->patientRepository->query()
-            ->leftjoin("medical_records", "medical_records.patient_id", "=", "patients.id")
-            ->select(
-                "patients.*",
-                \DB::raw('COALESCE(medical_records.medical_record_number, "") as medical_record_number')
-            )
-            ->get();
+        $data =  $this->patientRepository->getAll();
 
         return $data;
     }
@@ -212,6 +206,7 @@ class PatientService
 
     public function getRegisByRegistrationIDandNIK($request)
     {
+
         $data = DB::table('patients')
             ->join('visits', 'patients.id', '=', 'visits.patient_id')
             ->join('users as docter_users', 'visits.docter_id', '=', 'docter_users.id')

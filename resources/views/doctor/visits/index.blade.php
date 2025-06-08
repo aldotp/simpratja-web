@@ -26,6 +26,7 @@
                         <th scope="col" class="px-6 py-3">Tgl. Periksa</th>
                         <th scope="col" class="px-6 py-3">Nama Pasien</th>
                         <th scope="col" class="px-6 py-3">No. HP</th>
+                        the scope="col" class="px-6 py-3">Status</th>
                         <th scope="col" class="px-6 py-3">Aksi</th>
                     </tr>
                 </x-slot>
@@ -39,19 +40,25 @@
                         <td class="px-6 py-4">{{ $visit->patient_name }}</td>
                         <td class="px-6 py-4">{{ $visit->patient_phone_number }}</td>
                         <td class="px-6 py-4">
+                            <x-ui.badge :variant="match($visit->visit_status) {
+                                'queue' => 'info',
+                                'check' => 'secondary',
+                                'done' => 'success',
+                                default => 'info',
+                            }">
+                                {{ $visit->status}}
+                            </x-ui.badge>
+                        </td>
+                        <td class="px-6 py-4">
                             <div class="flex items-center space-x-2">
-                                <x-form.button variant="info" class="!py-1 !px-2"
-                                    data-modal-target="callPatientModal-{{ $visit->id }}"
-                                    data-modal-toggle="callPatientModal-{{ $visit->id }}"
-                                    data-id="{{ $visit->id }}">
-                                    <i class="fas fa-phone mr-1"></i> Panggil
-                                </x-form.button>
-                                <x-form.button variant="primary" class="!py-1 !px-2 periksaBtn"
-                                    data-id="{{ $visit->id }}"
-                                    data-modal-target="medicalRecordModal-{{ $visit->id }}"
-                                    data-modal-toggle="medicalRecordModal-{{ $visit->id }}">
-                                    <i class="fas fa-stethoscope mr-1"></i> Periksa
-                                </x-form.button>
+                                @if ($visit->status == 'check')
+                                    <x-form.button variant="primary" class="!py-1 !px-2 periksaBtn"
+                                        data-id="{{ $visit->id }}"
+                                        data-modal-target="medicalRecordModal-{{ $visit->id }}"
+                                        data-modal-toggle="medicalRecordModal-{{ $visit->id }}">
+                                        <i class="fas fa-stethoscope mr-1"></i> Periksa
+                                    </x-form.button>
+                                @endif
                             </div>
                         </td>
                     </tr>
@@ -61,7 +68,6 @@
                         <form id="medicalRecordForm" action="{{ route('doctor.medical-records.store', $visit->id) }}"
                             method="POST">
                             @csrf
-                            <input type="hidden" name="visit_id" id="visit_id">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <x-form.input id="dokter" name="dokter" label="Dokter" :disabled="true" />
@@ -70,11 +76,13 @@
                                     <x-form.input id="pasien" name="pasien" label="Pasien" :disabled="true" />
                                 </div>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div class="mb-4">
                                 <div>
                                     <x-form.datepicker id="examination_date" name="examination_date"
-                                        label="Tanggal Periksa" :required="true" />
+                                        label="Tanggal Periksa" :required="true" disabled />
                                 </div>
+                            </div>
+                            <div class="mb-4">
                                 <div>
                                     <x-form.input id="keluhan" name="complaint" label="Keluhan" :required="true" />
                                 </div>
@@ -93,8 +101,10 @@
                                     @endforeach
                                 </x-form.select>
                             </div>
+                            <input type="hidden" name="visit_id" id="visit_id">
                             <div class="flex justify-end space-x-2">
-                                <x-form.button type="button" variant="secondary" data-modal-hide="medicalRecordModal">
+                                <x-form.button type="button" variant="secondary"
+                                    data-modal-hide="medicalRecordModal-{{ $visit->id }}">
                                     Batal
                                 </x-form.button>
                                 <x-form.button type="submit" variant="primary">

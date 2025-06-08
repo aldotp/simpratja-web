@@ -20,7 +20,8 @@
 
     // Define outline variants
     $outlineVariants = [
-        'primary' => 'bg-transparent border border-primary-400 text-primary-800 dark:border-primary-600 dark:text-primary-400',
+        'primary' =>
+            'bg-transparent border border-primary-400 text-primary-800 dark:border-primary-600 dark:text-primary-400',
         'secondary' => 'bg-transparent border border-gray-400 text-gray-800 dark:border-gray-600 dark:text-gray-400',
         'success' => 'bg-transparent border border-green-400 text-green-800 dark:border-green-600 dark:text-green-400',
         'danger' => 'bg-transparent border border-red-400 text-red-800 dark:border-red-600 dark:text-red-400',

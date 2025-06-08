@@ -101,7 +101,7 @@ class VisitController
         }
 
         $visits = $this->visitService->getAllVisits($filters);
-        return view('staff.history.index', compact('visits'));
+        return view('staff.histories.index', compact('visits'));
     }
 
     /**

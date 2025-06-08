@@ -19,9 +19,9 @@
             <form action="{{ route('staff.history-visits') }}" method="GET" class="mb-6">
                 <div class="flex flex-col md:flex-row justify-end gap-2">
                     <div>
-                        <x-ui.daterangepicker id="visit-date-filter" name="visit_date" startLabel="Tanggal Mulai" endLabel="Tanggal Akhir"
-                            startPlaceholder="Pilih tanggal mulai" endPlaceholder="Pilih tanggal akhir"
-                            maxDate="{{ now()->format('Y-m-d') }}"
+                        <x-ui.daterangepicker id="visit-date-filter" name="visit_date" startLabel="Tanggal Mulai"
+                            endLabel="Tanggal Akhir" startPlaceholder="Pilih tanggal mulai"
+                            endPlaceholder="Pilih tanggal akhir" maxDate="{{ now()->format('Y-m-d') }}"
                             :startValue="request('visit_date_start', '')" :endValue="request('visit_date_end', '')" />
                     </div>
                     <div class="flex items-end">
@@ -46,6 +46,7 @@
                         <th scope="col" class="px-6 py-3">Nama Pasien</th>
                         <th scope="col" class="px-6 py-3">No. HP</th>
                         <th scope="col" class="px-6 py-3">Dokter</th>
+                        <th scope="col" class="px-6 py-3">Status</th>
                         <th scope="col" class="px-6 py-3">Aksi</th>
                     </tr>
                 </x-slot>
@@ -59,27 +60,28 @@
                         <td class="px-6 py-4">{{ $visit->patient->phone_number }}</td>
                         <td class="px-6 py-4">{{ $visit->doctor_name ?? 'Belum ditentukan' }}</td>
                         <td class="px-6 py-4">
-                            <div class="flex flex-row gap-4">
-                                <span x-data="{ status: '{{ $visit->visit_status }}' }"
-                                    :class="{
-                                        'bg-yellow-500 text-white': status === 'register',
-                                        'bg-green-600 text-white': status !== 'register'
-                                    }"
-                                    class="inline-flex gap-2 items-center px-4 py-2 rounded-md font-medium shadow-sm hover:bg-opacity-90 transition duration-150 ease-in-out text-xs">
-                                    @if ($visit->visit_status === 'register')
+                            <x-ui.badge class="px-2 py-1.5 text-nowrap" :variant="match ($visit->visit_status) {
+                                'register' => 'warning',
+                                default => 'success',
+                            }">
+                                @if ($visit->visit_status === 'register')
+                                    <span>
                                         <i class="fas fa-clipboard-check mr-1"></i>
-                                    @else
+                                        Belum Registrasi
+                                    </span>
+                                @else
+                                    <span>
                                         <i class="fas fa-check mr-1"></i>
-                                    @endif
-                                    <span
-                                        x-text="status === 'register' ? 'Belum Registrasi' : 'Sudah Registrasi'"></span>
-                                </span>
-                                <x-form.button variant="info" class="!py-1 !px-2 checkupBtn"
-                                    data-id="{{ $visit->id }}" data-modal-target="checkupModal"
-                                    data-modal-toggle="checkupModal">
-                                    <i class="fas fa-eye mr-1"></i> Detail
-                                </x-form.button>
-                            </div>
+                                        Sudah Registrasi
+                                    </span>
+                                @endif
+                            </x-ui.badge>
+                        </td>
+                        <td class="px-6 py-4">
+                            <x-form.button variant="info" class="!py-1 !px-2 checkupBtn" data-id="{{ $visit->id }}"
+                                data-modal-target="checkupModal" data-modal-toggle="checkupModal">
+                                <i class="fas fa-eye mr-1"></i> Detail
+                            </x-form.button>
                         </td>
                     </tr>
                 @empty

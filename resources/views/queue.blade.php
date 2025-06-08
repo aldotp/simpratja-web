@@ -81,7 +81,7 @@
                             </div>
                         </div>
 
-                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6" id="notes">
                             <div class="flex">
                                 <div class="flex-shrink-0">
                                     <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +117,7 @@
         <script type="module">
             import {
                 getQueueNumber
-            } from '{{ Vite::asset('resources/js/utils.js') }}';
+            } from '{{ Vite::asset('resources/js/api.js') }}';
 
             // Form Elements
             const nikInput = document.getElementById('nik');
@@ -136,6 +136,7 @@
             const patientName = document.getElementById('patient-name');
             const patientNik = document.getElementById('patient-nik');
             const registrationNumber = document.getElementById('registration-number');
+            const notes = document.getElementById('notes');
 
             // Form Validation
             nikInput.addEventListener('input', function() {
@@ -218,6 +219,7 @@
 
                 // Show download button only if status is NOT 'register'
                 if (data.visit_status !== 'register') {
+                    notes.classList.add('hidden');
                     downloadButton.classList.remove('hidden');
                 }
 

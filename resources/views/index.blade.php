@@ -51,7 +51,7 @@
                     <div
                         class="bg-primary-400 rounded-full absolute -z-10 w-72 h-72 md:w-96 md:h-96 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     </div>
-                    <img src="https://placehold.co/500x500" alt="Healthcare Professional" class="relative z-10 mx-auto">
+                    <img src="https://placehold.co/500x500" alt="Healthcare Professional" class="relative z-1 mx-auto">
 
                     <!-- Decorative elements -->
                     <div class="absolute top-0 right-0 w-20 h-20 bg-primary-200 rounded-full opacity-70 -z-5"></div>
@@ -217,7 +217,7 @@
                     </div>
                 </div>
                 <!-- Slider indicators -->
-                <div class="absolute z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse bottom-5 left-1/2">
+                <div class="absolute z-5 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse bottom-5 left-1/2">
                     <button type="button"
                         class="w-3 h-3 rounded-full bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800"
                         aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
@@ -230,7 +230,7 @@
                 </div>
                 <!-- Slider controls -->
                 <button type="button"
-                    class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                    class="absolute top-0 start-0 z-5 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
                     data-carousel-prev>
                     <span
                         class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
@@ -243,7 +243,7 @@
                     </span>
                 </button>
                 <button type="button"
-                    class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                    class="absolute top-0 end-0 z-5 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
                     data-carousel-next>
                     <span
                         class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">

@@ -75,13 +75,12 @@ class PatientController
             return $this->response->responseError($validator->errors(), 422);
         }
 
-        list($response, $error) = $this->patientService->registerPatientWithVisit($data);
-
-        if ($error) {
+        try {
+            $response = $this->patientService->registerPatientWithVisit($data);
+            return $this->response->responseSuccess($response, 'Pendaftaran pasien & visit berhasil');
+        } catch (\Exception $error) {
             return $this->response->responseError($error, 422);
         }
-
-        return $this->response->responseSuccess($response, 'Pendaftaran pasien & visit berhasil');
     }
 
     public function registerExistingPatientVisit(Request $request)
@@ -97,16 +96,13 @@ class PatientController
             return $this->response->responseError($validator->errors(), 422);
         }
 
-        $visit = $this->patientService->registerExistingPatientVisit($data);
-
-        if (is_array($visit) && isset($visit[1]) && $visit[1] !== null) {
-            return $this->response->responseError($visit[1], 422);
+        try {
+            $visit = $this->patientService->registerExistingPatientVisit($data);
+            return $this->response->responseSuccess($visit, 'Visit registered successfully');
+            return redirect()->route('portal')->with('success', 'Kunjungan pasien berhasil didaftarkan');
+        } catch (\Exception $error) {
+            return $this->response->responseError($error, 422);
         }
-        if (is_array($visit) && isset($visit[2]) && $visit[2] !== null) {
-            return $this->response->responseError($visit[2], 422);
-        }
-
-        return $this->response->responseSuccess($visit, 'Visit registered successfully');
     }
 
     public function showRegistration($id)

@@ -160,7 +160,7 @@ class AuthService {
         $accessToken = JWT::encode($accessTokenPayload, $accessSecret, 'HS256');
         $refreshToken = JWT::encode($refreshTokenPayload, $refreshSecret, 'HS256');
 
-      
+
         return [
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
@@ -175,7 +175,6 @@ class AuthService {
         $userId = $payload['sub'];
 
         $user = $this->userRepository->getUser($userId);
-
         if (!$user) {
             return null;
         }
