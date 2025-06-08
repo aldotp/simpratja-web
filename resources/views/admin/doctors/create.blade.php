@@ -31,7 +31,7 @@
                 <x-form.input name="nik" id="nik" label="NIK" placeholder="Masukkan NIK" required
                     :value="old('nik')" />
 
-                <x-form.input name="phone_number" id="phone_number" label="No. Handphone"
+                <x-form.input name="phone_number" id="phone_number" label="No. Handphone" type="number"
                     placeholder="Masukkan No. Handphone" required :value="old('phone_number')" />
 
                 <x-form.select name="gender" id="gender" label="Jenis Kelamin" required>

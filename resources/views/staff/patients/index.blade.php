@@ -41,7 +41,7 @@
                         </td>
                         <td class="px-6 py-4">{{ $patient->nik }}</td>
                         <td class="px-6 py-4">{{ $patient->name }}</td>
-                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($patient->birth_date)->format('d-m-Y') }}</td>
+                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($patient->birth_date)->translatedFormat('l, d F Y') }}</td>
                         <td class="px-6 py-4">{{ $patient->gender ? 'Laki-laki' : 'Perempuan' }}</td>
                         <td class="px-6 py-4">{{ $patient->address }}</td>
                         <td class="px-6 py-4">

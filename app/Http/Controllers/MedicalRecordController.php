@@ -55,10 +55,6 @@ class MedicalRecordController
 
         try {
             $result = $this->medicalRecordService->createMedicalRecordWithDetail($data, $userId);
-
-            if (is_array($result) && isset($result[1]) && $result[1] !== null) {
-                return $this->response->responseError($result[1], 422);
-            }
         } catch (\Exception $e) {
             return $this->response->responseError('Gagal membuat medical record: ' . $e->getMessage(), 500);
         }
@@ -82,10 +78,6 @@ class MedicalRecordController
 
         try {
             $result = $this->medicalRecordService->createMedicalRecordNumberOnly($data);
-
-            if (is_array($result) && isset($result[1]) && $result[1] !== null) {
-                return $this->response->responseError($result[1], 422);
-            }
         } catch (\Exception $e) {
             return $this->response->responseError('Gagal membuat medical record: ' . $e->getMessage(), 500);
         }

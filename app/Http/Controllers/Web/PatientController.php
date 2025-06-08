@@ -66,13 +66,12 @@ class PatientController
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        list($response, $error) = $this->patientService->registerPatientWithVisit($data);
-
-        if ($error) {
+        try {
+            $this->patientService->registerPatientWithVisit($data);
+            return redirect()->route('portal')->with('success', 'Pasien berhasil didaftarkan');
+        } catch (\Exception $error) {
             return redirect()->back()->with('error', 'Gagal menambahkan data')->withErrors($error)->withInput();
         }
-
-        return redirect()->route('portal')->with('success', 'Pasien berhasil didaftarkan');
     }
 
     /**
@@ -101,6 +100,34 @@ class PatientController
 
         return $this->response->responseSuccess($patients, 'Data pasien berhasil diambil');
     }
+
+    /**
+     * Register an existing patient's visit.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function registerExistingPatientVisit(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'patient_id' => 'required|exists:patients,id',
+            'visit_date' => 'required|date',
+            'docter_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $this->patientService->registerExistingPatientVisit($data);
+            return redirect()->route('portal')->with('success', 'Kunjungan pasien berhasil didaftarkan');
+        } catch (\Exception $error) {
+            return redirect()->back()->withErrors($error)->withInput();
+        }
+    }
+
 
     /**
      * Show registration details by registration ID and NIK.
@@ -175,37 +202,6 @@ class PatientController
         $pdf = Pdf::loadView('receipt', $viewData);
 
         return $pdf->download('receipt.pdf');
-    }
-
-    /**
-     * Register an existing patient's visit.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function registerExistingPatientVisit(Request $request)
-    {
-        $data = $request->all();
-        $validator = Validator::make($data, [
-            'patient_id' => 'required|exists:patients,id',
-            'visit_date' => 'required|date',
-            'docter_id' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $visit = $this->patientService->registerExistingPatientVisit($data);
-
-        if (is_array($visit) && isset($visit[1]) && $visit[1] !== null) {
-            return redirect()->back()->withErrors($visit[1])->withInput();
-        }
-        if (is_array($visit) && isset($visit[2]) && $visit[2] !== null) {
-            return redirect()->back()->withErrors($visit[2])->withInput();
-        }
-
-        return redirect()->route('portal')->with('success', 'Kunjungan pasien berhasil didaftarkan');
     }
 
     /**

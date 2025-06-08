@@ -58,7 +58,6 @@ class StaffService
             $queueNumber = $visitCount + 1;
 
             $visitData = [
-                'registration_number' => $this->generateRegistrationNumber($visit['examination_date'], $visit['docter_id']),
                 'queue_number' => $queueNumber,
                 'visit_status' => 'queue',
             ];

@@ -46,8 +46,7 @@
                                     <x-form.input name="name" id="name" label="Nama Lengkap"
                                         placeholder="Masukkan Nama Lengkap" required />
                                     <x-form.datepicker name="birth_date" id="birth_date" label="Tanggal Lahir"
-                                    maxDate="{{ now()->format('Y-m-d') }}"
-                                        placeholder="Pilih tanggal lahir" />
+                                        maxDate="{{ now()->format('Y-m-d') }}" placeholder="Pilih tanggal lahir" />
                                     <x-form.select name="gender" id="gender" label="Jenis Kelamin"
                                         placeholder="Pilih jenis kelamin">
                                         <option value="0">Perempuan</option>
@@ -60,8 +59,15 @@
                                         <option value="3">AB</option>
                                         <option value="4">O</option>
                                     </x-form.select>
-                                    <x-form.input name="religion" id="religion" label="Agama"
-                                        placeholder="Masukkan Agama" />
+                                    <x-form.select name="religion" id="religion" label="Agama"
+                                        placeholder="Pilih Kepercayaan">
+                                        <option value="islam">Islam</option>
+                                        <option value="kristen">Kristen</option>
+                                        <option value="katolik">Katolik</option>
+                                        <option value="hindu">Hindu</option>
+                                        <option value="budha">Budha</option>
+                                        <option value="konghucu">Konghucu</option>
+                                    </x-form.select>
                                     <x-form.select name="status" id="status" label="Status"
                                         placeholder="Pilih Status">
                                         <option value="0">Belum Menikah</option>
@@ -125,8 +131,8 @@
                                         label="Rekam Medis" placeholder="Masukkan Rekam Medis" required />
 
                                     <x-form.datepicker name="birth_date" id="birth_date_existing"
-                                    maxDate="{{ now()->format('Y-m-d') }}"
-                                        label="Tanggal Lahir" required placeholder="Pilih tanggal lahir" />
+                                        maxDate="{{ now()->format('Y-m-d') }}" label="Tanggal Lahir" required
+                                        placeholder="Pilih tanggal lahir" />
                                 </div>
                             </div>
 
@@ -186,7 +192,7 @@
         <script type="module">
             import {
                 getPatientExisting
-            } from '{{ Vite::asset('resources/js/utils.js') }}';
+            } from '{{ Vite::asset('resources/js/api.js') }}';
 
             // Global variable to track if patient was found
             window.patientFound = false;

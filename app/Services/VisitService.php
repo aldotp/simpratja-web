@@ -49,7 +49,7 @@ class VisitService
         $visit = $this->visitRepository->getById($id);
 
         if (!$visit) {
-            return [null, 'Visit not found'];
+            throw new \Exception('Visit not found');
         }
 
         $visit->visit_status = 'queue';

@@ -64,14 +64,36 @@
                         <td class="px-6 py-4">{{ $visit->doctor_name ?? 'Belum ditentukan' }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center space-x-2">
-                                <x-form.button variant="info" class="!py-1 !px-2"
-                                    data-modal-target="callPatientModal-{{ $visit->id }}"
-                                    data-modal-toggle="callPatientModal-{{ $visit->id }}"
-                                    data-id="{{ $visit->id }}">
-                                    <i class="fas fa-phone mr-1"></i> Panggil
-                                </x-form.button>
+                                @switch($visit->visit_status)
+                                    @case('queue')
+                                        <x-form.button variant="info" class="!py-1 !px-2"
+                                            data-modal-target="callPatientModal-{{ $visit->id }}"
+                                            data-modal-toggle="callPatientModal-{{ $visit->id }}"
+                                            data-id="{{ $visit->id }}">
+                                            <i class="fas fa-phone mr-1"></i> Panggil
+                                        </x-form.button>
+                                    @break
+
+                                    @case('check')
+                                        <x-ui.badge class="px-2 py-1.5 text-nowrap" variant="info">
+                                            <span>
+                                                <i class="fas fa-stethoscope mr-1"></i> Sedang Diperiksa
+                                            </span>
+                                        </x-ui.badge>
+                                    @break
+
+                                    @case('done')
+                                        <x-ui.badge class="px-2 py-1.5 text-nowrap" variant="success">
+                                            <span>
+                                                <i class="fas fa-check mr-1"></i> Selesai
+                                            </span>
+                                        </x-ui.badge>
+                                    @break
+
+                                    @default
+                                @endswitch
                                 @if (!$visit->queue_number)
-                                    <x-form.button variant="success" class="!py-1 !px-2 registrasiBtn"
+                                    <x-form.button variant="secondary" class="!py-1 !px-2 registrasiBtn"
                                         data-id="{{ $visit->id }}"
                                         data-modal-target="confirmationModal-{{ $visit->id }}"
                                         data-modal-toggle="confirmationModal-{{ $visit->id }}">
@@ -119,71 +141,71 @@
                             </form>
                         </div>
                     </x-dialog.modal>
-                @empty
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td colspan="7" class="px-6 py-4 text-center">Tidak ada data kunjungan</td>
-                    </tr>
-                @endforelse
-            </x-ui.table>
-        </x-ui.card>
-    </div>
+                    @empty
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td colspan="7" class="px-6 py-4 text-center">Tidak ada data kunjungan</td>
+                        </tr>
+                    @endforelse
+                </x-ui.table>
+            </x-ui.card>
+        </div>
 
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initialize DataTable with datetime sorting
-                const dataTable = new simpleDatatables.DataTable('#table-visits', {
-                    paging: true,
-                    perPage: 5,
-                    perPageSelect: [5, 10, 15, 20],
-                    fixedHeight: false,
-                    sortable: true,
-                    columns: [{
-                        select: 3,
-                        type: 'date',
-                        format: 'YYYY-MM-DD'
-                    }],
-                    labels: {
-                        placeholder: 'Cari...',
-                        perPage: 'data per halaman',
-                        noRows: 'Data tidak ditemukan',
-                        info: 'Menampilkan {start} sampai {end} dari {rows} data'
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Initialize DataTable with datetime sorting
+                    const dataTable = new simpleDatatables.DataTable('#table-visits', {
+                        paging: true,
+                        perPage: 5,
+                        perPageSelect: [5, 10, 15, 20],
+                        fixedHeight: false,
+                        sortable: true,
+                        columns: [{
+                            select: 3,
+                            type: 'date',
+                            format: 'YYYY-MM-DD'
+                        }],
+                        labels: {
+                            placeholder: 'Cari...',
+                            perPage: 'data per halaman',
+                            noRows: 'Data tidak ditemukan',
+                            info: 'Menampilkan {start} sampai {end} dari {rows} data'
+                        }
+                    });
+
+                    // Check if date filters are applied and highlight them
+                    const startDateInput = document.getElementById('visit-date-filter-start');
+                    const endDateInput = document.getElementById('visit-date-filter-end');
+
+                    if (startDateInput && startDateInput.value) {
+                        startDateInput.classList.add('border-primary-500');
                     }
-                });
 
-                // Check if date filters are applied and highlight them
-                const startDateInput = document.getElementById('visit-date-filter-start');
-                const endDateInput = document.getElementById('visit-date-filter-end');
+                    if (endDateInput && endDateInput.value) {
+                        endDateInput.classList.add('border-primary-500');
+                    }
 
-                if (startDateInput && startDateInput.value) {
-                    startDateInput.classList.add('border-primary-500');
-                }
+                    const registrasiBtns = document.querySelectorAll('.registrasiBtn');
 
-                if (endDateInput && endDateInput.value) {
-                    endDateInput.classList.add('border-primary-500');
-                }
+                    registrasiBtns.forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const visitId = this.getAttribute('data-id');
+                            document.getElementById('visit_id').value = visitId;
 
-                const registrasiBtns = document.querySelectorAll('.registrasiBtn');
-
-                registrasiBtns.forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const visitId = this.getAttribute('data-id');
-                        document.getElementById('visit_id').value = visitId;
-
-                        // Fetch visit details via AJAX
-                        fetch(`/staff/visits/${visitId}/details`)
-                            .then(response => response.json())
-                            .then(data => {
-                                document.getElementById('pasien').value = data.patient_name;
-                                document.getElementById('no_hp').value = data.patient_phone ||
-                                    'Tidak tersedia';
-                                document.getElementById('examination_date').value = data
-                                    .examination_date;
-                            })
-                            .catch(error => console.error('Error:', error));
+                            // Fetch visit details via AJAX
+                            fetch(`/staff/visits/${visitId}/details`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    document.getElementById('pasien').value = data.patient_name;
+                                    document.getElementById('no_hp').value = data.patient_phone ||
+                                        'Tidak tersedia';
+                                    document.getElementById('examination_date').value = data
+                                        .examination_date;
+                                })
+                                .catch(error => console.error('Error:', error));
+                        });
                     });
                 });
-            });
-        </script>
-    @endpush
-</x-dashboard-layout>
+            </script>
+        @endpush
+    </x-dashboard-layout>

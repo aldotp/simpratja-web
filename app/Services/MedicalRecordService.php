@@ -79,14 +79,14 @@ class MedicalRecordService
         $doctor = $this->userDetailRepository->getByUserId($userId);
 
         if (!$doctor) {
-            return [null, 'Doctor not found'];
+            throw new \Exception('Doctor not found');
         }
 
         return DB::transaction(function () use ($data, $doctor) {
 
             $visit = $this->visitRepository->getById($data['visit_id']);
             if (!$visit) {
-                return [null, 'Visit not found'];
+                throw new \Exception('Visit not found');
             }
 
             $record = $this->medicalRecordRepository->store([
@@ -116,7 +116,7 @@ class MedicalRecordService
             $medicine = $this->medicineRepository->getByID($data['medicine_id']);
             if ($medicine) {
                 if ($medicine->stock <= 0) {
-                    return [null, 'Obat habis'];
+                    throw new \Exception('Obat habis');
                 }
 
                 $medicine->stock = max(0, $medicine->stock - 1);
@@ -141,7 +141,7 @@ class MedicalRecordService
         });
     }
 
-    public function createMedicalRecordNumberOnly($data, )
+    public function createMedicalRecordNumberOnly($data)
     {
 
         return DB::transaction(function () use ($data) {

@@ -128,11 +128,7 @@ class MedicalRecordController
         $userId = Auth::id();
 
         try {
-            $result = $this->medicalRecordService->createMedicalRecordWithDetail($request->all(), $userId);
-
-            if (is_array($result) && isset($result[1]) && $result[1] !== null) {
-                return redirect()->back()->with('error', $result[1]);
-            }
+            $this->medicalRecordService->createMedicalRecordWithDetail($request->all(), $userId);
 
             // Update visit status to completed (2)
             $this->visitService->validateVisits($request->visit_id);
