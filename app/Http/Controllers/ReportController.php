@@ -40,7 +40,8 @@ class ReportController
         $data = $request->all();
         $validator = Validator::make($data, [
             'title' => 'required|string|max:255',
-            "period" =>"required|string",
+            'period' => 'required|date',
+            'patient_counts' => 'required|integer',
             'content' => 'required|string',
         ]);
 
@@ -52,6 +53,7 @@ class ReportController
             'report_type' => $data['title'],
             'period' => $data['period'],
             'report_content' => $data['content'],
+            'patient_counts' => $data['patient_counts'],
         ]);
         return $this->response->responseSuccess($report, 'Laporan berhasil dibuat');
     }

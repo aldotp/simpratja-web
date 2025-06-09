@@ -12,5 +12,6 @@ class Report extends Model
         'report_type',
         'period',
         'report_content',
+        'patient_counts'
     ];
 }
