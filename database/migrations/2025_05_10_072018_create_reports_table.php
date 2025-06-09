@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->string('report_type', 50);
-            $table->string('period', 20);
+            $table->date("period");
+            $table->bigInteger('patient_counts');
             $table->string('report_content', 255);
             $table->timestamps();
         });
