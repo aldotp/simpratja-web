@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('unit', 100);
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 10, 0);
             $table->integer('stock', false, true)->length(10);
             $table->date('expiry_date');
             $table->timestamps();

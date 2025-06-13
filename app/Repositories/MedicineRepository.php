@@ -8,8 +8,11 @@ class MedicineRepository
 {
     public function getAll()
     {
+       return Medicine::all();
+    }
+    public function getAllWithStock()
+    {
        return Medicine::where('stock', '>', 0)->get();
-
     }
 
     public function getByID($id)

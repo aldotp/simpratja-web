@@ -41,13 +41,14 @@
                         </td>
                         <td class="px-6 py-4">{{ $patient->nik }}</td>
                         <td class="px-6 py-4">{{ $patient->name }}</td>
-                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($patient->birth_date)->translatedFormat('l, d F Y') }}</td>
+                        <td class="px-6 py-4">
+                            {{ \Carbon\Carbon::parse($patient->birth_date)->translatedFormat('l, d F Y') }}</td>
                         <td class="px-6 py-4">{{ $patient->gender ? 'Laki-laki' : 'Perempuan' }}</td>
                         <td class="px-6 py-4">{{ $patient->address }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center space-x-2">
                                 @if (!$patient->medicalRecord)
-                                    <x-form.button class="!py-2 !px-2.5" variant="success"
+                                    <x-form.button class="!py-2 !px-2.5" variant="secondary"
                                         data-modal-target="generateMRNModal-{{ $patient->id }}"
                                         data-modal-toggle="generateMRNModal-{{ $patient->id }}"
                                         data-id="{{ $patient->id }}" data-name="{{ $patient->name }}">
@@ -77,7 +78,8 @@
                             data
                             terkait pasien ini.</p>
                         <x-slot name="footer">
-                            <x-form.button data-modal-hide="deletePatientModal">Batal</x-form.button>
+                            <x-form.button
+                                data-modal-hide="deletePatientModal-{{ $patient->id }}">Batal</x-form.button>
                             <form id="deletePatientForm" action="{{ route('staff.patients.destroy', $patient->id) }}"
                                 method="POST">
                                 @csrf
@@ -93,7 +95,7 @@
                                 id="patientNameForMRN" class="font-semibold"></span>.</p>
                         <p class="text-blue-500 mt-2">Nomor rekam medis akan dibuat secara otomatis oleh sistem.</p>
                         <x-slot name="footer">
-                            <x-form.button data-modal-hide="generateMRNModal">Batal</x-form.button>
+                            <x-form.button data-modal-hide="generateMRNModal-{{ $patient->id }}">Batal</x-form.button>
                             <form id="generateMRNForm"
                                 action="{{ route('staff.patients.generate-mrn', $patient->id) }}" method="POST">
                                 @csrf

@@ -62,19 +62,38 @@
                         <td class="px-6 py-4">
                             <x-ui.badge class="px-2 py-1.5 text-nowrap" :variant="match ($visit->visit_status) {
                                 'register' => 'warning',
+                                'queue' => 'secondary',
+                                'check' => 'info',
+                                'done' => 'success',
                                 default => 'success',
                             }">
-                                @if ($visit->visit_status === 'register')
-                                    <span>
-                                        <i class="fas fa-clipboard-check mr-1"></i>
-                                        Belum Registrasi
-                                    </span>
-                                @else
-                                    <span>
-                                        <i class="fas fa-check mr-1"></i>
-                                        Sudah Registrasi
-                                    </span>
-                                @endif
+                                @switch($visit->visit_status)
+                                    @case('register')
+                                        <span>
+                                            <i class="fas fa-clipboard mr-1"></i>
+                                            Tahap Registrasi
+                                        </span>
+                                        @break
+                                    @case('queue')
+                                        <span>
+                                            <i class="fas fa-hourglass-half mr-1"></i>
+                                            Dalam Antrian
+                                        </span>
+                                        @break
+                                    @case('check')
+                                        <span>
+                                            <i class="fas fa-stethoscope mr-1"></i>
+                                            Sedang Diperiksa
+                                        </span>
+                                        @break
+                                    @case('done')
+                                        <span>
+                                            <i class="fas fa-check-circle mr-1"></i>
+                                            Selesai Diperiksa
+                                        </span>
+                                        @break
+
+                                @endswitch
                             </x-ui.badge>
                         </td>
                         <td class="px-6 py-4">
@@ -86,7 +105,7 @@
                     </tr>
                 @empty
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td colspan="7" class="px-6 py-4 text-center">Tidak ada riwayat kunjungan</td>
+                        <td colspan="8" class="px-6 py-4 text-center">Tidak ada riwayat kunjungan</td>
                     </tr>
                 @endforelse
             </x-ui.table>

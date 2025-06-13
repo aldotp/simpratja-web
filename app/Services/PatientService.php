@@ -75,10 +75,10 @@ class PatientService
                 'patient_nik' => $patient->nik,
                 'patient_gender' => $patient->gender,
                 'patient_phone_number' => $patient->phone_number,
+                'registration_number' => $visit->registration_number,
                 'visit_id' => $visit->id,
                 'visit_docter_id' => $visit->docter_id,
                 'visit_examination_date' => $visit->examination_date,
-                'visit_registration_number' => $visit->registration_number,
                 'visit_queue_number' => $visit->queue_number,
                 'visit_status' => $visit->visit_status,
             ];

@@ -1,21 +1,16 @@
 <x-dashboard-layout>
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
 
-        <x-ui.breadcrumb rounded="true" :items="[
-            ['label' => 'Staff'],
-            [
-                'label' => 'Kunjungan',
-                'url' => '/staff/visits',
-            ],
-        ]" />
+        <x-ui.breadcrumb rounded="true" :items="[['label' => 'Staff'], ['label' => 'Kunjungan', 'url' => '/staff/visits']]" />
 
         <x-ui.card class="mt-2">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
                     {{ __('Data Kunjungan') }}
                 </h2>
-                <span
-                    class="text-primary-600 dark:text-gray-400 font-bold text-lg mr-2">{{ \Carbon\Carbon::parse(request('visit_date_start') ? request('visit_date_start') : now())->translatedFormat('l, d F Y') }}</span>
+                <span class="text-primary-600 dark:text-gray-400 font-bold text-lg mr-2">
+                    {{ \Carbon\Carbon::parse(request('visit_date_start') ? request('visit_date_start') : now())->translatedFormat('l, d F Y') }}
+                </span>
             </div>
 
             <form action="{{ route('staff.visits.index') }}" method="GET" class="mb-6">
@@ -23,7 +18,7 @@
                     <div>
                         <x-ui.daterangepicker id="visit-date-filter" name="visit_date" startLabel="Tanggal Mulai"
                             endLabel="Tanggal Akhir" startPlaceholder="Pilih tanggal mulai"
-                            endPlaceholder="Pilih tanggal akhir" maxDate="{{ now()->format('Y-m-d') }}"
+                            endPlaceholder="Pilih tanggal akhir" minDate="{{ now()->format('Y-m-d') }}"
                             :startValue="request('visit_date_start', '')" :endValue="request('visit_date_end', '')" />
                     </div>
                     <div class="flex items-end">
@@ -39,6 +34,7 @@
                     </div>
                 </div>
             </form>
+
             <x-ui.table id="table-visits">
                 <x-slot name="thead">
                     <tr>
@@ -52,6 +48,7 @@
                         <th scope="col" class="px-6 py-3">Aksi</th>
                     </tr>
                 </x-slot>
+
                 @forelse ($visits as $visit)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">{{ $loop->iteration }}</td>
@@ -85,12 +82,10 @@
                                     @case('done')
                                         <x-ui.badge class="px-2 py-1.5 text-nowrap" variant="success">
                                             <span>
-                                                <i class="fas fa-check mr-1"></i> Selesai
+                                                <i class="fas fa-check-circle mr-1"></i> Selesai
                                             </span>
                                         </x-ui.badge>
                                     @break
-
-                                    @default
                                 @endswitch
                                 @if (!$visit->queue_number)
                                     <x-form.button variant="secondary" class="!py-1 !px-2 registrasiBtn"
@@ -103,14 +98,14 @@
                             </div>
                         </td>
                     </tr>
+
                     <!-- Modal Konfirmasi Nomor Antrian -->
                     <x-dialog.modal id="confirmationModal-{{ $visit->id }}" title="Konfirmasi Nomor Antrian"
                         size="md" :showCloseButton="true" :static="true">
-                        <p class="text-gray-700 dark:text-gray-400 mb-4">Apakah Anda yakin memberikan nomor antrian?
-                        </p>
+                        <p class="text-gray-700 dark:text-gray-400 mb-4">Apakah Anda yakin memberikan nomor antrian?</p>
                         <div class="flex justify-center space-x-2">
                             <x-form.button type="button" class="grow" variant="secondary"
-                                data-modal-hide="confirmationModal">
+                                data-modal-hide="confirmationModal-{{ $visit->id }}">
                                 Batal
                             </x-form.button>
                             <form action="{{ route('staff.visits.queue-number', $visit->id) }}" method="post">
@@ -141,9 +136,10 @@
                             </form>
                         </div>
                     </x-dialog.modal>
+
                     @empty
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td colspan="7" class="px-6 py-4 text-center">Tidak ada data kunjungan</td>
+                            <td colspan="8" class="px-6 py-4 text-center">Tidak ada data kunjungan</td>
                         </tr>
                     @endforelse
                 </x-ui.table>
@@ -153,7 +149,6 @@
         @push('scripts')
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    // Initialize DataTable with datetime sorting
                     const dataTable = new simpleDatatables.DataTable('#table-visits', {
                         paging: true,
                         perPage: 5,
@@ -173,26 +168,12 @@
                         }
                     });
 
-                    // Check if date filters are applied and highlight them
-                    const startDateInput = document.getElementById('visit-date-filter-start');
-                    const endDateInput = document.getElementById('visit-date-filter-end');
-
-                    if (startDateInput && startDateInput.value) {
-                        startDateInput.classList.add('border-primary-500');
-                    }
-
-                    if (endDateInput && endDateInput.value) {
-                        endDateInput.classList.add('border-primary-500');
-                    }
-
                     const registrasiBtns = document.querySelectorAll('.registrasiBtn');
-
                     registrasiBtns.forEach(btn => {
                         btn.addEventListener('click', function() {
                             const visitId = this.getAttribute('data-id');
                             document.getElementById('visit_id').value = visitId;
 
-                            // Fetch visit details via AJAX
                             fetch(`/staff/visits/${visitId}/details`)
                                 .then(response => response.json())
                                 .then(data => {

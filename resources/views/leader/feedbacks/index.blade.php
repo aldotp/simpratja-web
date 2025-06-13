@@ -28,9 +28,9 @@
                 @forelse ($feedbacks as $feedback)
                     <tr>
                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-3">{{ $feedback->patient->name }}</td>
+                        <td class="px-4 py-3">{{ $feedback->name }}</td>
                         <td class="px-4 py-3">{{ Str::limit($feedback->feedback_content, 30) }}</td>
-                        <td class="px-4 py-3">{{ Carbon\Carbon::parse($feedback->created_at)->format('Y-m-d H:i') }}
+                        <td class="px-4 py-3">{{ Carbon\Carbon::parse($feedback->created_at)->translatedFormat('l, d F Y') }}
                         </td>
                         <td class="px-4 py-3">
                             <x-ui.rating :value="$feedback->rating" readonly />
@@ -49,7 +49,7 @@
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nama
                                     Pasien</label>
-                                <p class="text-gray-900 dark:text-gray-300">{{ $feedback->patient->name }}</p>
+                                <p class="text-gray-900 dark:text-gray-300">{{ $feedback->name }}</p>
                             </div>
                             <div class="mb-4">
                                 <label

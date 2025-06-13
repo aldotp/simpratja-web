@@ -39,7 +39,12 @@
 
                 <div>
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">Periode</h3>
-                    <p class="mt-1 text-gray-600 dark:text-gray-400">{{ $report->period }}</p>
+                    <p class="mt-1 text-gray-600 dark:text-gray-400">{{ Carbon\Carbon::parse($report->period)->translatedFormat('d F Y H:i') }}</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Jumlah Pasien</h3>
+                    <p class="mt-1 text-gray-600 dark:text-gray-400">{{ $report->patient_counts }} pasien</p>
                 </div>
 
                 <div>

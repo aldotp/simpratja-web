@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Visit;
+use Carbon\Carbon;
 
 class VisitRepository
 {
@@ -134,5 +135,11 @@ class VisitRepository
         $visit = Visit::find($id);
         $visit->delete();
         return $visit;
+    }
+
+    public function countPatientToday()
+    {
+        $today = Carbon::today();
+        return Visit::whereDate('created_at', $today)->count();
     }
 }

@@ -23,10 +23,10 @@
                     </h2>
                 </div>
                 <div>
-                    <x-form.button variant="primary"
-                        onclick="window.location.href='{{ route('leader.reports.edit', $report->id) }}'">
-                        <i class="fas fa-edit mr-2"></i>
-                        {{ __('Edit') }}
+                    <x-form.button class="!py-2 !px-2.5" variant="primary"
+                        onclick="window.location.href='{{ route('leader.reports.pdf', $report->id) }}'">
+                        <i class="fas fa-download mr-2"></i>
+                        {{ __('Download') }}
                     </x-form.button>
                 </div>
             </div>

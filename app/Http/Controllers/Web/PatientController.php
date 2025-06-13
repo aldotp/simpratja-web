@@ -67,10 +67,12 @@ class PatientController
         }
 
         try {
-            $this->patientService->registerPatientWithVisit($data);
-            return redirect()->route('portal')->with('success', 'Pasien berhasil didaftarkan');
+            $visit = $this->patientService->registerPatientWithVisit($data);
+            return redirect()->route('portal')
+                ->with('success', 'Pasien berhasil didaftarkan')
+                ->with('registration_number', $visit['registration_number']);
         } catch (\Exception $error) {
-            return redirect()->back()->with('error', 'Gagal menambahkan data')->withErrors($error)->withInput();
+            return redirect()->back()->with('error', $error->getMessage())->withInput();
         }
     }
 
@@ -111,7 +113,7 @@ class PatientController
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'required',
             'visit_date' => 'required|date',
             'docter_id' => 'required',
         ]);
@@ -121,10 +123,12 @@ class PatientController
         }
 
         try {
-            $this->patientService->registerExistingPatientVisit($data);
-            return redirect()->route('portal')->with('success', 'Kunjungan pasien berhasil didaftarkan');
+            $visit = $this->patientService->registerExistingPatientVisit($data);
+            return redirect()->route('portal')
+                ->with('success', 'Kunjungan pasien berhasil didaftarkan')
+                ->with('registration_number', $visit['registration_number']);
         } catch (\Exception $error) {
-            return redirect()->back()->withErrors($error)->withInput();
+            return redirect()->back()->with('error', $error->getMessage())->withInput();
         }
     }
 

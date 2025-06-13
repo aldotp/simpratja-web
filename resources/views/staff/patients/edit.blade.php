@@ -39,7 +39,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <x-form.input id="nik" name="nik" label="NIK" :value="old('nik', $patient->nik)"
-                                        required />
+                                        required minLength="16" maxLength="16" />
                                 </div>
                                 <div>
                                     <x-form.input id="name" name="name" label="Nama Lengkap" :value="old('name', $patient->name)"
