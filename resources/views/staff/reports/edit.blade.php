@@ -29,9 +29,14 @@
                 <x-form.input name="title" id="title" label="Jenis Laporan" placeholder="Masukkan Jenis Laporan"
                     required :value="old('title', $report->report_type)" />
 
-                <x-form.input name="period" id="period" label="Periode"
-                    placeholder="Masukkan Periode (contoh: Januari 2023)" required :value="old('period', $report->period)" />
+                <x-form.datepicker name="period" id="period" label="Periode" required
+                    :value="old('period', $report->period)" />
 
+                <x-form.input readonly name="patient_counts" label="Jumlah Pasien" id="patient_counts"
+                    value="$report->patient_counts">
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Data jumlah pasien tidak dapat diubah setelah
+                        laporan dibuat</p>
+                </x-form.input>
                 <x-form.textarea label="Isi Laporan" name="content" placeholder="Masukkan isi konten"
                     :value="old('content', $report->report_content)" />
 

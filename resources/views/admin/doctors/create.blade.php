@@ -29,7 +29,7 @@
                 <x-form.input name="name" id="name" label="Nama Lengkap" placeholder="Masukkan Nama Lengkap"
                     required :value="old('name')" />
                 <x-form.input name="nik" id="nik" label="NIK" placeholder="Masukkan NIK" required
-                    :value="old('nik')" />
+                    :value="old('nik')" minLength="16" maxLength="16" />
 
                 <x-form.input name="phone_number" id="phone_number" label="No. Handphone" type="number"
                     placeholder="Masukkan No. Handphone" required :value="old('phone_number')" />

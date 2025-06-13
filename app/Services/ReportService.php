@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\ReportRepository;
+use App\Models\Visit;
+use Carbon\Carbon;
 
 class ReportService
 {

@@ -12,7 +12,6 @@ class Feedback extends Model
     protected $fillable = [
         'patient_id',
         'feedback_content',
-        'feedback_date',
         'rating',
     ];
 

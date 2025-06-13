@@ -13,7 +13,7 @@
                     <form id="queue-status-form" class="space-y-6" x-data="{ nik: '', registration_number: '' }"
                         @submit.prevent="getQueueStatus()">
                         <x-form.input type="text" id="nik" name="nik" label="NIK" x-model="nik"
-                            placeholder="Masukkan NIK" required="true" />
+                            placeholder="Masukkan NIK" required="true" minLength="16" maxLength="16" />
 
                         <x-form.input type="text" id="registration_number" name="registration_number"
                             x-model="registration_number" label="Nomor Registrasi"
@@ -102,9 +102,13 @@
 
                         <!-- Action Button -->
                         <div>
-                            <x-form.button id="download-button" type="button" variant="primary" class="w-full"
+                            <x-form.button id="download-button" type="button" variant="primary" class="w-full hidden"
                                 onclick="downloadReceiptQueue()">
                                 <i class="fas fa-download mr-2"></i> Download Receipt
+                            </x-form.button>
+                            <x-form.button id="feedback-button" type="button" variant="primary" class="w-full hidden"
+                                data-modal-target="feedback-modal" data-modal-toggle="feedback-modal">
+                                <i class="fas fa-star mr-2"></i> Isi Feedback
                             </x-form.button>
                         </div>
                     </x-ui.card>
@@ -113,11 +117,52 @@
         </div>
     </section>
 
+    <!-- Feedback Modal -->
+    <x-dialog.modal id="feedback-modal" title="Berikan Feedback Anda" size="lg" centered="true">
+        <form action="{{ route('submit-feedback') }}" method="POST" id="feedback-form">
+            @csrf
+            <input type="hidden" name="patient_id" id="feedback_patient_id">
+            <input type="hidden" name="rating" id="rating" value="0">
+
+            <div class="p-2">
+                <div class="mb-4 text-center">
+                    <!-- Rating Stars -->
+                    <div id="rating-stars" class="flex items-center justify-center space-x-1 mb-4">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <button type="button" class="w-10 h-10">
+                                <span class="sr-only">Star {{ $i }}</span>
+                                <svg class="w-10 h-10 text-gray-300" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path
+                                        d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                </svg>
+                            </button>
+                        @endfor
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Terima kasih telah menggunakan layanan kami. Mohon
+                        berikan penilaian untuk pengalaman Anda.</p>
+                </div>
+                <!-- Feedback Message -->
+                <x-form.textarea name="feedback_content" id="feedback_content" label="Pesan Anda"
+                    placeholder="Berikan komentar atau saran Anda tentang layanan kami..." rows="4"
+                    required="true" class="mb-6" />
+
+                <!-- Submit Button -->
+                <x-form.button type="submit" variant="primary" class="w-full">
+                    Kirim Feedback
+                </x-form.button>
+            </div>
+        </form>
+    </x-dialog.modal>
+
     @push('scripts')
         <script type="module">
             import {
                 getQueueNumber
             } from '{{ Vite::asset('resources/js/api.js') }}';
+            import {
+                showFeedbackModal
+            } from '{{ Vite::asset('resources/js/feedback.js') }}';
 
             // Form Elements
             const nikInput = document.getElementById('nik');
@@ -127,6 +172,7 @@
             const loadingIndicator = document.getElementById('loading-indicator');
             const queueStatusResults = document.getElementById('queue-status-results');
             const downloadButton = document.getElementById('download-button');
+            const feedbackButton = document.getElementById('feedback-button');
 
             // Result Elements
             const examinationDate = document.getElementById('examination-date');
@@ -149,6 +195,8 @@
                 }
             });
 
+
+
             // Form Submission
             window.getQueueStatus = async function() {
                 const nik = nikInput.value.trim();
@@ -161,6 +209,8 @@
                 try {
                     // Make API request
                     const data = await getQueueNumber(nik, regNumber);
+
+                    localStorage.setItem('patient', JSON.stringify(data.data));
 
                     // Hide loading indicator
                     loadingIndicator.classList.add('hidden');
@@ -214,20 +264,82 @@
 
                 visitStatus.textContent = statusText;
 
-                // Hide download button by default
-                downloadButton.classList.add('hidden');
-
                 // Show download button only if status is NOT 'register'
                 if (data.visit_status !== 'register') {
                     notes.classList.add('hidden');
                     downloadButton.classList.remove('hidden');
                 }
 
+                if (data.visit_status === 'done') {
+                    downloadButton.classList.add('hidden');
+                    feedbackButton.classList.remove('hidden');
+                }
+
+                const patientData = JSON.parse(localStorage.getItem("patient"));
+                const feedbackGiven = localStorage.getItem(
+                    `feedback_given_${patientData.visit_id}`
+                );
+                if (feedbackGiven) {
+                    feedbackButton.classList.add('hidden');
+                } else {
+                    feedbackButton.classList.remove('hidden');
+                }
+
                 doctorName.textContent = data.docter_name || '-';
                 patientName.textContent = data.patient_name || '-';
                 patientNik.textContent = data.patient_nik || '-';
                 registrationNumber.textContent = data.visit_registration_number || '-';
+
+                // Check if visit status is 'done' to show feedback modal
+                if (data.visit_status === 'done') {
+                    // Wait a moment to ensure data is loaded properly
+                    setTimeout(() => {
+                        showFeedbackModal();
+                    }, 1000);
+                }
             }
+
+
+
+            // Handle star rating selection
+            const ratingButtons = document.querySelectorAll('#rating-stars button');
+            let selectedRating = 0;
+
+            ratingButtons.forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    selectedRating = index + 1;
+                    document.getElementById('rating').value = selectedRating;
+
+                    // Update visual state of stars
+                    ratingButtons.forEach((btn, idx) => {
+                        const star = btn.querySelector('svg');
+                        if (idx < selectedRating) {
+                            star.classList.add('text-yellow-300');
+                            star.classList.remove('text-gray-300');
+                        } else {
+                            star.classList.add('text-gray-300');
+                            star.classList.remove('text-yellow-300');
+                        }
+                    });
+                });
+            });
+
+            // Handle form submission
+            const feedbackForm = document.getElementById('feedback-form');
+            feedbackForm.addEventListener('submit', (e) => {
+                // Validate that rating has been selected
+                if (selectedRating === 0) {
+                    e.preventDefault();
+                    alert('Mohon berikan rating bintang sebelum mengirim feedback.');
+                    return false;
+                }
+
+                // Store in localStorage that feedback has been given for this visit
+                const patientData = JSON.parse(localStorage.getItem('patient'));
+                if (patientData && patientData.visit_id) {
+                    localStorage.setItem(`feedback_given_${patientData.visit_id}`, 'true');
+                }
+            });
         </script>
     @endpush
 </x-home-layout>

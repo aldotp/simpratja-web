@@ -19,7 +19,7 @@
                 class="hidden md:block bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-md transition duration-300">Portal</a>
 
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none cursor-pointer">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
@@ -33,9 +33,24 @@
     <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200">
         <div class="container mx-auto px-4 py-2 space-y-2">
             <a href="{{ route('home') }}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Home</a>
-            <a href="#about" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">About</a>
+            <a href="{{ route('about') }}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">About</a>
             <a href="{{ route('queue') }}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Queue</a>
+            <a href="{{ route('portal') }}" class="block py-2 text-primary-600 font-medium">Portal</a>
             <a href="{{ route('login') }}" class="block py-2 text-primary-600 font-medium">Login</a>
         </div>
     </div>
 </header>
+
+<!-- Script untuk hamburger menu -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    });
+</script>

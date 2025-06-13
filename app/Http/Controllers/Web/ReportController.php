@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Repositories\VisitRepository;
 use Illuminate\Http\Request;
 use App\Services\ReportService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -12,23 +13,12 @@ use Illuminate\Support\Facades\Validator;
 class ReportController
 {
     protected $reportService;
+    protected $visitRepository;
 
-    public function __construct(ReportService $reportService)
+    public function __construct(ReportService $reportService, VisitRepository $visitRepository)
     {
         $this->reportService = $reportService;
-    }
-
-    private function viewByRole($role, $data = [])
-    {
-        // Get the view name based on the role
-        $view = match ($role) {
-            'leader' => 'leader.reports.index',
-            'staff' => 'staff.reports.index',
-            default => 'reports.index',
-        };
-
-        // Return the view with the data (just like the view() function)
-        return view($view, $data);
+        $this->visitRepository = $visitRepository;
     }
 
     /**
@@ -40,7 +30,13 @@ class ReportController
     {
         $role = Auth::user()->role;
         $reports = $this->reportService->getAll();
-        return $this->viewByRole($role, compact('reports'));
+
+        $view = match ($role) {
+            'leader' => 'leader.reports.index',
+            'staff' => 'staff.reports.index',
+        };
+
+        return view($view, compact('reports'));
     }
 
     /**
@@ -50,7 +46,8 @@ class ReportController
      */
     public function create()
     {
-        return view('staff.reports.create');
+        $countPatient = $this->visitRepository->countPatientToday();
+        return view('staff.reports.create', compact('countPatient'));
     }
 
     /**
@@ -63,7 +60,8 @@ class ReportController
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'period' => 'required|string',
+            'period' => 'required|date',
+            'patient_counts' => 'required|integer',
             'content' =>'required|string'
         ]);
 
@@ -76,6 +74,7 @@ class ReportController
         $this->reportService->store([
             'report_type' => $request->title,
             'period' => $request->period,
+            'patient_counts' => $request->patient_counts,
             'report_content' => $request->content,
         ]);
 
@@ -91,14 +90,20 @@ class ReportController
      */
     public function show($id)
     {
+        $role = Auth::user()->role;
         $report = $this->reportService->getById($id);
 
+        $view = match ($role) {
+            'leader' => 'leader.reports.show',
+            'staff' => 'staff.reports.show',
+        };
+
         if (!$report) {
-            return redirect()->route('staff.reports.index')
+            return redirect()->back()
                 ->with('error', 'Laporan tidak ditemukan');
         }
 
-        return view('staff.reports.show', compact('report'));
+        return view($view, compact('report'));
     }
 
     /**
@@ -112,7 +117,7 @@ class ReportController
         $report = $this->reportService->getById($id);
 
         if (!$report) {
-            return redirect()->route('staff.reports.index')
+            return redirect()->back()
                 ->with('error', 'Laporan tidak ditemukan');
         }
 
@@ -130,7 +135,7 @@ class ReportController
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'period' => 'required|string',
+            'period' => 'required|date',
             'content' => 'required|string',
         ]);
 
@@ -140,10 +145,18 @@ class ReportController
                 ->withInput();
         }
 
+        // Mendapatkan data laporan yang ada untuk mempertahankan patient_counts
+        $existingReport = $this->reportService->getById($id);
+        if (!$existingReport) {
+            return redirect()->route('staff.reports.index')
+                ->with('error', 'Laporan tidak ditemukan');
+        }
+
         $report = $this->reportService->update($id, [
             'report_type' => $request->title,
             'period' => $request->period,
             'report_content' => $request->content,
+            // patient_counts tidak diubah, tetap menggunakan nilai yang sudah ada
         ]);
 
         if (!$report) {

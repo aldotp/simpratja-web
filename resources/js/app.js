@@ -1,6 +1,5 @@
 import Alpine from "alpinejs";
 import "./bootstrap";
-import { Modal } from "flowbite";
 
 window.Alpine = Alpine;
 
@@ -8,11 +7,14 @@ Alpine.start();
 
 document.addEventListener("DOMContentLoaded", function () {
     const lightSwitches = document.querySelectorAll(".light-switch");
+    const test = localStorage.getItem("dark-mode");
+    if (localStorage.getItem("dark-mode") === "true") {
+        document.querySelector("html").classList.add("dark");
+    } else {
+        document.querySelector("html").classList.remove("dark");
+    }
     if (lightSwitches.length > 0) {
         lightSwitches.forEach((lightSwitch, i) => {
-            if (localStorage.getItem("dark-mode") === "true") {
-                lightSwitch.checked = true;
-            }
             lightSwitch.addEventListener("change", () => {
                 const { checked } = lightSwitch;
                 lightSwitches.forEach((el, n) => {
@@ -23,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.documentElement.classList.add("**:transition-none!");
                 if (lightSwitch.checked) {
                     document.documentElement.classList.add("dark");
-                    document.querySelector("html").style.colorScheme = "dark";
+                    document.querySelector("html").classList.add("dark");
                     localStorage.setItem("dark-mode", true);
                     document.dispatchEvent(
                         new CustomEvent("darkMode", { detail: { mode: "on" } })
@@ -45,3 +47,5 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+

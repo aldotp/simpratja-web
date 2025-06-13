@@ -29,8 +29,14 @@
                 <x-form.input name="title" id="title" label="Jenis Laporan" placeholder="Masukkan Jenis Laporan"
                     required :value="old('title')" />
 
-                <x-form.input name="period" id="period" label="Periode"
-                    placeholder="Masukkan Periode (contoh: Januari 2023)" required :value="old('period')" />
+                <x-form.datepicker name="period" id="period" label="Periode" required :value="old('period')"
+                    maxDate="{{ now()->format('Y-m-d') }}" />
+
+                <x-form.input label="Jumlah Pasien Hari Ini" type="number" name="patient_counts" id="patient_counts"
+                    value="{{ $countPatient }}" readonly>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Data jumlah pasien yang mendaftar hari ini
+                        (otomatis)</p>
+                </x-form.input>
 
                 <x-form.textarea label="Isi Laporan" name="content" placeholder="Masukkan isi konten"
                     :value="old('content')" />

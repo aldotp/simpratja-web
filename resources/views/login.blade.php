@@ -43,7 +43,7 @@
                         @csrf
                         <div>
                             <x-form.input type="text" id="nik" name="nik" label="NIK"
-                                placeholder="Masukkan NIK" required="true" />
+                                placeholder="Masukkan NIK" required="true" minLength="16" maxLength="16" />
                         </div>
 
                         <div>

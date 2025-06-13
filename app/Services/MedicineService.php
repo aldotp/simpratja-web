@@ -61,4 +61,9 @@ class MedicineService
 
         return $patient;
     }
+
+    public function getAllWithStock()
+    {
+        return $this->medicineRepository->getAllWithStock();
+    }
 }

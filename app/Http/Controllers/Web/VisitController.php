@@ -77,7 +77,7 @@ class VisitController
         }
 
         $visits = $this->visitService->getAllVisits($filters);
-        $medicines = $this->medicineService->getAll();
+        $medicines = $this->medicineService->getAllWithStock();
 
         return $this->viewByRole($role, compact('visits', 'medicines'));
     }
@@ -122,9 +122,9 @@ class VisitController
             'doctor_name' => $visit->doctor_name ?? 'Tidak ada dokter',
             'patient_name' => $visit->patient_name ?? 'Tidak ada pasien',
             'examination_date' => Carbon::parse($visit->examination_date)->translatedFormat('l, d F Y') ?? now()->format('l, d F Y'),
-            'complaint' => $visit->complaint ?? 'Tidak ada keluhan',
-            'diagnosis' => $visit->diagnosis?? 'Tidak ada diagnosis',
-            'medicine' => $visit->medicine_name?? 'Tidak ada obat',
+            'complaint' => $visit->complaint ?? '',
+            'diagnosis' => $visit->diagnosis?? '',
+            'medicine' => $visit->medicine_name?? '',
         ]);
     }
 
