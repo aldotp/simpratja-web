@@ -32,4 +32,9 @@ class FeedbackService
     {
         return $this->feedbackRepository->countAll();
     }
+
+       public function getByPatientId($patient_id)
+    {
+        return $this->feedbackRepository->getFeedbackByPatientID($patient_id);
+    }
 }

@@ -68,4 +68,18 @@ class FeedbackRepository
         $feedback->delete();
         return $feedback;
     }
+
+    public function getFeedbackByPatientID($patient_id)
+    {
+        $query = Feedback::query()
+        ->select("feedbacks.id")
+        ->where('feedbacks.patient_id', $patient_id);
+
+        $data = $query->first();
+        if ($data) {
+            return $data;
+        } else {
+            return null;
+        }
+    }
 }

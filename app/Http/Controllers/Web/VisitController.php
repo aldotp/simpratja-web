@@ -135,7 +135,7 @@ class VisitController
         }
 
 
-        return redirect()->route('staff.visits.index')->with('success', 'validate patient success');
+        return redirect()->route('staff.visits.index')->with('success', 'Berhasil validasi pasien');
     }
 
     public function checkUpPatient($id, Request $request) {

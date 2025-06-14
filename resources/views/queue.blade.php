@@ -121,7 +121,7 @@
     <x-dialog.modal id="feedback-modal" title="Berikan Feedback Anda" size="lg" centered="true">
         <form action="{{ route('submit-feedback') }}" method="POST" id="feedback-form">
             @csrf
-            <input type="hidden" name="patient_id" id="feedback_patient_id">
+            <input type="hidden" name="patient_id" id="patient_id">
             <input type="hidden" name="rating" id="rating" value="0">
 
             <div class="p-2">
@@ -158,7 +158,8 @@
     @push('scripts')
         <script type="module">
             import {
-                getQueueNumber
+                getQueueNumber,
+                getFeedbackByPatientId
             } from '{{ Vite::asset('resources/js/api.js') }}';
             import {
                 showFeedbackModal
@@ -241,7 +242,7 @@
              * Update the queue status UI with data from API
              * @param {Object} data - The data from API
              */
-            function updateQueueStatus(data) {
+            async function updateQueueStatus(data) {
                 // Format date for display
                 const date = new Date(data.visit_examination_date);
                 const formattedDate = date.toLocaleDateString('id-ID', {
@@ -276,23 +277,20 @@
                 }
 
                 const patientData = JSON.parse(localStorage.getItem("patient"));
-                const feedbackGiven = localStorage.getItem(
-                    `feedback_given_${patientData.visit_id}`
-                );
-                if (feedbackGiven) {
-                    feedbackButton.classList.add('hidden');
-                } else {
-                    feedbackButton.classList.remove('hidden');
-                }
 
                 doctorName.textContent = data.docter_name || '-';
                 patientName.textContent = data.patient_name || '-';
                 patientNik.textContent = data.patient_nik || '-';
                 registrationNumber.textContent = data.visit_registration_number || '-';
 
+                @if (session('validation-feedback'))
+                    showFeedbackModal()
+                @endif
+
                 // Check if visit status is 'done' to show feedback modal
                 if (data.visit_status === 'done') {
                     // Wait a moment to ensure data is loaded properly
+                    console.log('test')
                     setTimeout(() => {
                         showFeedbackModal();
                     }, 1000);
@@ -330,8 +328,8 @@
                 // Validate that rating has been selected
                 if (selectedRating === 0) {
                     e.preventDefault();
-                    alert('Mohon berikan rating bintang sebelum mengirim feedback.');
-                    return false;
+                    window.flasher.error('Mohon berikan rating bintang sebelum mengirim feedback.');
+                    showFeedbackModal();
                 }
 
                 // Store in localStorage that feedback has been given for this visit

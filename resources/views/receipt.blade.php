@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -21,7 +21,7 @@
             padding: 10px;
         }
 
-        .header {
+        header {
             text-align: center;
             border-bottom: 1px solid #000;
             padding-bottom: 10px;
@@ -46,11 +46,7 @@
             font-size: 14pt;
         }
 
-        .clinic-address {
-            font-size: 10pt;
-            margin-top: 5px;
-        }
-
+        .clinic-address,
         .clinic-contact {
             font-size: 10pt;
             margin-top: 5px;
@@ -61,22 +57,24 @@
             margin: 10px 0;
         }
 
-        .patient-info {
+        section.patient-info {
             margin-bottom: 15px;
         }
 
         .info-row {
             display: flex;
+            justify-content: space-between;
             margin-bottom: 5px;
         }
 
         .info-label {
-            width: 120px;
             font-weight: normal;
+            width: 40%;
         }
 
         .info-value {
             flex: 1;
+            text-align: left;
         }
 
         .queue-number {
@@ -95,7 +93,7 @@
             font-weight: bold;
         }
 
-        .footer {
+        footer {
             font-size: 10pt;
             text-align: center;
             margin-top: 15px;
@@ -112,60 +110,64 @@
 
 <body>
     <div class="container">
-        <div class="header">
+        <header>
             <div class="logo-container">
                 <img src="{{ public_path('images/logo.png') }}" class="logo" alt="Logo">
-                <div class="clinic-name">Praktek Umum dr. Purwito Adisunu</div>
+                <h1 class="clinic-name">SIMPRATJA</h1>
             </div>
-            <div class="clinic-address">Gandrungmanis Lor, Gandrungmanis, Kec.Gandrungmangu, Kab. Cilacap, Jawa Tengah
-                53254</div>
+            <address class="clinic-address">Gandrungmanis Lor, Gandrungmanis, Kec.Gandrungmangu, Kab. Cilacap, Jawa
+                Tengah
+                53254</address>
             <div class="clinic-contact">Telepon : 0813-9014-82226<br>Website : https://simpratja.co.id/</div>
-        </div>
+        </header>
 
-        <div class="patient-info">
-            <div class="info-row">
-                <div class="info-label">Nomor Reg</div>
-                <div class="info-value">= {{ $regNumber }}</div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Nama Pasien</div>
-                <div class="info-value">= {{ $patientName }}</div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Nama Dokter</div>
-                <div class="info-value">= {{ $docterName }}</div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Alamat</div>
-                <div class="info-value">= {{ $address }}</div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Tgl Daftar</div>
-                <div class="info-value">= {{ $registerDate }}</div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Tgl Periksa</div>
-                <div class="info-value">= {{ $examDate }}</div>
-            </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="queue-number">
-            <div class="queue-number-label">NOMOR ANTRIAN ANDA</div>
-            <div class="queue-number-value">{{ $queueNumber }}</div>
-        </div>
+        <section class="patient-info">
+            <article class="info-row">
+                <span class="info-label">Nomor Reg</span>
+                <span class="info-value">= {{ $regNumber }}</span>
+            </article>
+            <article class="info-row">
+                <span class="info-label">Nama Pasien</span>
+                <span class="info-value">= {{ $patientName }}</span>
+            </article>
+            <article class="info-row">
+                <span class="info-label">Nama Dokter</span>
+                <span class="info-value">= {{ $docterName }}</span>
+            </article>
+            <article class="info-row">
+                <span class="info-label">Alamat</span>
+                <span class="info-value">= {{ $address }}</span>
+            </article>
+            <article class="info-row">
+                <span class="info-label">Tgl Daftar</span>
+                <span class="info-value">= {{ $registerDate }}</span>
+            </article>
+            <article class="info-row">
+                <span class="info-label">Tgl Periksa</span>
+                <span class="info-value">= {{ $examDate }}</span>
+            </article>
+        </section>
 
         <div class="divider"></div>
 
-        <div class="note">
-            Mohon diperhatikan demi kenyamanan pasien ANTRIAN tidak berlaku (dilewat), jika pasien datang TIDAK SESUAI
-            jadwal rencana kunjungan.
-        </div>
+        <section class="queue-number">
+            <h2 class="queue-number-label">NOMOR ANTRIAN ANDA</h2>
+            <p class="queue-number-value">{{ $queueNumber }}</p>
+        </section>
 
-        <div class="footer">
-            Untuk PASIEN BARU diharapkan membawa kartu identitas berupa KTP atau KK.
-        </div>
+        <div class="divider"></div>
+
+        <section class="note">
+            <p>
+                Mohon diperhatikan demi kenyamanan pasien ANTRIAN tidak berlaku (dilewat), jika pasien datang TIDAK
+                SESUAI
+                jadwal rencana kunjungan.
+            </p>
+        </section>
+
+        <footer>
+            <p>Untuk PASIEN BARU diharapkan membawa kartu identitas berupa KTP atau KK.</p>
+        </footer>
     </div>
 </body>
 

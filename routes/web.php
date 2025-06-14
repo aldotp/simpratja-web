@@ -37,6 +37,7 @@ Route::get('/queue', function () {
 })->name('queue');
 Route::get('/check-registration-number', [PatientController::class, 'showRegistrationByRegistrationIDandNIK'])->name('check-registration-number');
 Route::get('/export-receipt', [PatientController::class, 'exportQueueToPDF'])->name('export-receipt');
+Route::get('/check-feedback/{patient_id}', [FeedbackController::class, 'checkExistFeedbackByPatientId'])->name('portal.check-feedback');
 Route::post('/submit-feedback', [FeedbackController::class, 'store'])->name('submit-feedback');
 
 // Authentication Routes
