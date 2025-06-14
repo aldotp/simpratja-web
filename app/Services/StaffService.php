@@ -33,9 +33,20 @@ class StaffService
     public function ValidateRegisterPatient($id)
     {
         return DB::transaction(function () use ($id) {
+
             $visit = $this->visitRepository->queryWhere(['id' =>$id])->first();
             if (!$visit) {
                 return null;
+            }
+
+            $existNumber = $this->medicalRecordRepository->query()->where('patient_id', $visit->patient_id)->select("medical_record_number");
+            if (!$existNumber->exists()) {
+                 $this->medicalRecordRepository->store([
+                    'patient_id' => $visit->patient_id,
+                    'medical_record_number' => $this->generateMedicalRecordNumber(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
 
             if ($visit->visit_status !== 'register') {
