@@ -42,8 +42,8 @@
                     <form id="login-form" method="POST" action="{{ route('login.submit') }}" class="space-y-6">
                         @csrf
                         <div>
-                            <x-form.input type="text" id="nik" name="nik" label="NIK"
-                                placeholder="Masukkan NIK" required="true" minLength="16" maxLength="16" />
+                            <x-form.input type="number" id="nik" name="nik" label="NIK"
+                                placeholder="Masukkan NIK" required="true"  />
                         </div>
 
                         <div>

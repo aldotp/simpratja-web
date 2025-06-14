@@ -10,7 +10,7 @@
                 </div>
 
                 <!-- Registration Success Card -->
-                <x-ui.card class="mb-4" x-data="{ show: false }" x-init="setTimeout(() => show = true, 2000)"
+                <x-ui.card class="mb-4 hidden" x-data="{ show: false }" x-init="setTimeout(() => show = true, 2000)"
                     x-show.transition.duration.1000ms="show" id="card-registration-number">
                     <div class="w-full">
                         <div class="mb-2 flex justify-between items-center">
@@ -86,7 +86,8 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <x-form.input name="nik" id="nik" label="NIK" type="text"
                                         placeholder="Masukkan NIK" required
-                                        helpText="NIK harus terdiri dari 16 digit angka" minLength="16" maxLength="16" />
+                                        helpText="NIK harus terdiri dari 16 digit angka" minLength="16"
+                                        maxLength="16" />
 
                                     <x-form.input name="name" id="name" label="Nama Lengkap"
                                         placeholder="Masukkan Nama Lengkap" required />
@@ -119,7 +120,7 @@
                                         <option value="0">Belum Menikah</option>
                                         <option value="1">Sudah Menikah</option>
                                     </x-form.select>
-                                    <x-form.input type="number" name="phone_number" id="phone_number"
+                                    <x-form.input type="tel" name="phone_number" id="phone_number"
                                         label="No. HP" placeholder="Masukkan Nomor HP" required />
                                     <x-form.textarea name="address" id="address" label="Alamat"
                                         placeholder="Masukkan Alamat Lengkap" rows="3" required

@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export async function getPatientExisting(medicalRecordNumber, birthDate) {
     const response = await fetch(
         `/portal/check-medical-number?medical_record_number=${encodeURIComponent(
@@ -34,5 +32,19 @@ export async function getQueueNumber(nik, regNumber) {
     } else {
         window.flasher.error(data.message);
     }
+    return data;
+}
+
+export async function getFeedbackByPatientId(patientId) {
+    const response = await fetch(
+        `
+        /check-feedback/${patientId}
+        `,
+        {
+            method: "GET",
+        }
+    );
+
+    const data = await response.json();
     return data;
 }

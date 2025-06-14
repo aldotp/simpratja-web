@@ -1,10 +1,7 @@
 <x-dashboard-layout>
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
         <!-- Breadcrumb -->
-        <x-ui.breadcrumb rounded="true" :items="[
-            ['label' => 'Doctor'],
-            ['label' => 'Kunjungan', 'url' => '/doctor/visits'],
-        ]" />
+        <x-ui.breadcrumb rounded="true" :items="[['label' => 'Doctor'], ['label' => 'Kunjungan', 'url' => '/doctor/visits']]" />
 
         <!-- Card -->
         <x-ui.card class="mt-2">
@@ -52,9 +49,8 @@
 
                                     @case('check')
                                         <x-form.button variant="primary" class="!py-1 !px-2 periksaBtn"
-                                            data-id="{{ $visit->id }}"
-                                            data-modal-target="medicalRecordModal-{{ $visit->id }}"
-                                            data-modal-toggle="medicalRecordModal-{{ $visit->id }}">
+                                            data-id="{{ $visit->id }}" data-modal-toggle="medicalRecordModal-{{ $visit->id }}"
+                                            data-modal-target="medicalRecordModal-{{ $visit->id }}">
                                             <i class="fas fa-stethoscope mr-1"></i> Periksa
                                         </x-form.button>
                                     @break
@@ -83,16 +79,18 @@
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <x-form.input id="dokter" name="dokter" label="Dokter" :disabled="true" />
+                                    <x-form.input id="dokter-{{ $visit->id }}" name="dokter" label="Dokter"
+                                        :disabled="true" />
                                 </div>
                                 <div>
-                                    <x-form.input id="pasien" name="pasien" label="Pasien" :disabled="true" />
+                                    <x-form.input id="pasien-{{ $visit->id }}" name="pasien" label="Pasien"
+                                        :disabled="true" />
                                 </div>
                             </div>
                             <div class="mb-4">
                                 <div>
-                                    <x-form.datepicker id="examination_date" name="examination_date"
-                                        label="Tanggal Periksa" :required="true" disabled />
+                                    <x-form.datepicker id="examination_date-{{ $visit->id }}"
+                                        name="examination_date" label="Tanggal Periksa" :required="true" disabled />
                                 </div>
                             </div>
                             <div class="mb-4">
@@ -111,7 +109,7 @@
                                     @endforeach
                                 </x-form.select>
                             </div>
-                            <input type="hidden" name="visit_id" id="visit_id">
+                            <input type="hidden" name="visit_id" id="visit_id-{{ $visit->id }}">
                             <div class="flex justify-end space-x-2">
                                 <x-form.button type="button" variant="secondary"
                                     data-modal-hide="medicalRecordModal-{{ $visit->id }}">Batal</x-form.button>
@@ -120,69 +118,58 @@
                         </form>
                     </x-dialog.modal>
 
-                    <!-- Modal Panggil Pasien -->
-                    <x-dialog.modal id="callPatientModal-{{ $visit->id }}" title="Panggil Pasien" size="md"
-                        :showCloseButton="true" :static="true">
-                        <p class="text-gray-700 dark:text-gray-400 mb-4">Anda akan memanggil pasien <span
-                                class="font-semibold">{{ $visit->patient_name }}</span>.</p>
-                        <p class="text-blue-500 mb-4">Sistem akan mengubah status kunjungan pasien menjadi "check".</p>
-                        <div class="flex justify-center space-x-2">
-                            <x-form.button type="button" class="grow" variant="secondary"
-                                data-modal-hide="callPatientModal-{{ $visit->id }}">Batal</x-form.button>
-                            <form action="{{ route('doctor.visits.call-patient', $visit->id) }}" method="post">
-                                @csrf
-                                <x-form.button type="submit" class="grow" variant="info">
-                                    <i class="fas fa-phone mr-1"></i> Panggil Pasien
-                                </x-form.button>
-                            </form>
-                        </div>
-                    </x-dialog.modal>
+                    @empty
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td colspan="7" class="px-6 py-4 text-center">Tidak ada data kunjungan</td>
+                        </tr>
+                    @endforelse
+                </x-ui.table>
+            </x-ui.card>
+        </div>
 
-                @empty
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td colspan="7" class="px-6 py-4 text-center">Tidak ada data kunjungan</td>
-                    </tr>
-                @endforelse
-            </x-ui.table>
-        </x-ui.card>
-    </div>
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Initialize DataTable
+                    new simpleDatatables.DataTable('#table-visits', {
+                        paging: true,
+                        perPage: 5,
+                        perPageSelect: [5, 10, 15, 20],
+                        fixedHeight: false,
+                        labels: {
+                            placeholder: 'Cari...',
+                            perPage: 'data per halaman',
+                            noRows: 'Data tidak ditemukan',
+                            info: 'Menampilkan {start} sampai {end} dari {rows} data'
+                        }
+                    });
 
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initialize DataTable
-                new simpleDatatables.DataTable('#table-visits', {
-                    paging: true,
-                    perPage: 5,
-                    perPageSelect: [5, 10, 15, 20],
-                    fixedHeight: false,
-                    labels: {
-                        placeholder: 'Cari...',
-                        perPage: 'data per halaman',
-                        noRows: 'Data tidak ditemukan',
-                        info: 'Menampilkan {start} sampai {end} dari {rows} data'
-                    }
-                });
+                    const periksaBtns = document.querySelectorAll('.periksaBtn');
 
-                const periksaBtns = document.querySelectorAll('.periksaBtn');
+                    periksaBtns.forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const visitId = this.getAttribute('data-id');
+                            const dokterInput = document.getElementById(`dokter-${visitId}`);
+                            const pasienInput = document.getElementById(`pasien-${visitId}`);
+                            const examinationDateInput = document.getElementById(
+                                `examination_date-${visitId}`);
+                            const visitIdInput = document.getElementById(`visit_id-${visitId}`);
 
-                periksaBtns.forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const visitId = this.getAttribute('data-id');
-                        document.getElementById('visit_id').value = visitId;
+                            // Set the visit ID
+                            visitIdInput.value = visitId;
 
-                        // Fetch visit details via AJAX
-                        fetch(`/doctor/visits/${visitId}/details`)
-                            .then(response => response.json())
-                            .then(data => {
-                                document.getElementById('dokter').value = data.doctor_name;
-                                document.getElementById('pasien').value = data.patient_name;
-                                document.getElementById('examination_date').value = data.examination_date;
-                            })
-                            .catch(error => console.error('Error:', error));
+                            // Fetch visit details via AJAX
+                            fetch(`/doctor/visits/${visitId}/details`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    dokterInput.value = data.doctor_name;
+                                    pasienInput.value = data.patient_name;
+                                    examinationDateInput.value = data.examination_date;
+                                })
+                                .catch(error => console.error('Error:', error));
+                        });
                     });
                 });
-            });
-        </script>
-    @endpush
-</x-dashboard-layout>
+            </script>
+        @endpush
+    </x-dashboard-layout>

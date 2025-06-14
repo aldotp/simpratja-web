@@ -18,7 +18,7 @@
                 <div class="absolute bottom-0 left-0 w-16 h-16 md:w-32 md:h-32 bg-primary-300 rounded-full -ml-8 -mb-8">
                 </div>
 
-                <div class="relative z-10 p-6 md:p-8">
+                <div class="relative z-5 p-6 md:p-8">
                     <div class="flex flex-col md:flex-row items-start md:items-center justify-between w-full">
                         <!-- Welcome Message Section -->
                         <div class="mb-6 md:mb-0 animate-slide-right animate-delay-100">
