@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'password' => Hash::make('12345678a'),
             'role' => 'admin',
-            'nik'=> '5125162162161',
+            'nik'=> '5412512512521601',
             'status' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'password' => Hash::make('12345678a'),
             'role' => 'docter',
-            'nik'=> '5125162162162',
+            'nik'=> '5412512512521602',
             'status' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'password' => Hash::make('12345678a'),
             'role' => 'staff',
-            'nik'=> '5125162162163',
+            'nik'=> '5412512512521603',
             'status' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'password' => Hash::make('12345678a'),
             'role' => 'leader',
-            'nik'=> '5125162162164',
+            'nik'=> '5412512512521604',
             'status' => 1,
             'created_at' => now(),
             'updated_at' => now(),
