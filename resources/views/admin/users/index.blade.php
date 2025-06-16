@@ -52,15 +52,34 @@
                                     <i class="fas fa-edit mr-2"></i>
                                     {{ __('Edit') }}
                                 </x-form.button>
-                                <x-form.button class="!py-2 !px-2.5" variant="danger"
+                                <x-form.button class="!py-2 !px-2.5" variant="secondary"
                                     data-modal-target="resetPasswordModal" data-modal-toggle="resetPasswordModal"
                                     data-id="{{ $user->nik }}">
                                     <i class="fas fa-lock mr-2"></i>
                                     {{ __('Reset') }}
                                 </x-form.button>
+                                <x-form.button class="!py-2 !px-2.5" variant="danger"
+                                    data-modal-toggle="deleteModal-{{ $user->id }}"
+                                    data-modal-target="deleteModal-{{ $user->id }}" data-id="{{ $user->id }}">
+                                    <i class="fas fa-trash mr-2"></i>
+                                    {{ __('Delete') }}
+                                </x-form.button>
                             </div>
                         </td>
                     </tr>
+                    <x-dialog.modal id="deleteModal-{{ $user->id }}" title="Hapus User" size="md">
+                        Apakah anda yakin akan menghapus user ini?
+                        <x-slot name="footer">
+                            <x-form.button data-modal-hide="deleteModal-{{ $user->id }}">Tidak,
+                                kembali</x-form.button>
+                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
+                                id="deleteForm">
+                                @csrf
+                                @method('DELETE')
+                                <x-form.button variant="danger" type="submit">Ya, hapus!</x-form.button>
+                            </form>
+                        </x-slot>
+                    </x-dialog.modal>
                 @empty
                     <tr>
                         <td colspan="5" class="text-center">Tidak ada data</td>

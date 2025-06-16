@@ -15,7 +15,7 @@
             </svg>
         </div>
     </button>
-    <div class="origin-top-right z-10 absolute top-full min-w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded-lg shadow-lg overflow-hidden mt-1 {{ $align === 'right' ? 'right-0' : 'left-0' }}"
+    <div class="origin-top-right z-50 absolute top-full min-w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded-lg shadow-lg overflow-hidden mt-1 {{ $align === 'right' ? 'right-0' : 'left-0' }}"
         @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
         x-transition:enter="transition ease-out duration-200 transform"
         x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
@@ -34,17 +34,14 @@
                 </a>
             </li>
             <li class="cursor-pointer">
-                <form method="POST" action="{{ route('logout') }}" x-data>
-                    @csrf
-                    @method('DELETE')
-
-                    <a class="font-medium text-sm text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex items-center py-1 px-3"
-                        href="#" @click.prevent="$root.submit();" @focus="open = true" @focusout="open = false">
-                        <i class="fa-solid fa-right-from-bracket mr-2"></i>
-                        {{ __('Sign Out') }}
-                    </a>
-                </form>
+                <a
+                    class="font-medium text-sm text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex items-center py-1 px-3"
+                    data-modal-target="logout-confirmation-modal" data-modal-toggle="logout-confirmation-modal">
+                    <i class="fa-solid fa-right-from-bracket mr-2"></i>
+                    {{ __('Sign Out') }}
+                </a>
             </li>
         </ul>
     </div>
 </div>
+

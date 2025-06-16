@@ -61,7 +61,8 @@
                     <x-dialog.modal id="deleteModal-{{ $medicine->id }}" title="Hapus Obat" size="md">
                         Apakah anda yakin akan menghapus obat ini?
                         <x-slot name="footer">
-                            <x-form.button data-modal-hide="deleteModal">Tidak, kembali</x-form.button>
+                            <x-form.button data-modal-hide="deleteModal-{{ $medicine->id }}">Tidak,
+                                kembali</x-form.button>
                             <form action="{{ route('doctor.medicines.destroy', $medicine->id) }}" method="POST"
                                 id="deleteForm">
                                 @csrf
