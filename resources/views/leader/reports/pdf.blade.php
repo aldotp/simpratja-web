@@ -139,7 +139,7 @@
 
     <div class="footer">
         <p>Dicetak pada: {{ Carbon\Carbon::now()->translatedFormat('l, d F Y H:i:s') }}</p>
-        <p>Simpratja - Sistem Informasi Manajemen Praktek Kerja</p>
+        <p>Simpratja - Sistem Informasi Pasien Rawat Jalan</p>
     </div>
 </body>
 

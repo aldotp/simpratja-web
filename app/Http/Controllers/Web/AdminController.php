@@ -26,7 +26,8 @@ class AdminController
     public function dashboard()
     {
         $docter = $this->userService->countDocter();
+        $user = $this->userService->countUser();
 
-        return view('admin.dashboard', compact('docter'));
+        return view('admin.dashboard', compact('docter', 'user'));
     }
 }

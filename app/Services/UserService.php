@@ -217,4 +217,8 @@ class UserService {
       $count = $this->userRepository->query()->where('role', 'docter')->count();
       return $count;
     }
+    public function countUser() {
+      $count = $this->userRepository->query()->whereNot('role', 'docter')->count();
+      return $count;
+    }
 }

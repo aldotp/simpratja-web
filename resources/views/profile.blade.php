@@ -13,6 +13,10 @@
 
         <x-ui.card class="mt-4">
             <div class="flex flex-row gap-4 items-center mb-6">
+                <x-form.button class="!p-3" variant="secondary"
+                    onclick="window.location.href='{{ url()->previous() }}'">
+                    <i class="fa-solid fa-angle-left"></i>
+                </x-form.button>
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
                     {{ __('Profile') }}
                 </h2>

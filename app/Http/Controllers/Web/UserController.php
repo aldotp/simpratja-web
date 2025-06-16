@@ -82,13 +82,26 @@ class UserController
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
-
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  string  $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $user = $this->userService->deleteUser($id);
+            if (!$user) {
+                return redirect()->route('admin.users.index')
+                    ->with('error', 'User tidak ditemukan');
+            }
+            return redirect()->route('admin.users.index')
+                ->with('success', 'User berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     public function resetPassword(Request $request)
