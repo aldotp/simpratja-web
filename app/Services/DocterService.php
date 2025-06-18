@@ -38,17 +38,32 @@ class DocterService
         $this->patientRepository = $patientRepository;
     }
 
+    /**
+     * Get all docter
+     * @param array $filters
+     * @return array
+     */
     public function getAll($filters = [])
     {
         $filters["role"] = "docter";
         return $this->userRepository->getAllDocterDetail($filters);
     }
 
+    /**
+     * Get docter by id
+     * @param int $id
+     * @return array
+     */
     public function getById($id)
     {
         return $this->userRepository->getAllDocterDetailByID($id);
     }
 
+    /**
+     * Create docter
+     * @param array $data
+     * @return array
+     */
     public function createDocter($data)
     {
         DB::beginTransaction();
@@ -103,6 +118,12 @@ class DocterService
         }
     }
 
+    /**
+     * Update docter
+     * @param int $id
+     * @param array $data
+     * @return array
+     */
     public function update($id, $data)
     {
 
@@ -156,6 +177,11 @@ class DocterService
         }
     }
 
+    /**
+     * Delete docter
+     * @param int $id
+     * @return array
+     */
     public function delete($id)
     {
         return $this->userDetailRepository->delete($id);
@@ -167,7 +193,12 @@ class DocterService
         return $this->patientRepository->countAll();
     }
 
-
+    /**
+     * Check up patient
+     * @param int $id
+     * @param array $data
+     * @return array
+     */
     public function checkUpPatient($id,$data)
     {
 
@@ -222,6 +253,11 @@ class DocterService
         });
     }
 
+    /**
+     * Delete docter
+     * @param int $id
+     * @return array
+     */
     public function deleteUser($id)
     {
         return $this->userRepository->deleteUser($id);

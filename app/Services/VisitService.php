@@ -24,11 +24,23 @@ class VisitService
         $this->patientRepository = $patientRepository;
     }
 
+    /**
+     * Get queue number
+     *
+     * @param int $id
+     * @return array
+     */
     public function getQueueNumber($id)
     {
         return $this->visitRepository->getQueueNumber($id);
     }
 
+    /**
+     * Get all visits
+     *
+     * @param array $filters
+     * @return array
+     */
     public function getAllVisits($filters = [])
     {
         // Ensure filters is an array
@@ -39,11 +51,23 @@ class VisitService
         return $this->visitRepository->getAll($filters);
     }
 
+    /**
+     * Get visit by ID
+     *
+     * @param int $id
+     * @return array
+     */
     public function getVisitById($id)
     {
         return $this->visitRepository->getVisitByID($id);
     }
 
+    /**
+     * Validate visit
+     *
+     * @param int $id
+     * @return array
+     */
     public function validateVisits($id)
     {
         $visit = $this->visitRepository->getById($id);
@@ -58,12 +82,22 @@ class VisitService
         return $visit;
     }
 
+    /**
+     * Count all visits
+     *
+     * @return int
+     */
     public function countAll()
     {
         return $this->visitRepository->countAll();
     }
 
-
+    /**
+     * Check status visit
+     *
+     * @param array $request
+     * @return array
+     */
     public function checkStatusVisit($request)
     {
         $visit = $this->visitRepository->queryWhere(['patient_id' => $request['patient_id'], 'visit_status' => 'done', 'examination_date' => $request['examination_date'] ])->first();
@@ -75,7 +109,13 @@ class VisitService
         return $visit;
     }
 
-     public function callPatient($id)
+    /**
+     * Call patient
+     *
+     * @param int $id
+     * @return array
+     */
+    public function callPatient($id)
     {
 
         return DB::transaction(function () use ($id) {

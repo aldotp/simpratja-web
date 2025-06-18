@@ -7,21 +7,41 @@ use Illuminate\Support\Facades\DB;
 
 class MedicalRecordRepository
 {
+    /**
+     * Retrieve all medical records.
+     * @returns {Array<Medical_Record>} List of all medical records.
+     */
     public function getAll()
     {
         return Medical_Record::all();
     }
 
+    /**
+     * Retrieve medical record by ID.
+     * @param {number} id - The ID of the medical record.
+     * @returns {Medical_Record|null} The medical record instance or null if not found.
+     */
     public function getById($id)
     {
         return Medical_Record::find($id);
     }
 
+    /**
+     * Store a new medical record.
+     * @param {Array} data - The data for creating a new medical record.
+     * @returns {Medical_Record} The created medical record instance.
+     */
     public function store($data)
     {
         return Medical_Record::create($data);
     }
 
+    /**
+     * Update an existing medical record.
+     * @param {number} id - The ID of the medical record to update.
+     * @param {Array} data - The updated data for the medical record.
+     * @returns {Medical_Record|null} The updated medical record instance or null if not found.
+     */
     public function update($id, $data)
     {
         $record = Medical_Record::find($id);
@@ -33,6 +53,10 @@ class MedicalRecordRepository
     }
 
 
+    /**
+     * Retrieve all medical records.
+     * @returns {Array<Medical_Record>} List of all medical records.
+     */
     public function getAllMedicalRecords()
     {
         return DB::table('medical_records as mr')
@@ -42,6 +66,11 @@ class MedicalRecordRepository
             ->get();
     }
 
+    /**
+     * Retrieve medical record details by patient ID.
+     * @param {number} patientId - The ID of the patient.
+     * @returns {Array<Object>} List of medical record details for the patient.
+     */
     public function getMedicalRecordDetailByPatientID($patientId)
     {
         return DB::table('medical_records as mr')
