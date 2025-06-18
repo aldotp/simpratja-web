@@ -102,6 +102,11 @@ class AuthService {
         ];
     }
 
+    /**
+     * Register a new user.
+     * @param {Object} request - The request object containing user registration data.
+     * @returns {Array} An array containing the created user and an error message (if any).
+     */
     public function register($request){
         $name = $request->name;
         $email = $request->email;
@@ -169,6 +174,11 @@ class AuthService {
         ];
     }
 
+    /**
+     * Get user authenticate.
+     * @param {Object} request - The request object containing user authentication data.
+     * @returns {User|null} The authenticated user instance or null if not found.
+     */
     public function getUserAuhenticate($request) {
         $payload = $request->attributes->get('user_auth');
 
@@ -182,6 +192,11 @@ class AuthService {
         return $user;
     }
 
+    /**
+     * Get user authenticate v2.
+     * @param {Object} request - The request object containing user authentication data.
+     * @returns {User|null} The authenticated user instance or null if not found.
+     */
     public function getUserAuhenticatev2($request) {
         $cookie = $request->cookie('user_session');
 
@@ -204,7 +219,11 @@ class AuthService {
 
         return $user;
     }
-
+    /**
+     * Get user authenticate v3.
+     * @param {Object} request - The request object containing user authentication data.
+     * @returns {User|null} The authenticated user instance or null if not found.
+     */
     public function getUserAuhenticatev3($request) {
         $user = Auth::user();
 
@@ -215,6 +234,11 @@ class AuthService {
         return $user;
     }
 
+    /**
+     * Forgot password.
+     * @param {string} email - The email of the user.
+     * @returns {Array} An array containing success status and a message.
+     */
     public function forgotPassword($email)
     {
         $user = $this->userRepository->findByEmail($email);
@@ -231,6 +255,11 @@ class AuthService {
         return ['success' => true, 'message' => 'Link reset password telah dikirim ke email'];
     }
 
+    /**
+     * Reset password.
+     * @param {Object} data - The data containing reset password information.
+     * @returns {Array} An array containing success status and a message.
+     */
     public function resetPassword($data)
     {
         $user = $this->userRepository->findByNIK($data['nik']);

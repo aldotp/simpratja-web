@@ -30,6 +30,12 @@ class StaffService
     }
 
 
+    /**
+     * Validate register patient
+     *
+     * @param int $id
+     * @return array
+     */
     public function ValidateRegisterPatient($id)
     {
         return DB::transaction(function () use ($id) {
@@ -88,7 +94,13 @@ class StaffService
         });
     }
 
-     public function registerExistingPatientVisit($data)
+    /**
+     * Register existing patient visit
+     *
+     * @param array $data
+     * @return array
+     */
+    public function registerExistingPatientVisit($data)
     {
         DB::beginTransaction();
 
@@ -130,28 +142,55 @@ class StaffService
         }
     }
 
-
-
+    /**
+     * Get patient by ID
+     *
+     * @param int $id
+     * @return array
+     */
     public function getByID($id)
     {
         return $this->patientRepository->getByID($id);
     }
 
+    /**
+     * Get all patients
+     *
+     * @return array
+     */
     public function getAll()
     {
         return $this->patientRepository->getAll();
     }
 
+    /**
+     * Count all patients
+     *
+     * @return int
+     */
     public function countAll()
     {
         return $this->patientRepository->countAll();
     }
 
+    /**
+     * Update patient by ID
+     *
+     * @param int $id
+     * @param array $data
+     * @return array
+     */
     public function update($id, $data)
     {
         return $this->patientRepository->update($id, $data);
     }
 
+    /**
+     * Delete patient by ID
+     *
+     * @param int $id
+     * @return array
+     */
     public function deletePatient($id)
     {
         $patient = $this->patientRepository->getByID($id);
@@ -182,7 +221,14 @@ class StaffService
         return $patient;
     }
 
-  public function generateRegistrationNumber($visit_date, $docter_id)
+    /**
+     * Generate registration number
+     *
+     * @param string $visit_date
+     * @param int $docter_id
+     * @return string
+     */
+    public function generateRegistrationNumber($visit_date, $docter_id)
     {
         $kodeKunjungan = 1;
 
@@ -240,6 +286,12 @@ class StaffService
         ];
     }
 
+    /**
+     * Get registration by ID
+     *
+     * @param int $id
+     * @return array
+     */
     public function getRegistration($id)
     {
         $patient = $this->patientRepository->getByID($id);
@@ -270,6 +322,12 @@ class StaffService
         ];
     }
 
+    /**
+     * Get all registrations
+     *
+     * @param array $request
+     * @return array
+     */
     public function getAllRegistration($request)
     {
         $query = $this->visitRepository->query()->with(['patient']);
@@ -310,7 +368,13 @@ class StaffService
         });
     }
 
-    public function delete($id)
+    /**
+     * Delete registration by ID
+     *
+     * @param int $id
+     * @return array
+     */
+    public function deleteRegistration($id)
     {
         $patient = $this->patientRepository->getByID($id);
 
@@ -323,6 +387,11 @@ class StaffService
         return $patient;
     }
 
+    /**
+     * Generate medical record number
+     *
+     * @return string
+     */
     public function generateMedicalRecordNumber()
     {
         $date = date('Ymd');

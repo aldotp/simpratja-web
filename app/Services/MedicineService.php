@@ -41,10 +41,16 @@ class MedicineService
         return $this->medicineRepository->delete($id);
     }
 
+    /**
+     * Delete medicine and related records
+     *
+     * @param int $id Medicine ID
+     * @return string
+     */
     public function deleteMedicines($id)
     {
-        $patient = $this->medicineRepository->getByID($id);
-        if (!$patient) {
+        $medicine = $this->medicineRepository->show($id);
+        if (!$medicine) {
             return 'data not found';
         }
 
@@ -62,6 +68,11 @@ class MedicineService
         return $patient;
     }
 
+    /**
+     * Get all medicines with stock
+     *
+     * @return array
+     */
     public function getAllWithStock()
     {
         return $this->medicineRepository->getAllWithStock();

@@ -35,15 +35,24 @@ class MedicalRecordService
         $this->patientRepository = $patientRepository;
     }
 
+    /**
+     * Get all medical records
+     * @return array
+     */
     public function getAll()
     {
         return $this->medicalRecordRepository->getAll();
     }
 
+    /**
+     * Get all medical records with details
+     * @return array
+     */
     public function getAllMedicalRecords()
     {
         return $this->medicalRecordRepository->getAllMedicalRecords();
     }
+
 
     public function getById($id)
     {
@@ -69,11 +78,24 @@ class MedicalRecordService
             ->first();
     }
 
+    /**
+     * Get medical record detail by patient ID
+     *
+     * @param int $patientId Patient ID
+     * @return object|null
+     */
     public function getMedicalRecordDetailByPatientID($patientId)
     {
         return $this->medicalRecordRepository->getMedicalRecordDetailByPatientID($patientId);
     }
 
+    /**
+     * Create medical record with detail
+     *
+     * @param array $data
+     * @param int $userId
+     * @return object
+     */
     public function createMedicalRecordWithDetail($data, $userId)
     {
         $doctor = $this->userDetailRepository->getByUserId($userId);
@@ -113,7 +135,7 @@ class MedicalRecordService
             $detail = $this->medicalRecordDetailRepository->store($detailData);
 
 
-            $medicine = $this->medicineRepository->getByID($data['medicine_id']);
+            $medicine = $this->medicineRepository->show($data['medicine_id']);
             if ($medicine) {
                 if ($medicine->stock <= 0) {
                     throw new \Exception('Obat habis');
@@ -141,6 +163,12 @@ class MedicalRecordService
         });
     }
 
+    /**
+     * Create medical record number only
+     *
+     * @param array $data
+     * @return array
+     */
     public function createMedicalRecordNumberOnly($data)
     {
 
@@ -175,6 +203,13 @@ class MedicalRecordService
         });
     }
 
+    /**
+     * Update medical record number only
+     *
+     * @param int $id
+     * @param array $data
+     * @return array
+     */
     public function update($id, $data)
     {
         return $this->medicalRecordRepository->update($id, $data);
@@ -187,6 +222,11 @@ class MedicalRecordService
 
 
 
+    /**
+     * Generate medical record number
+     *
+     * @return string
+     */
     public function generateMedicalRecordNumber()
     {
         $date = date('Ymd');
@@ -194,7 +234,12 @@ class MedicalRecordService
         return "MRN{$date}{$random}";
     }
 
-
+    /**
+     * Get existing patient by medical record number and birth date
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return object|null
+     */
     public function getExistingPatient($request)
     {
 

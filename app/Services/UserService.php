@@ -17,6 +17,12 @@ class UserService {
         $this->userDetailRepository = $userDetailRepository;
     }
 
+    /**
+     * Get all users
+     *
+     * @param array $request
+     * @return array
+     */
     public function getAllUsers($request)
     {
         $users = $this->userRepository->getAllUsersDetail($request);
@@ -24,6 +30,12 @@ class UserService {
       return $users;
     }
 
+    /**
+     * Get user by ID
+     *
+     * @param int $id
+     * @return array
+     */
     public function getUser($id)
     {
         $user = $this->userRepository->getAllUsersDetailByID($id);
@@ -31,7 +43,13 @@ class UserService {
         return $user;
     }
 
-     public function createUser($data)
+    /**
+     * Create user
+     *
+     * @param array $data
+     * @return array
+     */
+    public function createUser($data)
     {
         DB::beginTransaction();
 
@@ -85,6 +103,12 @@ class UserService {
         }
     }
 
+    /**
+     * Create user
+     *
+     * @param array $request
+     * @return array
+     */
     public function create($request)
     {
         $existingUser = $this->userRepository->findByNik($request['nik']);
@@ -113,6 +137,13 @@ class UserService {
         }
     }
 
+    /**
+     * Update user
+     *
+     * @param int $id
+     * @param array $data
+     * @return array
+     */
     public function updateUser($id, $data) {
         $user = $this->userRepository->getUser($id);
         $userDetail = $this->userDetailRepository->getByUserId($id);
@@ -180,6 +211,12 @@ class UserService {
         ];
     }
 
+    /**
+     * Delete user
+     *
+     * @param int $id
+     * @return array
+     */
     public function deleteUser($id) {
         $user = $this->userRepository->getUser($id);
 
@@ -201,7 +238,12 @@ class UserService {
 
     }
 
-
+    /**
+     * Reset password
+     *
+     * @param string $nik
+     * @return array
+     */
     public function resetPassword($nik){
         $user = $this->userRepository->findByNik($nik);
         if (!$user) {

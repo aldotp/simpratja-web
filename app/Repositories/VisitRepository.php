@@ -7,32 +7,62 @@ use Carbon\Carbon;
 
 class VisitRepository
 {
+    /**
+     * Store visit data.
+     * @param {Object} data - The visit data to store.
+     * @returns {Visit} The created visit instance.
+     */
     public function store($data)
     {
         return Visit::create($data);
     }
 
+    /**
+     * Update visit by ID.
+     * @param {number} id - The ID of the visit.
+     * @param {Object} data - The data to update.
+     * @returns {Visit|null} The updated visit instance or null if not found.
+     */
     public function update($id, $data)
     {
         return Visit::find($id)->update($data);
     }
 
+    /**
+     * Retrieve visit by ID.
+     * @param {number} id - The ID of the visit.
+     * @returns {Visit|null} The visit instance or null if not found.
+     */
     public function getVisit($id)
     {
         return Visit::find($id);
     }
 
+    /**
+     * Get queue number by ID.
+     * @param {number} id - The ID of the visit.
+     * @returns {number|null} The queue number or null if not found.
+     */
     public function getQueueNumber($id)
     {
         $visit = Visit::find($id);
         return $visit ? $visit->queue_number : null;
     }
-
+    /**
+     * Get visit by ID.
+     * @param {number} id - The ID of the visit.
+     * @returns {Visit|null} The visit instance or null if not found.
+     */
     public function getByID($id)
     {
          return Visit::find($id);
     }
 
+    /**
+     * Get all visit.
+     * @param {Object} filters - The filters to apply.
+     * @returns {Array<Visit>} List of all visit.
+     */
     public function getAll($filters = [])
     {
         $query = Visit::query()
@@ -93,7 +123,12 @@ class VisitRepository
 
     }
 
-
+    /**
+     * Count visits by docter and date.
+     * @param {number} docterId - The ID of the docter.
+     * @param {string} examinationDate - The examination date.
+     * @returns {number} The count of visits.
+     */
     public function countVisitsByDocterAndDate($docterId, $examinationDate)
     {
         return Visit::where('docter_id', $docterId)
@@ -102,6 +137,12 @@ class VisitRepository
     }
 
 
+    /**
+     * Get latest queue number by docter and date.
+     * @param {number} docterId - The ID of the docter.
+     * @param {string} examinationDate - The examination date.
+     * @returns {number|null} The latest queue number or null if not found.
+     */
     public function getLatestQueueNumber($docterId, $examinationDate)
     {
         return Visit::where('docter_id', $docterId)
@@ -109,6 +150,10 @@ class VisitRepository
             ->max('queue_number');
     }
 
+    /**
+     * Count all visit.
+     * @returns {number} The total number of visit.
+     */
     public function countAll()
     {
         return Visit::count();
@@ -130,6 +175,11 @@ class VisitRepository
         return $query;
     }
 
+    /**
+     * Delete visit by ID.
+     * @param {number} id - The ID of the visit.
+     * @returns {Visit|null} The deleted visit instance or null if not found.
+     */
     public function delete($id)
     {
         $visit = Visit::find($id);
@@ -137,6 +187,10 @@ class VisitRepository
         return $visit;
     }
 
+    /**
+     * Count patient visit today.
+     * @returns {number} The count of patient visit today.
+     */
     public function countPatientToday()
     {
         $today = Carbon::today();
